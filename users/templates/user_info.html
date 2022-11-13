@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+{% comment %} * content block * {% endcomment %}
+{% block content %}
+
+    {% include 'inc/_canvas.html' %}
+    {% include 'inc/_indev.html' %}
+
+    <div class="wrapper py-5 client-wrapper">
+
+        {% include 'inc/_header.html' %}
+
+        <main class="main mt-4">
+            <div class="container-fluid px-5 py-5 container-client-info">
+                
+                {% comment %} messages {% endcomment %}
+                {% include 'inc/messages/_messages.html' %}
+
+                <form method="POST" class="row m-0 d-flex justify-content-evenly w-100 client-info" id="client-info-form">
+                    
+                    {% csrf_token %}
+
+                    <!-- - client info header - -->
+                    <div class="client-info__header border-bottom d-flex justify-content-between">
+    
+                        <h2 class="h2 text-nowrap m-0 d-flex align-items-center">My Profile</h2>
+                        
+                        
+                        <div class="client-info__header--buttons d-flex py-2 text-nowrap">
+
+                            <button type="submit" 
+                            class="btn btn-primary me-3" 
+                            id="save-changes" 
+                            disabled data-hide-btn="">Save Changes</button>
+
+                            <button type="button" data-edit="hide" 
+                            class="btn btn-primary" 
+                            id="edit-client-info">Edit information</button>
+                            
+                        </div>
+    
+                    </div>
+    
+                    <!-- - client info personal - -->
+                    <div class="client-info__personal mt-4 border px-4 py-3 rounded shadow-sm client-info-content">
+    
+                        <h4 class="h4 d-flex justify-content-between align-items-center client-info-manager">
+                            <span>Personal Details</span>
+                            <i class="fa fa-angle-down fs-4 me-3" aria-hidden="true"></i>
+                        </h4>
+    
+                        <div class="row client-info-managed">
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">First Name <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! form input ! {% endcomment %}
+                                {{user_form.first_name}}
+
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Last Name <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! form input ! {% endcomment %}
+                                {{user_form.last_name}}
+
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Job Title <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! form input ! {% endcomment %}
+                                {{user_form.job_title}}
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Contact Email <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                <div class="input-group mt-2">
+                                    <span class="input-group-text border"><i class="fa fa-envelope-open-o"
+                                            aria-hidden="true"></i></span>
+                                    {% comment %} ! form input ! {% endcomment %}
+                                    {{user_form.email}}
+                                </div>
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Mobile Number <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! form input ! {% endcomment %}
+                                {{user_form.tel}}
+                            </div>
+    
+                        </div>
+    
+                    </div>
+    
+                    <!-- - client info company - -->
+                    <div class="client-info__company mt-4 border px-4 py-3 rounded shadow-sm client-info-content">
+
+                        <h4 class="h4 d-flex justify-content-between align-items-center client-info-manager">
+                            <span>Company Details</span>
+                            <i class="fa fa-angle-down fs-4 me-3" aria-hidden="true"></i>
+                        </h4>
+    
+                        <div class="row client-info-managed">
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Company Name <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_name}}
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Business Tel <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_tel}}
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Address <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_address}}
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Contact Email <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                <div class="input-group mt-2">
+                                    <span class="input-group-text border"><i class="fa fa-envelope-open-o"
+                                            aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_email}}
+                                </div>
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">City <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_city}}
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Web Address <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_web_address}}
+                            </div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">State / Province / Region <i
+                                        class="fa fa-pencil" aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_region}}
+                            </div>
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 empty"></div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Country <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_country}}
+                            </div>
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 empty"></div>
+    
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                <span class="client-info__input-group--name">Zipcode / PIN <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></span>
+                                {% comment %} ! company form input ! {% endcomment %}
+                                {{company_form.company_zip}}
+                            </div>
+                            <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 empty"></div>
+                        </div>
+    
+                    </div>
+    
+                    <!-- - client info shipping address - -->
+                    {% for form in shipping_formset %}
+                        <div class="client-info__shipping mt-4 border px-4 py-3 rounded shadow-sm client-info-content" data-shipping="{{forloop.counter0}}">
+
+                            <h4 class="h4 d-flex justify-content-between align-items-center client-info-manager shipping-clone-parent">
+                                <span>Shipping Address <span data-shipping-title="">{{forloop.counter}}</span></span>
+                                <i class="fa fa-angle-down fs-4 me-3" aria-hidden="true"></i>
+                            </h4>
+
+                            <div class="row client-info-managed">
+                                {{shipping_formset.management_form}}
+                                {% for input in form %}
+                                    <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                        {% comment %} * label {% endcomment %}
+                                        {% if input.label != 'Id' %}
+                                        <span class="client-info__input-group--name">{{input.label}}<i class="fa fa-pencil"
+                                            aria-hidden="true"></i></span>
+                                            {% endif %}
+                                        {% comment %} * input {% endcomment %}
+                                        {{input}}
+                                    </div>   
+                                {% endfor %}                    
+                            </div>
+        
+                        </div>
+                    {% endfor %}
+
+                </form>
+                <!-- - client info add shipping address - -->
+                <div class="client-info__shipping-add mt-4 border p-4 py-3 rounded shadow-sm d-flex justify-content-end">
+                    <div class="d-block">
+                        <a href="{% url 'password_change' %}" 
+                                class="btn btn-secondary me-3" id="change-password" disabled data-hide-btn="">Change Password</a>
+                    </div>
+
+                    <button type="button" 
+                        class="btn btn-secondary px-4 d-flex justify-content-center align-items-center"
+                        id="add-shipping-address">Add Shipping Address 
+                        <i class="fa fa-plus ms-1" aria-hidden="true"></i>
+                    </button>
+                </div>
+                
+
+    
+            </div>
+        </main>
+
+    </div>
+
+{% endblock content %}
+
+{% comment %} * scripts block * {% endcomment %}
+{% block scripts %}
+    <!-- * element control -->
+    <script src="{% static 'js/public/classes/elementControl-min.js' %}"></script>
+    <!-- * client info -->
+    <script src="{% static 'js/scripts/clientInfo.js' %}"></script>
+    <!-- * canvas -->
+    <script src="{% static 'js/public/canvas-min.js' %}"></script>
+    <!-- * in dev -->
+    <script src="{% static 'js/public/in-dev-min.js' %}"></script>
+    <!-- * bootstrap 5 -->
+    <script src="{% static 'js/public/bootstrap/bootstrap.bundle.min.js' %}"></script>
+{% endblock scripts %}

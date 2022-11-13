@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block more_style %}{% endblock more_style %}
+
+    {% comment %} * favicon * {% endcomment %}
+    <link rel="icon" href="{% static 'img/logo/favicon/favicon.ico' %}" type="image/x-icon">
+
+    {% comment %} * page title * {% endcomment %}
+    <title>LaBrilliante{% block title %}{% endblock title %}</title>
+
+    {% comment %} * static css files * {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/more.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fa/css/font-awesome.min.css' %}">
+
+</head>
+<body style="{{body_style}}">
+    {% comment %} * page content * {% endcomment %}
+    {% block content %}{% endblock content %}
+
+    {% comment %} * scripts * {% endcomment %}
+    {% block scripts %}{% endblock scripts %}
+</body>
+</html>

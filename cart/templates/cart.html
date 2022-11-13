@@ -1,0 +1,467 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} * page title {% endcomment %}
+{% block title %} {{title}} {% endblock title %}
+
+{% comment %} * content {% endcomment %}
+{% block content %}
+
+        {% include 'inc/_header.html' %}
+        {% include 'inc/_canvas.html' %}
+        {% include 'inc/_indev.html' %}
+
+        <!-- ? page wrapper -->
+        <div class="wrapper filter-wrapper min-vh-100 mt-5">
+    
+            <!-- ? start diamond item ? -->
+            <div class="container-fluid container-io px-5 mt-2 content-container diamond-items-container pb-5">
+                <h2 class="h2 px-2 py-3">Shopping Bag <i class="fa fa-shopping-bag ms-2 text-primary"></i></h2>
+                <!-- content sections -->
+                <div class="content tab-content cart-content">
+    
+                    <div class="cart-panel shadow-sm border">
+    
+                        <div class="cart-panel__info px-2 py-4">
+                            <div class="cart-panel__info-item">
+                                <span class="cart-panel__info-name">Total Stone</span>
+                                <span class="cart-panel__info-place" id="total_stone">{{total_stone}}</span>
+                            </div>
+                            <div class="cart-panel__info-item">
+                                <span class="cart-panel__info-name">Total Carat</span>
+                                <span class="cart-panel__info-place" id="total_carat">{{total_carat}}</span>
+                            </div>
+                            <div class="cart-panel__info-item">
+                                <span class="cart-panel__info-name">Total net payable</span>
+                                <span class="cart-panel__info-place">$
+                                    <span class="d-flex align-items-center" id="total_price">
+                                        {{total_price}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+    
+                        <div class="cart-panel__buttons px-2 py-4 row">
+    
+                            <div class="cart-button col-3">
+                                <button type="button" class="btn btn-danger w-100" id="delete-selected">Delete
+                                    Selected</button>
+                            </div>
+    
+                            <div class="cart-button col-3">
+                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                                    data-bs-target="#buy-modal">Buy</button>
+                            </div>
+    
+                            <div class="cart-button col-3">
+                                <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal"
+                                    data-bs-target="#memo-modal">Memo</button>
+                            </div>
+    
+                            <div class="cart-button col-3">
+                                <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal"
+                                    data-bs-target="#hold-modal">Hold</button>
+                            </div>
+    
+                            <div class="cart-button col-12 mt-3">
+                                <button type="button" class="btn btn-primary w-100">Send link to wish list to
+                                    Manager</button>
+                            </div>
+    
+                        </div>
+    
+                    </div>
+    
+                    <!-- - start cart - -->
+                    <section class="result fade show pb-5 active">
+    
+                        <!-- content info list start -->
+                        <div class="content-name" id="cart_simple_sort">
+                            <!-- content name list -->
+                            {% include 'inc/_simple_sort.html' %}
+                            <!-- modal toggler -->
+                            <div class="sort-modal-toggler me-4 d-block d-xxl-none d-xl-none d-lg-none d-md-none">
+                                <button type="button" class="btn-sort px-2 py-1" data-io-sort="toggle-modal"
+                                    data-bs-target="#cart-name--modal" data-bs-toggle="modal">
+                                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            
+                            {% comment %} result sort modal {% endcomment %}
+                            <div class="modal fade" id="cart-name--modal" tabindex="-1"
+                                aria-labelledby="result-sort-label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-bottom">
+                                            <h4 class="h4 modal-title">Result Sort</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="" id="cart-sort-modal">
+                                                <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Drag to set priority
+                                                </h6>
+                                                <ul class="list result-name__modal-list" id="cart-name-priority">
+                                                    <li class="modal-sort-item active-2" data-io-advanced-sort="sale_price">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Price</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Sort by</h6>
+                                                <ul class="list result-name__modal-list" id="cart-name-sort">
+                                                    <li class="modal-sort-item" data-io-advanced-sort="compare">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Compare</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="shape">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Shape</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="disc">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Disc%</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="weight">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Carat</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="cut">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Cut</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="color">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Color</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="clarity">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Clarity</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="table_procent">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">T%</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="depth_procent">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">D%</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="lw">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">L/W</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li class="modal-sort-item" data-io-advanced-sort="report">
+                                                        <div class="d-flex sort-plus">
+                                                            <i class="fa fa-plus"></i>
+                                                            <span class="ms-2">Report</span>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <i class="fa fa-angle-down me-2"></i>
+                                                            <i class="fa fa-bars drag-handle"></i>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-top">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- content info list end -->
+    
+                        <!-- result items -->
+                        <div class="result__items border shadow rounded-bottom pe-2" id="cart-items">
+                            {% if diamonds %}
+                                {% for diamond in diamonds %}
+                                    {% include 'inc/_diamond_list.html' %}
+                                {% endfor %}
+
+                            {% else %}
+                                <div class="w-100 py-4 d-flex align-items-center justify-content-center border flex-column">
+                                    <h3 class="h3 text-success">Your shopping cart is empty</h3>
+                                    <p class="text-dark fs-5">
+                                        <span>
+                                            Go to Products
+                                        <span>
+                                        <a href="{% url 'filter' %}" class="text-success">Filter</a>
+                                    </p>
+                                </div>
+                            {% endif %}
+                        </div>
+    
+                    </section>
+                    <!-- - end cart - -->
+                </div>
+            </div>
+            <!-- ? end diamond item ? -->
+    
+            <!-- Modal Buy start -->
+            <div class="modal fade" id="buy-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="buy-modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form action="" method="" id="form-buy" class="modal-content border">
+                        <div class="modal-header border-bottom">
+                            <div class="d-flex align-items-end">
+                                <i class="svg-logo logo-icon modal-logo"></i>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h3 class="h3 text-center">Buy Request</h3>
+                            <!-- sub-title -->
+                            <h5 class="h5 text-center">Payment Terms</h5>
+                            <!-- dario terns -->
+                            <div class="d-flex w-100 justify-content-center align-items-center mt-3 modal-label-container">
+                                <div class="mx-2">
+                                    <input type="radio" name="order_type" value="0" id="buy-cod" class="d-none buy-terms-radio">
+                                    <label class="circle-radio-label shadow-sm unselectable" for="buy-cod">COD</label>
+                                </div>
+    
+                                <div class="mx-2">
+                                    <input type="radio" name="order_type" value="1" id="buy-invoice" class="d-none buy-terms-radio"
+                                        checked>
+                                    <label class="circle-radio-label shadow-sm unselectable"
+                                        for="buy-invoice">Invoice</label>
+                                </div>
+    
+                                <div class="mx-2">
+                                    <input type="radio" name="order_type" value="2" id="buy-cash-memo" class="d-none buy-terms-radio">
+                                    <label class="circle-radio-label shadow-sm unselectable" for="buy-cash-memo">Cash <br>
+                                        Memo</label>
+                                </div>
+    
+                            </div>
+                            <!-- inputs -->
+                            <div class="buy-modal-inputs d-flex align-items-center justify-content-center flex-column mt-4">
+                                <div class="input-group d-flex align-items-center justify-content-start w-75 mt-2">
+                                    <span class="d-block me-3 w-30">Pay Within</span>
+                                    <input type="number" name="pay_within" id="" class="small-input" placeholder="30">
+                                    <span class="d-block ms-4">Days of Invoice</span>
+                                </div>
+                                <div class="input-group d-flex align-items-center justify-content-center w-75 mt-2">
+                                    <span class="d-block me-3 w-30">P/ct Offer</span>
+                                    <input type="number" name="p_ct_offer" id="" class="form-control" placeholder="$200">
+                                </div>
+                                <div class="input-group d-flex align-items-center justify-content-center w-75 mt-2">
+                                    <span class="d-block me-3 w-30">Total Price Offer</span>
+                                    <input type="number" name="total_price_offer" id="" class="form-control" placeholder="$20.30">
+                                </div>
+                                <div
+                                    class="input-group d-flex flex-column align-items-center justify-content-center w-100 mt-4">
+                                    <h5 class="h5">Comments</h5>
+                                    <textarea name="comment" id="" style="resize: none;"
+                                        class="form-control w-100 text-center comment-area"
+                                        placeholder="Click to comment"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer border-top">
+                            <button type="submit" class="btn btn-primary w-100">Place Your Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Modal Buy end -->
+    
+            <!-- Modal Memo start -->
+            <div class="modal fade" id="memo-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="memo-modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form action="" method="" id="form-memo" class="modal-content border">
+                        <div class="modal-header border-bottom">
+                            <div class="d-flex align-items-end">
+                                <i class="svg-logo logo-icon modal-logo"></i>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="order_type" value="3">
+                            <!-- title -->
+                            <h3 class="h3 text-center">Memo Request</h3>
+                            <!-- inputs -->
+                            <div class="buy-modal-inputs d-flex align-items-center justify-content-center flex-column mt-3">
+                                <div
+                                    class="input-group d-flex flex-column align-items-center justify-content-center w-100 mt-3">
+                                    <h5 class="h5">Comments</h5>
+                                    <textarea name="comment" id="" style="resize: none;"
+                                        class="form-control w-100 text-center comment-area-large"
+                                        placeholder="Click to comment"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-top">
+                            <button type="submit" class="btn btn-primary w-100">Place Your Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Modal Memo end -->
+    
+            <!-- Modal hold start -->
+            <div class="modal fade" id="hold-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="hold-modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form action="" method="" id="form-hold" class="modal-content border">
+                        <div class="modal-header border-bottom">
+                            <div class="d-flex align-items-end">
+                                <i class="svg-logo logo-icon modal-logo"></i>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- title -->
+                            <h3 class="h3 text-center">Memo Request</h3>
+                            <!-- sub-title -->
+                            <h5 class="h5 text-center">How Long would you like the diamond <br> to be on hold for you</h5>
+                            <!-- inputs -->
+                            <div class="buy-modal-inputs d-flex align-items-center justify-content-center flex-column mt-3">
+                                
+                                <input type="hidden" name="order_type" value="4">
+
+                                <div class="hold-hours shadow-sm" id="hours-item">
+    
+                                    <div class="hold-hours__value unselectable">
+                                        <h3 class="h3" id="hold-hours--title">5</h3>
+                                        <h5 class="h5">Hours</h5>
+                                        <i class="fa fa-angle-down d-block fs-5" aria-hidden="true"></i>
+                                        <input type="hidden" name="hold_hours" value="5" id="hold-hours--option">
+                                    </div>
+    
+                                    <ul class="hold-hours__values mt-3 unselectable" id="hours-list">
+                                        <li class="hold-hours__select">1</li>
+                                        <li class="hold-hours__select">2</li>
+                                        <li class="hold-hours__select">3</li>
+                                        <li class="hold-hours__select">4</li>
+                                        <li class="hold-hours__select">5</li>
+                                        <li class="hold-hours__select">6</li>
+                                        <li class="hold-hours__select">7</li>
+                                        <li class="hold-hours__select">8</li>
+                                        <li class="hold-hours__select">9</li>
+                                        <li class="hold-hours__select">10</li>
+                                        <li class="hold-hours__select">11</li>
+                                        <li class="hold-hours__select">12</li>
+                                        <li class="hold-hours__select">13</li>
+                                        <li class="hold-hours__select">14</li>
+                                        <li class="hold-hours__select">15</li>
+                                        <li class="hold-hours__select">16</li>
+                                        <li class="hold-hours__select">17</li>
+                                        <li class="hold-hours__select">18</li>
+                                        <li class="hold-hours__select">19</li>
+                                        <li class="hold-hours__select">20</li>
+                                        <li class="hold-hours__select">21</li>
+                                        <li class="hold-hours__select">22</li>
+                                        <li class="hold-hours__select">23</li>
+                                        <li class="hold-hours__select">24</li>
+                                    </ul>
+    
+                                </div>
+    
+                                <p class="mt-3">Click to Change</p>
+    
+                                <div
+                                    class="input-group d-flex flex-column align-items-center justify-content-center w-100 mt-3">
+                                    <h5 class="h5">Comments</h5>
+                                    <textarea name="comment" id="" style="resize: none;"
+                                        class="form-control w-100 text-center comment-area"
+                                        placeholder="Click to comment"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-top">
+                            <button type="submit" class="btn btn-primary w-100">Place Your Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Modal hold end -->
+    
+        </div>
+
+{% endblock content %}
+
+{% comment %} * scripts {% endcomment %}
+{% block scripts %}
+    <script src="{% static 'js/scripts/ajax.js' %}"></script>
+    <script src="{% static 'js/scripts/delivery_date.js' %}"></script>
+    <script src="{% static 'js/scripts/diamond_view.js' %}"></script>
+    <script src="{% static 'js/node_modules/sortablejs/Sortable.min.js' %}"></script>
+    <script src="{% static 'js/scripts/classes/nouiSlider.min.js' %}"></script>
+    <script src="{% static 'js/scripts/classes/elementControl.js' %}"></script>
+    <script src="{% static 'js/scripts/classes/sort.js' %}"></script>
+    <script src="{% static 'js/scripts/cart.js' %}"></script>
+    <script src="{% static 'js/scripts/canvas.js' %}"></script>
+    <script src="{% static 'js/scripts/classes/scroll.js' %}"></script>
+    <script src="{% static 'js/public/bootstrap/bootstrap.bundle.min.js' %}"></script> 
+    <script src="{% static 'js/scripts/in-dev.js' %}"></script>
+{% endblock scripts %}

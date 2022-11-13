@@ -1,0 +1,116 @@
+<nav class="canvas shadow container-io py-5 px-4" id="nav-canvas">
+
+    <div class="canvas__out"></div>
+
+    <ul class="canvas__list fs-5">
+        <!-- * dashbord * -->
+        <li class="canvas__li canvas__dashbord border-bottom pb-4">
+            <div class="canvas__user">
+                <a href="{% url 'user_info' %}">
+                    <i class="fa fa-user fs-3 text-primary"></i>
+                </a>
+            </div>
+            <span class="canvas__text">Dashbord</span>
+            <div class="canvas__dashbord--btns">
+                <a href="#" class="canvas__dashbord--btn"><i class="fa fa-bell" aria-hidden="true"></i></a>
+                <a href="#" class="canvas__dashbord--btn"><i class="fa fa-cog" aria-hidden="true"></i></a>
+                <button type="button" class="exit-canvas burger-trigger" id="exit-canvas"></button>
+            </div>
+        </li>
+
+        <li class="canvas__li canvas__drop-box">
+            <div class="d-flex align-items-center w-100 canvas__element canvas__drop-list--trigger">
+                <i class="fa fa-filter me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Diamonds</span>
+                <i class="fa fa-angle-down canvas__text " aria-hidden="true"></i>
+            </div>
+
+            <ul class="canvas__drop-list canvas__drop-list--target">
+                <li class="canvas__drop-li canvas__element">
+                    <a href="{% url 'filter' %}" class="canvas__link">
+                        <i class="fa fa-diamond me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                        <span class="canvas__text canvas__item">White Diamonds</span>
+                    </a>
+                </li>
+
+                <li class="canvas__drop-li canvas__element">
+                    <a href="{% url 'filter' %}" class="canvas__link">
+                        <i class="fa fa-diamond me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                        <span class="canvas__text canvas__item">Colored Diamond</span>
+                    </a>
+                </li>
+
+                <li class="canvas__drop-li canvas__element">
+                    <a href="{% url 'filter' %}" class="canvas__link">
+                        <i class="fa fa-diamond me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                        <span class="canvas__text canvas__item">Melee</span>
+                    </a>
+                </li>
+
+                <li class="canvas__drop-li canvas__element">
+                    <a href="{% url 'filter' %}" class="canvas__link">
+                        <i class="fa fa-diamond me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                        <span class="canvas__text canvas__item">Other Diamond</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="#" class="canvas__link in-dev-toggler">
+                <i class="fa fa-magic me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Custom Order</span>
+            </a>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="#" class="canvas__link in-dev-toggler">
+                <i class="fa fa-file me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Hold List</span>
+            </a>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="#" class="canvas__link in-dev-toggler">
+                <i class="fa fa-credit-card me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Payment Methods</span>
+            </a>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="{% url 'user_info' %}" class="canvas__link">
+                <i class="fa fa-book me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Client Information</span>
+            </a>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="#" class="canvas__link in-dev-toggler">
+                <i class="fa fa-comments me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Chat</span>
+            </a>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="#" class="canvas__link in-dev-toggler">
+                <i class="fa fa-handshake-o me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Sale</span>
+            </a>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="{% url 'orders' %}" class="canvas__link">
+                <i class="fa fa-book me-3 fs-5 canvas__icon d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Orders</span>
+            </a>
+        </li>
+
+        <li class="canvas__li canvas__element">
+            <a href="{% url 'signout' %}" class="canvas__link">
+                <i class="fa fa-sign-out me-3 fs-5 canvas__icon bg-danger d-flex justify-content-center align-items-center" aria-hidden="true"></i>
+                <span class="canvas__text canvas__item">Sign-out</span>
+            </a>
+        </li>
+    </ul>
+
+</nav>

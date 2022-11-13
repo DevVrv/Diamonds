@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} * page title * {% endcomment %}
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+{% comment %} * content block * {% endcomment %}
+{% block content %}
+    <div class="h-100 w-100 d-flex align-items-center justify-content-center">
+        <div class="container d-flex align-items-center justify-content-center auth-form-container">
+            {% comment %} form start {% endcomment %}
+            <form method="POST" class="auth-form border rounded shadow-sm px-5 py-5">
+                {% comment %} token {% endcomment %}
+                {% csrf_token %}
+    
+                {% if messages %}
+
+                    {% for message in messages %}
+                        <div class="logo w-100 d-flex align-items-center justify-content-center pb-4 border-bottom">
+                            <img src="{% static 'img/logo/LaBrilliante.svg' %}" alt="" class="w-75">
+                        </div>
+                        <div class="w-100 d-flex justify-content-center align-items-center py-3 flex-column">
+                            <h3 class="h3 text-success">Registration was <span class="text-success">successfule</h3>
+                            <p class="fs-6 mt-0 mt-2">
+                                Now you can log in to the site
+                            </p>
+                        </div>
+                        <div class="w-100 d-flex justify-content-center align-items-center">
+                            <a href="{% url 'signin' %}" class="btn btn-primary fs-6 py-2 px-4">Log in to the site</a>
+                        </div>
+                    {% endfor %}
+                
+                {% comment %} -- messages is empty -- {% endcomment %}
+                {% else %}
+                    <div class="row">
+                        {% comment %} logo {% endcomment %}
+                        <div class="col-12 d-flex align-items-center justify-content-center pb-4 border-bottom">
+                            <i class="svg-logo logo-icon modal-logo"></i>
+                        </div>
+        
+                        {% comment %} title {% endcomment %}
+                        <div class="col-12 mt-4 d-flex align-items-center justify-content-center">
+                            <h3 class="h3 text-primary">{{title}}</h3>
+                        </div>
+                        
+                        {% comment %} errors list {% endcomment %}
+                        {% if form.errors or messages.tags == 'errors' %}
+                            {% include 'inc/messages/_error_list.html' %}
+                            
+                        {% elif form.errors or messages.tags != 'errors' %}
+                            {% include 'inc/messages/_messages.html' %}
+                        {% endif %}
+                        
+                        {% comment %} form inputs {% endcomment %}
+                        {% for input in form %}
+                            {% if input.name != 'user_type' %}
+                            <div class="col-12 mt-4">
+                                {{input}}
+                            </div>
+                            {% else %}
+                            {{input}}
+                            {% endif %} 
+                        {% endfor %}
+        
+                        {% comment %} captcha {% endcomment %}
+                        <div class="col-12 mt-4">
+                            <div class="g-recaptcha mt-3 w-75" data-sitekey="6LfQ9XggAAAAALRfdFBAyQZJ-7ekoHARW8o7oMwJ"></div>
+                        </div>
+        
+                        {% comment %} submit {% endcomment %}
+                        <div class="col-12 mt-4 d-flex justify-content-center align-items-center flex-column">
+                            <button type="submit" class="btn btn-primary w-100">
+                                Register
+                            </button>
+            
+                            <p class="mt-4">Have an account ? <a href="{% url 'signin' %}" class="link">Sign in</a></p>
+                        </div>
+        
+                    </div>
+                {% endif %}
+    
+            </form>
+            {% comment %} form end {% endcomment %}
+        </div>
+    </div>
+{% endblock content %}
+
+{% comment %} * scripts * {% endcomment %}
+{% block scripts %}
+
+    {% comment %} ! google captcha ! {% endcomment %}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="{% static 'js/public/bootstrap/bootstrap.bundle.min.js' %}"></script>
+
+{% endblock scripts %}
+

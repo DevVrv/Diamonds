@@ -1,0 +1,52 @@
+{% load static %}
+<header class="header">
+    <div class="header__style client-header d-flex align-items-center px-5 pb-1">
+        <div class="container-fluid container-io header__container py-4 border">
+            <div class="header__logo-container">
+                <a href="{% url 'filter' %}" class="header__logo w-100">
+                    <img src="{% static 'img/logo/LaBrilliante.svg' %}">
+                </a>
+
+                <button type="button" class="btn-burger burger-trigger" id="canvas-toggler">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <nav class="header__nav w-100">
+                <div class="d-flex align-items-end header__nav-box">
+
+                    <a href="tel:+12012855165" class="header__link fs-4 header__tel">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        <span>+1201 2855165</span>
+                    </a>
+
+                    <a href="#" class="header__nav--btn fs-4">
+                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                <div class="d-flex align-items-end">
+                    <a href="#" class="header__nav--btn fs-4">
+                        <i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                    </a>
+
+                    <a href="#" class="header__nav--btn fs-4">
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    </a>
+
+                    <a href="{% url 'cart' %}" class="header__nav--btn fs-4 header_cart-btn">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                        {% if cart_len %}
+                            <span id="cart_length">{{cart_len}}</span>
+                        {% endif %}
+                    </a>
+
+                    <a href="{% url 'user_info' %}" class="header__nav--btn fs-4">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>

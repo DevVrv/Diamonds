@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} * page title * {% endcomment %}
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+{% comment %} * page content * {% endcomment %}
+{% block content %}
+
+    <div class="share">
+        <main class="share__info px-5 py-2 min-vh-100 d-flex align-items-center justify-content-center">
+            <div class="vh-100 d-flex flex-column justify-content-center align-items-center">
+                {% comment %} content name {% endcomment %}
+                <div class="content-name w-100">
+                    <!-- content name list -->
+                    {% include 'inc/_simple_names.html' %}
+                </div>
+                
+                <div class="result__items share_items border shadow rounded-bottom pe-2" id="share_items">
+                    {% if diamonds %}
+                    {% for diamond in diamonds %}
+                       {% include 'inc/_diamond_list_share.html' %}
+                    {% endfor %}
+                {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+{% endblock content %}
+
+{% comment %} * scripts * {% endcomment %}
+{% block scripts %}
+    <script src="{% static 'js/public/classes/elementControl-min.js' %}"></script>
+    <!-- * sortable  -->>
+    <script src="{% static 'js/public/diamond-items-min.js' %}"></script>
+{% endblock scripts %}
+

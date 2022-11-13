@@ -1,0 +1,68 @@
+{% load i18n %}
+
+{% if app_list %}
+  {% for app in app_list %}
+    
+    <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+        
+        <a href="{{ app.app_url }}" class="section app_li d-flex px-3 w-100 text-white" 
+        title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
+
+        {% for model in app.models %}
+            <div class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path|urlencode %} current{% endif %} border-bottom app d-flex align-items-center justify-content-between px-3 py-3">
+            {% if model.admin_url %}
+                <div scope="row"><a href="{{ model.admin_url }}" class="link-def" {% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>{{ model.name }}</a></div>
+            {% else %}
+                <div scope="row">{{ model.name }}</div>
+            {% endif %}
+
+            {% if model.add_url %}
+                <div>
+                    {% if model.name == 'Users' %}
+                    <a href="/user/signup/extended/" class="add-link-text">
+                        {% translate '' %}
+                        <i class="fa fa-plus ms-1" aria-hidden="true"></i>
+                    </a>
+                    {% else %}
+                    <a href="{{ model.add_url }}" class="add-link-text">
+                        {% translate '' %}
+                        <i class="fa fa-plus ms-1" aria-hidden="true"></i>
+                    </a>
+                    {% endif %}
+
+                </div>
+            {% else %}
+                <div></div>
+            {% endif %}
+
+            {% if model.admin_url and show_changelinks %}
+                {% if model.view_only %}
+                <div><a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a></div>
+
+                {% endif %}
+            {% elif show_changelinks %}
+                <div></div>
+            {% endif %}
+            
+            </div>
+        {% endfor %}
+
+        
+        {% if app.name == 'Vendors'%}
+        <div class="model-group border-bottom app d-flex align-items-center justify-content-between px-3 py-3">
+            <div scope="row">
+                <a href="{% url 'white' %}" class="link-def">White</a>
+            </div>
+        </div>
+        <div class="model-group border-bottom app d-flex align-items-center justify-content-between px-3 py-3">
+            <div scope="row">
+                <a href="{% url 'round_pear' %}" class="link-def">Round / Pear</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+  {% endfor %}
+
+{% else %}
+    <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+{% endif %}
