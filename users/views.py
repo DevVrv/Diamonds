@@ -149,6 +149,7 @@ class SignInConfirmView(FormView):
         print(self.extra_context)
         return super().get(request, *args, **kwargs)
 
+# -- sign out
 class SignOut(TemplateView):
     pass
 
