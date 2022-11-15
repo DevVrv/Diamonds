@@ -36,14 +36,14 @@ class UsersCreationForm(forms.Form):
         email = self.cleaned_data['email']
         if CustomUser.objects.filter(email=email).exists():
             raise ValidationError("Email already exists")
-        return email
+        return self.cleaned_data
 
         # email validation
     def clean_tel(self):
         tel = self.cleaned_data['tel']
         if CustomUser.objects.filter(tel=tel).exists():
             raise ValidationError("Tel already exists")
-        return tel
+        return self.cleaned_data
 
     # password validation
     def clean(self):
@@ -51,12 +51,23 @@ class UsersCreationForm(forms.Form):
         if form_data['password1'] != form_data['password2']:
             self._errors["password1"] = "Password do not match" # Will raise a error message
             del form_data['password1']
-        return form_data
+        return self.cleaned_data
 
     # meta settings
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'tel')
+
+# -- signup form exntended
+class ExtendedUsersCreationForm(UsersCreationForm):
+    user_types = (
+        (0, 'Type - Staff'),
+        (1, 'Type - User'),
+        (2, 'Type - Vendor'),
+    )
+    user_type = forms.ChoiceField(initial=1, choices=user_types, widget=forms.Select(attrs={
+        'class': 'form-select'
+    }))
 
 # -- signin form
 class UsersAuthForm(forms.Form):

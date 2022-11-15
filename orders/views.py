@@ -11,7 +11,7 @@ import json
 
 
 from django.utils import timezone
-from tools.inspector import inspect_level, inspect_type
+
 
 
 from django.core import mail
@@ -23,12 +23,7 @@ from core.settings import DEFAULT_FROM_EMAIL
 
 # * Get orders page
 def get_orders(request):
-    
-    if not inspect_type(request, 1):
-        return redirect(reverse_lazy('signin'))
 
-    if not inspect_level(request, 2):
-        return redirect(reverse_lazy('signin'))
 
     orders_model = Orders_model.objects.filter(user_id = request.user.id)
 

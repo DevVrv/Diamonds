@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import filterPage, filtering_of_key, filtering, test_email
+from .views import filterPage, filtering_of_key, filtering
 
 urlpatterns = [
 

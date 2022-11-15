@@ -1,5 +1,5 @@
 from django import forms
-from users.forms import CustomUserCreationForm
+from users.forms import UsersCreationForm
 
 # * upload white list
 class UploadCSV(forms.Form):
@@ -9,7 +9,7 @@ class UploadCSV(forms.Form):
     )
 
 # * vendor create
-class VendorCreationForm(CustomUserCreationForm):
+class VendorCreationForm(UsersCreationForm):
 
     user_types = (
         (2, '2 - Vendor'),

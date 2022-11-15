@@ -12,15 +12,13 @@ from django.contrib import messages
 from .models import CustomUser
 
 # -- forms
-from .forms import UsersCreationForm, UsersAuthForm, UsersConfirmForm
+from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm
 
 # -- tools
-from tools.code import create_code
+from .code import create_code
+from .inspector import Inspector
 from mail.views import send_email
 
-
-
-# -------------------------------------------------------------- #
 
 # -- sign up view
 class SignUpView(FormView):
@@ -62,6 +60,16 @@ class SignUpView(FormView):
     # <-- GET
     def get(self, request, *args: str, **kwargs):
         return super().get(request, *args, **kwargs)
+        
+# -- sign up extended view
+class SignUpExtendedView(SignUpView):
+    form_class = ExtendedUsersCreationForm
+    template_name = 'signup_extended.html'
+    success_url = reverse_lazy('signup_extended')
+
+    def get(self, request, *args: str, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 # -- sign in
 class SignInView(FormView):
@@ -76,7 +84,10 @@ class SignInView(FormView):
     # --> POST
     def post(self, request, *args, **kwargs):
         form = self.form_class(self.request.POST)
+
+        # -- recaptcha true
         if self.request.recaptcha_is_valid:
+            
             # -- form valid
             if form.is_valid():
                 user_type = form.cleaned_data.get('user_type')
@@ -100,7 +111,10 @@ class SignInView(FormView):
 
                 # --> vendor door
                 elif user_type == '2':
-                    print(user_type)
+                    user = CustomUser.objects.filter(email=form.cleaned_data.get('username')).filter(user_type='2')
+                    if user.exists():
+                        login(self.request, user)
+                    
 
             # -- form invalid
             else:
@@ -108,6 +122,8 @@ class SignInView(FormView):
                     messages.error(self.request, form.errors.as_data()['__all__'][0].message)
                 except:
                     messages.error(self.request, 'Something was wrong')
+        
+        # -- recaptcha false
         else:
             return redirect(reverse_lazy('signin'))
 
@@ -115,7 +131,11 @@ class SignInView(FormView):
 
     # <-- GET
     def get(self, request, *args: str, **kwargs):
-        return super().get(request, *args, **kwargs)
+        inspect = Inspector(request, {})
+        if inspect.inspect_auth():
+            return redirect(reverse_lazy('user_info'))
+        else:
+            return super().get(request, *args, **kwargs)
 
 # -- auth confirm
 class SignInConfirmView(FormView):
@@ -149,10 +169,6 @@ class SignInConfirmView(FormView):
         print(self.extra_context)
         return super().get(request, *args, **kwargs)
 
-# -- sign out
-class SignOut(TemplateView):
-    pass
-
 # -- auth confirm replay
 class SignInConfirmResend(SignInConfirmView):
 
@@ -181,6 +197,10 @@ class SignInConfirmResend(SignInConfirmView):
 
         messages.info(self.request, 'New code was sended on your email')
         return redirect(reverse_lazy('signin_confirm'))
+
+# -- sign out
+class SignOut(TemplateView):
+    pass
 
 # -- user info
 class UserInfo(TemplateView):

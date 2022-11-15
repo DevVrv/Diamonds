@@ -7,16 +7,11 @@ import json
 # forms
 from .models import Diamond_Model, MaxMin
 from cart.models import CartModal
-from tools.inspector import inspect_level, inspect_type
+
 from django.contrib import messages
 # <------------------------------ get filter page
 def filterPage(request):
 
-    if not inspect_type(request, 1):
-        return redirect(reverse_lazy('signin'))
-
-    if not inspect_level(request, 2):
-        return redirect(reverse_lazy('signin'))
 
     # * get cart items
     try:
@@ -292,7 +287,6 @@ def filtering(request):
 
 # <------------------------------ get diamond of keys
 def filtering_of_key(request):
-
     if request.method == 'POST':
 
         # <-- get request data
@@ -322,18 +316,3 @@ def filtering_of_key(request):
 
         return HttpResponse (responce, content_type="application/json")
 
-
-# todo --> email test 
-def test_email(request):
-
-    request = json.loads(request.body)
-
-    print(request)
-
-    from  django.core.mail  import EmailMessage 
-
-    send_mail('TEST MESSAGE', 'LAB EMAIL', None, ['vrv.lfm@gmail.com', 'dev.vrv@gmail.com'], fail_silently=False)
-    
-
-    responce = {}
-    return HttpResponse(json.dumps(responce))

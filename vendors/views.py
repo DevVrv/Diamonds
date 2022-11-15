@@ -12,7 +12,6 @@ import csv
 
 from filter.models import Diamond_Model
 from .models import Vedor_Diamond_Model
-from tools.inspector import inspect_type
 from .forms import UploadCSV, VendorCreationForm
 from users.models import CustomUser
 
@@ -65,10 +64,6 @@ def diamonds_white(request):
     # * urls
     refused_url = 'signin'
     this_url = 'white'
-
-    # * inspect type
-    if not inspect_type(request, 2):
-        return redirect(reverse_lazy(refused_url))
 
     # * form 
     form = UploadCSV(request.POST or None)
@@ -227,10 +222,6 @@ def diamonds_data(request):
     # * urls
     refused_url = 'signin'
     this_url = 'diamonds_data'
-
-    # * inspect type
-    if not inspect_type(request, 2):
-        return redirect(reverse_lazy(refused_url))
 
     # * get form
     form = UploadCSV()

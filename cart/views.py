@@ -7,17 +7,10 @@ from django.urls import reverse_lazy
 from .models import CartModal
 from filter.models import Diamond_Model
 from cart.models import CartModal
-from tools.inspector import inspect_type, inspect_level
-# Create your views here.
+
 
 # <-- get cart template
 def cart(request):
-
-    if not inspect_type(request, 1):
-        return redirect(reverse_lazy('signin'))
-
-    if not inspect_level(request, 2):
-        return redirect(reverse_lazy('signin'))
 
     try:
         cart_items = CartModal.objects.get(user = request.user.pk)
