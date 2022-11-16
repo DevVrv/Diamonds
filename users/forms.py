@@ -1,9 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
-from .models import CustomUser
-from django.contrib import messages
-
+from django.forms import modelformset_factory
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.exceptions import ValidationError
+
+from .models import CustomUser, ShippingAddress, CompanyDetails
 
 # -- signup form
 class UsersCreationForm(forms.Form):
@@ -36,14 +36,14 @@ class UsersCreationForm(forms.Form):
         email = self.cleaned_data['email']
         if CustomUser.objects.filter(email=email).exists():
             raise ValidationError("Email already exists")
-        return self.cleaned_data
+        return self.cleaned_data['email']
 
-        # email validation
+    # tel validation
     def clean_tel(self):
         tel = self.cleaned_data['tel']
         if CustomUser.objects.filter(tel=tel).exists():
             raise ValidationError("Tel already exists")
-        return self.cleaned_data
+        return self.cleaned_data['tel']
 
     # password validation
     def clean(self):
@@ -55,10 +55,6 @@ class UsersCreationForm(forms.Form):
             del form_data['password1']
         return self.cleaned_data
 
-    # meta settings
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'tel')
 
 # -- signup form exntended
 class ExtendedUsersCreationForm(UsersCreationForm):
@@ -155,4 +151,75 @@ class PasswordRecoveryForm(forms.Form):
             self._errors["password1"] = "Password do not match" # Will raise a error message
             del form_data['password1']
         return self.cleaned_data
+
+# -- change client info form
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'job_title', 'email', 'tel']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'last_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'email': forms.EmailInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info'}),
+            'tel': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'job_title': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+        }
+
+# -- company details form
+class CompanyDetailsForm(forms.ModelForm):
+    class Meta:
+        model = CompanyDetails
+        fields = [
+            'company_name', 
+            'company_address', 
+            'company_city', 
+            'company_country', 
+            'company_region', 
+            'company_zip', 
+            'company_tel', 
+            'company_email', 
+            'company_web_address'
+            ]
+        widgets = {
+            'company_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_tel': forms.NumberInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_email': forms.EmailInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info'}),
+            'company_address': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_city': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_web_address': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_region': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_country': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_zip': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+        }
+
+# -- shipping formset
+ShippingFormSet = modelformset_factory(
+    ShippingAddress, 
+    fields=(
+        'shipping_company_name', 
+        'shipping_attention_name',
+        'shipping_address', 
+        'shipping_city', 
+        'shipping_country', 
+        'shipping_region', 
+        'shipping_zip', 
+        'shipping_tel', 
+        'shipping_email', 
+    ),
+    widgets = {
+    'shipping_company_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_attention_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_tel': forms.NumberInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_email': forms.EmailInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_address': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_city': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_region': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_country': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+    'shipping_zip': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}), 
+    },
+    extra=1,
+    
+)
+
+
 

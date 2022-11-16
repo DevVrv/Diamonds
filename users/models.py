@@ -41,7 +41,7 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
     
-# * Company details model
+# -- Company details model
 class CompanyDetails(models.Model):
     company_name = models.CharField(max_length=150, verbose_name='Company Name', blank=True)
 
@@ -65,7 +65,7 @@ class CompanyDetails(models.Model):
         verbose_name_plural = 'Company Details'
         ordering = ['pk']  
 
-# * Shipping address model
+# -- Shipping address model
 class ShippingAddress(models.Model):
     shipping_company_name = models.CharField(max_length=150, verbose_name='Company Name', blank=True)
     shipping_attention_name = models.CharField(max_length=150, verbose_name='Attention To (Name)', blank=True)
