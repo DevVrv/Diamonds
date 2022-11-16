@@ -62,5 +62,3 @@ function timer(containerID, clockID, link, timer = 60) {
     }
 
 }
-
-timer('#resend_timer_container', '#resend_timer', '/user/confirm/again/');

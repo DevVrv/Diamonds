@@ -48,6 +48,8 @@ class UsersCreationForm(forms.Form):
     # password validation
     def clean(self):
         form_data = self.cleaned_data
+        if len(form_data['password1']) < 8:
+            self._errors["password1"] = "The password must be at least 8 characters long" # Will raise a error message
         if form_data['password1'] != form_data['password2']:
             self._errors["password1"] = "Password do not match" # Will raise a error message
             del form_data['password1']
@@ -121,4 +123,36 @@ class UsersConfirmForm(forms.Form):
         'placeholder': 'Enter Code'
     }))
 
+# -- password recovery
+class PasswordRecoveryForm(forms.Form):
+    mail = forms.CharField(required=True, max_length=255, label='', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Email',
+        
+        }))
+    password1 = forms.CharField(max_length=150, label='', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'New Password'
+        }))
+    password2 = forms.CharField(max_length=150, label='', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Repeat new password'
+        }))
+
+    # email validation
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if CustomUser.objects.filter(email=email).exists() == False:
+            raise ValidationError("Email was not found")
+        return self.cleaned_data
+
+    # password validation
+    def clean(self):
+        form_data = self.cleaned_data
+        if len(form_data['password1']) < 8:
+            self._errors["password1"] = "The password must be at least 8 characters long" # Will raise a error message
+        if form_data['password1'] != form_data['password2']:
+            self._errors["password1"] = "Password do not match" # Will raise a error message
+            del form_data['password1']
+        return self.cleaned_data
 

@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
         (1, '1 - Client'),
         (2, '2 - Vendor'),
     )
-
+    
     # user info
     username = models.CharField(max_length=250, verbose_name="User Name", unique=True, db_index=True)
     email = models.EmailField(verbose_name="Email", unique=True, db_index=True)

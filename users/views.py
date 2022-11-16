@@ -12,13 +12,16 @@ from django.contrib import messages
 from .models import CustomUser
 
 # -- forms
-from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm
+from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm, PasswordRecoveryForm
 
 # -- tools
 from .code import create_code
 from .inspector import Inspector
 from mail.views import send_email
 
+
+
+# @ SIGN IN
 
 # -- sign up view
 class SignUpView(FormView):
@@ -70,6 +73,17 @@ class SignUpExtendedView(SignUpView):
     def get(self, request, *args: str, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
+# @ SIGN OUT
+
+# -- sign out
+class SignOut(TemplateView):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(reverse_lazy('signin'))
+
+
+# @ SIGN IN
 
 # -- sign in
 class SignInView(FormView):
@@ -140,7 +154,7 @@ class SignInView(FormView):
 # -- auth confirm
 class SignInConfirmView(FormView):
 
-    template_name = 'confirm.html'
+    template_name = 'signin_confirm.html'
     form_class = UsersConfirmForm
     extra_context = {
         'title': 'Email confirmation',
@@ -159,14 +173,13 @@ class SignInConfirmView(FormView):
 
             if form_code == mail_code:
                 user = CustomUser.objects.get(email=email)
-                print(authenticate(user))
+                login(self.request, user)
 
         return super().post(request, *args, **kwargs)
 
     # <-- GET
     def get(self, request, *args: str, **kwargs):
         self.extra_context['email'] = self.request.session['email']
-        print(self.extra_context)
         return super().get(request, *args, **kwargs)
 
 # -- auth confirm replay
@@ -198,9 +211,113 @@ class SignInConfirmResend(SignInConfirmView):
         messages.info(self.request, 'New code was sended on your email')
         return redirect(reverse_lazy('signin_confirm'))
 
-# -- sign out
-class SignOut(TemplateView):
-    pass
+
+# @ PASSWORD RECOVERY
+
+# -- restor password
+class PasswordRecovery(FormView):
+
+    form_class = PasswordRecoveryForm
+    template_name = 'password_recovery.html'
+    success_url = 'password_recovery_confirm'
+    extra_context = {
+        'title': 'Password Recovery',
+        'resend_url': 'password_recovery_resend'
+    }
+
+    # --> POST
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            
+            code = create_code(request, form.cleaned_data.get('mail'))
+            self.request.session['new_pass'] = form.cleaned_data.get('password1')
+            
+
+            # --> send email
+            send_email({
+                'subject': 'Password recovery',
+                'email': self.request.session['email'],
+                'template': '_mail_confirm.html',
+                'context': {
+                    'code': code,
+                    'title': 'Recovery',
+                    'login': self.request.session['email']
+                }
+            })
+
+
+            return redirect(reverse_lazy(self.success_url))
+
+        return super().post(request, *args, **kwargs)
+
+    # <-- get
+    def get(self, request, *args, **kwargs):
+        self.extra_context['email'] = self.request.session['email']
+        return super().get(request, *args, **kwargs)
+
+# -- auth confirm
+class PasswordRecoveryConfirm(FormView):
+
+    template_name = 'password_recovery_confirm.html'
+    form_class = UsersConfirmForm
+    extra_context = {
+        'title': 'Password recovery confirm',
+    }
+    success_url = 'signin'
+
+    # --> POST
+    def post(self, request, *args, **kwargs):
+        password = self.request.session['new_pass']
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            
+            if int(self.request.session['code']) == int(form.cleaned_data.get('code')):
+                user = CustomUser.objects.get(email = self.request.session['email'])
+                user.password = make_password(password)
+                user.save()
+                messages.success(self.request, 'Your password has been successfully updated')
+                return redirect(reverse_lazy(self.success_url))
+
+        return super().post(request, *args, **kwargs)
+
+    # <-- GET
+    def get(self, request, *args: str, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+# -- auth confirm replay
+class PasswordRecoveryResend(PasswordRecoveryConfirm):
+    
+    # <-- GET
+    def get(self, request, *args: str, **kwargs):
+        
+        mail = self.request.session['email']
+
+        # -- generate code
+        code = create_code(request, mail)
+        
+        # -- set timer
+        self.extra_context['timer'] = True
+        
+        # --> send email
+        send_email({
+            'subject': 'Password recovery',
+            'email': self.request.session['email'],
+            'template': '_mail_confirm.html',
+            'context': {
+                'code': code,
+                'title': 'Recovery',
+                'login': self.request.session['email']
+            }
+        })
+
+        messages.info(self.request, 'New code was sended on your email')
+        return redirect(reverse_lazy('password_recovery_confirm'))
+
+
+# @ USER INFO
 
 # -- user info
 class UserInfo(TemplateView):
