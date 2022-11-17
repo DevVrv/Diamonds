@@ -1,9 +1,9 @@
 from django import forms
-from django.forms import modelformset_factory
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.forms import modelformset_factory, BaseModelFormSet
+from django.contrib.auth.forms import UserChangeForm
 from django.core.exceptions import ValidationError
 
-from .models import CustomUser, ShippingAddress, CompanyDetails
+from .models import CustomUser, CompanyDetails, ShippingAddress
 
 # -- signup form
 class UsersCreationForm(forms.Form):
@@ -54,7 +54,6 @@ class UsersCreationForm(forms.Form):
             self._errors["password1"] = "Password do not match" # Will raise a error message
             del form_data['password1']
         return self.cleaned_data
-
 
 # -- signup form exntended
 class ExtendedUsersCreationForm(UsersCreationForm):
@@ -192,9 +191,17 @@ class CompanyDetailsForm(forms.ModelForm):
             'company_zip': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
         }
 
+# TODO FORMSER
+class ShippingAddressFormSet(BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.queryset = ShippingAddress.objects.filter(user_id=22)
+
 # -- shipping formset
 ShippingFormSet = modelformset_factory(
-    ShippingAddress, 
+
+    model=ShippingAddress, 
+    
     fields=(
         'shipping_company_name', 
         'shipping_attention_name',
@@ -206,19 +213,40 @@ ShippingFormSet = modelformset_factory(
         'shipping_tel', 
         'shipping_email', 
     ),
+
     widgets = {
-    'shipping_company_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_attention_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_tel': forms.NumberInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_email': forms.EmailInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_address': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_city': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_region': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_country': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-    'shipping_zip': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}), 
+        'shipping_company_name': forms.TextInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            
+        'shipping_attention_name': forms.TextInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+
+        'shipping_tel': forms.NumberInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+
+        'shipping_email': forms.EmailInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+
+        'shipping_address': forms.TextInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+
+        'shipping_city': forms.TextInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+
+        'shipping_region': forms.TextInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+
+        'shipping_country': forms.TextInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+
+        'shipping_zip': forms.TextInput(
+            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
     },
+
     extra=1,
-    
+
+    formset=ShippingAddressFormSet,
+
 )
 
 

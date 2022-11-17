@@ -58,7 +58,7 @@ class CompanyDetails(models.Model):
     user = models.ForeignKey(CustomUser, verbose_name='Associated User', db_index=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.pk}{self.company_name}{self.user}'
+        return f'{self.pk}'
 
     class Meta:
         verbose_name = 'Company Details'
@@ -82,7 +82,7 @@ class ShippingAddress(models.Model):
     user = models.ForeignKey(CustomUser, verbose_name='Associated User', db_index=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.pk}{self.shipping_company_name}{self.user}'
+        return f'{self.pk}'
 
     class Meta:
         verbose_name = 'Shipping Address'

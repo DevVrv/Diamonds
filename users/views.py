@@ -111,6 +111,7 @@ class SignInView(FormView):
                     code = create_code(request, form.cleaned_data.get('username'), form.cleaned_data.get('remember_me'))
                     
                     # --> send email
+                    print(self.request.session['email'])
                     send_email({
                         'subject': 'Labrilliante email confirm',
                         'email': self.request.session['email'],
@@ -325,8 +326,21 @@ class UserInfo(TemplateView):
     shipping_forms = ShippingFormSet
     success_url = 'user_info'
 
+    # -- update shipping
+    def update_shipping(self):
+
+        for item in self.shipping_forms.cleaned_data:
+            if item:
+                item['user_id'] = self.request.user.pk
+
+        self.shipping_forms.add_fields()
+        # self.shipping_forms.save()
+
+
+
+
     # <-- get company form
-    def getCompany(self):
+    def get_company(self):
 
         # if compnay is not registered - create company details
         if not CompanyDetails.objects.filter(user_id=self.request.user.id).exists():
@@ -351,22 +365,26 @@ class UserInfo(TemplateView):
     def post(self, request, *args, **kwargs):
 
         # -- personal details
-        user_form = CustomUserChangeForm(request.POST, instance=CustomUser.objects.get(pk=request.user.pk))
-        if user_form.is_valid():
-            user_form.save()
+        self.user_form = self.user_form(request.POST, instance=CustomUser.objects.get(pk=request.user.pk))
+        if self.user_form.is_valid():
+            self.user_form.save()
         else:
             messages.error(request, 'A user with this data already exists')
             return redirect(reverse_lazy('user_info'))
 
         # -- company details
-        company_form = CompanyDetailsForm(request.POST, instance=CompanyDetails.objects.get(user_id=request.user.pk))
-        if company_form.is_valid():
-            company_form.save()
+        self.company_form = self.company_form(request.POST, instance=CompanyDetails.objects.get(user_id=request.user.pk))
+        if self.company_form.is_valid():
+            self.company_form.save()
         
-        if not user_form.changed_data and not company_form.changed_data:
-            messages.info(self.request, 'You haven\'t made any changes')
+        # -- shipping details
+        self.shipping_forms = self.shipping_forms(request.POST)
+        if self.shipping_forms.is_valid():
+            self.update_shipping()
+                    
+                    
 
-
+            
         return redirect(reverse_lazy(self.success_url))
 
     # <-- GET
@@ -376,7 +394,11 @@ class UserInfo(TemplateView):
         self.user_form = self.user_form(instance=request.user or None)
 
         # -- company form
-        self.company_form = self.getCompany()
+        self.company_form = self.get_company()
+        
+        # -- shipping formset
+        self.shipping_forms = self.shipping_forms()
+
 
         # -- extra context
         self.extra_context = {
@@ -392,7 +414,7 @@ class UserInfo(TemplateView):
 # def user_info(request):
 
 #     # -- get company form
-#     def getCompany(request):
+#     def get_company(request):
 
 #         # if compnay is not registered - create company details
 #         if not CompanyDetails.objects.filter(user_id=request.user.id):
@@ -474,7 +496,7 @@ class UserInfo(TemplateView):
 #     user_form = CustomUserChangeForm(instance=request.user or None)
 
 #     # * company form
-#     company_form = getCompany(request)
+#     company_form = get_company(request)
 
 #     # * shipping address
 #     shipping_items = ShippingAddress.objects.filter(user_id=request.user.pk)
@@ -493,5 +515,4 @@ class UserInfo(TemplateView):
     
 #     # # -- render template
 #     # return render(request, 'user_info.html', context)
-            
             
