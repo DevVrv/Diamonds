@@ -195,7 +195,6 @@ class CompanyDetailsForm(forms.ModelForm):
 class ShippingAddressFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.queryset = ShippingAddress.objects.filter(user_id=22)
 
 # -- shipping formset
 ShippingFormSet = modelformset_factory(
@@ -243,7 +242,7 @@ ShippingFormSet = modelformset_factory(
             attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
     },
 
-    extra=1,
+    extra=0,
 
     formset=ShippingAddressFormSet,
 

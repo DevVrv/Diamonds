@@ -329,17 +329,45 @@ class UserInfo(TemplateView):
     # -- update shipping
     def update_shipping(self):
 
-        for item in self.shipping_forms.cleaned_data:
-            if item:
-                item['user_id'] = self.request.user.pk
+        shipping = ShippingAddress.objects.filter(user_id=self.request.user.pk)
+        self.shipping_forms.queryset = shipping
 
-        self.shipping_forms.add_fields()
-        # self.shipping_forms.save()
+        if self.shipping_forms.has_changed():
+
+            new_addresses = []
+
+            # -- create address data
+            for item in self.shipping_forms.cleaned_data:
+                if item:
+                    item['user_id'] = self.request.user.pk
+                    del item['id']
+
+                    new_addresses.append(item)
 
 
+            # -- update or create address data
+            for index, item in enumerate(new_addresses):
+                if index < len(shipping):
+                    shipping[index].shipping_company_name = item['shipping_company_name']
+                    shipping[index].shipping_attention_name = item['shipping_attention_name']
+                    shipping[index].shipping_address = item['shipping_address']
+                    shipping[index].shipping_city = item['shipping_city']
+                    shipping[index].shipping_country = item['shipping_country']
+                    shipping[index].shipping_region = item['shipping_region']
+                    shipping[index].shipping_zip = item['shipping_zip']
+                    shipping[index].shipping_tel = item['shipping_tel']
+                    shipping[index].shipping_email = item['shipping_email']
+                    shipping[index].user_id = shipping[index].user_id
+                    shipping[index].save()
+                else:
+                    item['user_id'] = self.request.user.pk
+                    ShippingAddress.objects.create(**item)
+                
+            return True
+        else:
+            return False
 
-
-    # <-- get company form
+    # -- get company form
     def get_company(self):
 
         # if compnay is not registered - create company details
@@ -380,11 +408,15 @@ class UserInfo(TemplateView):
         # -- shipping details
         self.shipping_forms = self.shipping_forms(request.POST)
         if self.shipping_forms.is_valid():
-            self.update_shipping()
-                    
-                    
-
+            shipping_changed = self.update_shipping()
+        
+        # changes detection 
+        if not self.user_form.has_changed() and not self.company_form.has_changed() and not self.shipping_forms.has_changed():
+            messages.info(self.request, 'You haven\'t made any changes')
+        else:
+            messages.success(request, 'You have successfully updated your profile information')
             
+
         return redirect(reverse_lazy(self.success_url))
 
     # <-- GET
@@ -399,7 +431,6 @@ class UserInfo(TemplateView):
         # -- shipping formset
         self.shipping_forms = self.shipping_forms()
 
-
         # -- extra context
         self.extra_context = {
             'title': 'User Info',
@@ -411,108 +442,3 @@ class UserInfo(TemplateView):
         return super().get(request, *args, **kwargs)
 
 
-# def user_info(request):
-
-#     # -- get company form
-#     def get_company(request):
-
-#         # if compnay is not registered - create company details
-#         if not CompanyDetails.objects.filter(user_id=request.user.id):
-#             # create company details
-#             compnay_details = {
-#                 'user_id': request.user.id
-#             }
-#             CompanyDetails.objects.create(**compnay_details)
-#             # create company details form
-#             form = CompanyDetailsForm()
-
-#         # if compnay is registered - get istance from company details
-#         else:
-#             # create company details form with instance
-#             form = CompanyDetailsForm(instance=CompanyDetails.objects.get(user_id=request.user.id))
-
-#         # return form obj
-#         return form
-
-#     # @ POST
-#     if request.method == 'POST':
-
-#         # -- personal details
-#         user_form = CustomUserChangeForm(request.POST, instance=CustomUsers.objects.get(id=request.user.pk))
-#         if user_form.is_valid():
-#             user_form.save()
-#         else:
-#             print(123)
-#             messages.error(request, 'A user with this data already exists')
-#             return redirect(reverse_lazy('user_info'))
-
-#         # -- company details
-#         company_form = CompanyDetailsForm(request.POST, instance=CompanyDetails.objects.get(user_id=request.user.pk))
-#         if company_form.is_valid():
-#             company_form.save()
-
-
-#         # -- shipping details
-#         shipping_formset = ShippingFormSet(request.POST)
-
-#         # * get cleaned data
-#         clean_data = shipping_formset.cleaned_data 
-        
-#         # * create exists bool
-#         exists = False
-
-#         # * update shipping       
-#         if shipping_formset.has_changed():
-#             for i, shipping in enumerate(shipping_formset):
-
-#                 # * commit save
-#                 ship = shipping.save(commit=False)
-
-#                 # * update user_pk
-#                 if ship.user_id is None:
-#                     ship.user_id = request.user.pk
-
-#                 # data is not empty
-#                 for key in clean_data[i]:
-#                     if (clean_data[i][key] != '' and clean_data[i][key] != ' ' and clean_data[i][key] != None):
-#                         exists = True
-                        
-#                 # if exists save
-#                 if exists:
-#                     ship.save()
-#                     exists = False
-
-#         # -- success message create
-#         messages.success(request, 'Data has been successfully changed')
-
-#         # -- update user info
-#         return redirect(reverse_lazy('user_info'))
-
-#     # @ GET
-#     # * shipping formset
-#     shipping_formset = ShippingFormSet()
-
-#     # * user form
-#     user_form = CustomUserChangeForm(instance=request.user or None)
-
-#     # * company form
-#     company_form = get_company(request)
-
-#     # * shipping address
-#     shipping_items = ShippingAddress.objects.filter(user_id=request.user.pk)
-
-#     # * single form
-    
-#     shipping_formset.extra = 1
-        
-#     # -- create context data
-#     context = {
-#         'title': 'Client Info',
-#         'user_form': user_form,
-#         'company_form': company_form,
-#         'shipping_formset': shipping_formset
-#     }
-    
-#     # # -- render template
-#     # return render(request, 'user_info.html', context)
-            
