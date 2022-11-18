@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import SignUpView, SignUpExtendedView, SignInView, SignInConfirmView, SignInConfirmResend, UserInfo, SignOut, PasswordRecovery, PasswordRecoveryConfirm, PasswordRecoveryResend
+from .views import SignUpView, SignUpExtendedView, SignInView, SignInConfirmView, SignInConfirmResend, UserInfo, SignOut, PasswordRecovery, PasswordRecoveryConfirm, PasswordRecoveryResend, ChangePassword
 
 from .decorators import check_recaptcha
 
@@ -43,6 +43,6 @@ urlpatterns = [
     
     # -- change password
 
-    path('password_change/', UserInfo.as_view(), name='password_change'),
+    path('password_change/', ChangePassword.as_view(), name='password_change'),
 
 ]

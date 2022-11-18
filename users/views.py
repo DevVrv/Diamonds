@@ -1,10 +1,11 @@
 from django.views.generic import FormView
-from django.views.generic.edit import UpdateView
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth import update_session_auth_hash
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib import messages
 
 
@@ -12,14 +13,14 @@ from django.contrib import messages
 from .models import CustomUser, CompanyDetails, ShippingAddress
 
 # -- forms
-from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm, PasswordRecoveryForm, CompanyDetailsForm,  ShippingFormSet, CustomUserChangeForm
+from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm, PasswordRecoveryForm, CompanyDetailsForm,  ShippingFormSet, CustomUserChangeForm, ChangePasswordForm
 
 # -- tools
 from .code import create_code
 from .inspector import Inspector
 from mail.views import send_email
 
-# @ SIGN IN
+# SIGN UP
 
 # -- sign up view
 class SignUpView(FormView):
@@ -72,7 +73,7 @@ class SignUpExtendedView(SignUpView):
         return super().get(request, *args, **kwargs)
 
 
-# @ SIGN OUT
+# SIGN OUT
 
 # -- sign out
 class SignOut(TemplateView):
@@ -81,7 +82,7 @@ class SignOut(TemplateView):
         return redirect(reverse_lazy('signin'))
 
 
-# @ SIGN IN
+# SIGN IN
 
 # -- sign in
 class SignInView(FormView):
@@ -111,7 +112,6 @@ class SignInView(FormView):
                     code = create_code(request, form.cleaned_data.get('username'), form.cleaned_data.get('remember_me'))
                     
                     # --> send email
-                    print(self.request.session['email'])
                     send_email({
                         'subject': 'Labrilliante email confirm',
                         'email': self.request.session['email'],
@@ -211,7 +211,7 @@ class SignInConfirmResend(SignInConfirmView):
         return redirect(reverse_lazy('signin_confirm'))
 
 
-# @ PASSWORD RECOVERY
+# PASSWORD RECOVERY
 
 # -- restor password
 class PasswordRecovery(FormView):
@@ -253,7 +253,6 @@ class PasswordRecovery(FormView):
 
     # <-- get
     def get(self, request, *args, **kwargs):
-        self.extra_context['email'] = self.request.session['email']
         return super().get(request, *args, **kwargs)
 
 # -- auth confirm
@@ -316,7 +315,7 @@ class PasswordRecoveryResend(PasswordRecoveryConfirm):
         return redirect(reverse_lazy('password_recovery_confirm'))
 
 
-# @ USER INFO
+# USER INFO
 
 # -- user info
 class UserInfo(TemplateView):
@@ -415,7 +414,22 @@ class UserInfo(TemplateView):
             messages.info(self.request, 'You haven\'t made any changes')
         else:
             messages.success(request, 'You have successfully updated your profile information')
-            
+            company = CompanyDetails.objects.get(user_id=request.user.pk)
+            manager = CustomUser.objects.get(pk=request.user.manager_id)
+            send_email({
+                'subject': f'User {request.user.email} was updated',
+                'email': manager.email,
+                'template': '_mail_user_updated.html',
+                'context': {
+                    'fname': request.user.first_name,
+                    'user_email': request.user.email,
+                    'user_tel': request.user.tel,
+                    'company_name': company.company_name,
+                    'company_tel': company.company_tel,
+                    'company_email': company.company_email,
+                    'company_address': company.company_address,
+                }
+            })
 
         return redirect(reverse_lazy(self.success_url))
 
@@ -441,4 +455,31 @@ class UserInfo(TemplateView):
         
         return super().get(request, *args, **kwargs)
 
+# CHAGE PASSWORD
 
+# -- user info change pass
+class ChangePassword(PasswordChangeView):
+
+    template_name = 'change_pass.html'
+    extra_context = {
+        'title': 'Change Password'
+    }
+    success_url = reverse_lazy('user_info')
+    form_class = ChangePasswordForm
+
+    # --> POST
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(request.user, request.POST)
+
+        if form.is_valid():
+            messages.success(request, 'Your password was successfully changed')
+        else:
+            messages.error(request, form.errors.as_text())
+
+        return super().post(request, *args, **kwargs)
+
+
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)

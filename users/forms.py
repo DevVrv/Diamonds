@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import modelformset_factory, BaseModelFormSet
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.core.exceptions import ValidationError
 
 from .models import CustomUser, CompanyDetails, ShippingAddress
@@ -50,6 +50,11 @@ class UsersCreationForm(forms.Form):
         form_data = self.cleaned_data
         if len(form_data['password1']) < 8:
             self._errors["password1"] = "The password must be at least 8 characters long" # Will raise a error message
+        if form_data['password1'].isdigit():
+            self._errors["password1"] = "This password is entirely numeric." # Will raise a error message
+        elif not form_data['password1'].isdigit():
+            self._errors["password1"] = "This password is entirely letters." # Will raise a error message
+        
         if form_data['password1'] != form_data['password2']:
             self._errors["password1"] = "Password do not match" # Will raise a error message
             del form_data['password1']
@@ -191,12 +196,11 @@ class CompanyDetailsForm(forms.ModelForm):
             'company_zip': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
         }
 
-# TODO FORMSER
+# -- shipping address formser
 class ShippingAddressFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-# -- shipping formset
 ShippingFormSet = modelformset_factory(
 
     model=ShippingAddress, 
@@ -248,5 +252,19 @@ ShippingFormSet = modelformset_factory(
 
 )
 
-
+# -- change password form
+class ChangePasswordForm(PasswordChangeForm):
+    
+    old_password = forms.CharField(max_length=150, label='', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Old password'
+        }))
+    new_password1 = forms.CharField(max_length=150, label='', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'New password'
+        }))
+    new_password2 = forms.CharField(max_length=150, label='', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Repeat new password'
+        }))
 

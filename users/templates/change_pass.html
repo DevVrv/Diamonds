@@ -38,28 +38,11 @@
                                         </div>
                                     </div>
                                     <div class="mt-2 d-flex flex-column align-items-center justify-content-center"> 
-                                        <p>
-                                            You will be transferred to another page within 3 seconds
-                                        </p>
                                         <a href="{% url 'user_info' %}" class="d-block link mt-2">Go to client info</a>
                                     </div>
                                 </div>
-
-                                <script>
-                                    setTimeout(function(){
-                                        window.location.href = '/user/info/';
-                                    }, 3000);
-                                </script>
                             {% elif message.tags == 'error' %}
                                 <div class="alert alert-danger mt-3 alert-dismissible fade show border-none" role="alert">
-                                    {% comment %} * alert header * {% endcomment %}
-                                    <div class="my-2">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa fa-exclamation-triangle me-2 fs-5" aria-hidden="true"></i>
-                                            <h5 class="h5 m-0 p-0">{{message}}</h5>
-                                        </div>
-                                        <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
                                     {% comment %} * alert info * {% endcomment %}
                                     <ul class="mt-3">
                                     {% for key,value in form.errors.items %} 
