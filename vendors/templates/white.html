@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} * page title * {% endcomment %}
+{% block title %}
+    {{title}}
+{% endblock title %}
+
+{% comment %} * content block * {% endcomment %}
+{% block content %}
+    <div class="wrapper h-100 w-100 d-flex align-items-center justify-content-center">
+        <div class="container d-flex align-items-center justify-content-center">
+            <form method="POST" enctype="multipart/form-data" class="auth-form border rounded shadow px-5 py-5" data-upload-file="white">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-12 d-flex align-items-center justify-content-center pb-4 border-bottom">
+                        <i class="svg-logo logo-icon modal-logo"></i>
+                    </div>
+
+                    {% if user.is_superuser %}
+                        <div class="col-12 mt-4 pb-4 border-bottom d-flex justify-content-evenly align-items-center">
+                            <a href="#" class="fs-5 link">White diamonds</a>
+                            <a href="{% url 'round_pear' %}" class="fs-5 link-def">Price Updated</a>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="col-12 mt-4 d-flex align-items-center justify-content-center">
+                        <h3 class="h3 text-primary switch-title">White Diamonds</h3>
+                    </div>
+
+                    {% if form.errors %}
+                        {% include 'messages/_form_errors.html' %}
+                    {% endif %}
+                        
+                    {% if messages %}
+                        {% include 'messages/_messages.html' %}
+                    {% endif %}
+
+                    {% comment %} * input file * {% endcomment %}
+                    {% for input in form %}
+                        <div class="col-12 mt-4">
+                            <h5 class="h5 mb-3">Select the main stone representation file</h5>
+                            {{input}}
+                        </div>
+                    {% endfor %}
+
+                    <div class="col-12 mt-4 d-flex justify-content-center align-items-center flex-column">
+                        <button type="submit" class="btn btn-primary w-100">
+                            Submit File
+                        </button>
+                    </div>
+                    
+                    {% comment %} * get back to admin * {% endcomment %}
+                    <div class="col-12 mt-2">
+                        <div class="col-12 mt-3 py-2 d-flex justify-content-between align-items-center border-top w-100 pt-3">
+                            
+                            {% if user.is_superuser %}
+                                <p class="m-0">
+                                    Get back to 
+                                    <a href="{% url 'white' %}" class="link">Admin</a>
+                                </p>
+                            {% else %}
+                                <a href="{% url 'white' %}" class="link">Sign out</a>
+                            {% endif %}
+                            
+                            <div class="d-flex align-items-center justify-content-center">
+                                <a href="{% static 'template/white_template.csv' %}" class="btn btn-secondary">Download the template</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+
+{% comment %} * scripts * {% endcomment %}
+{% block scripts %}
+
+    <script src="{% static 'js/public/bootstrap/bootstrap.bundle.min.js' %}"></script> 
+
+{% endblock scripts %}

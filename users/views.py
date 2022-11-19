@@ -65,10 +65,42 @@ class SignUpView(FormView):
 
         
 # -- sign up extended view
-class SignUpExtendedView(SignUpView):
+class SignUpExtendedView(FormView):
     form_class = ExtendedUsersCreationForm
     template_name = 'signup_extended.html'
-    success_url = reverse_lazy('signup_extended')
+    success_url = 'signup_extended'
+    extra_context = {
+        'title': 'Registration Extended'
+    }
+    # --> POST
+    def post(self, request, *args: str, **kwargs):
+
+        # <-- get form and form data
+        form = self.form_class(self.request.POST)
+        if self.request.recaptcha_is_valid:
+            if form.is_valid():
+                
+                # <-- get user name from email
+                new_user = {
+                    'username': form.cleaned_data.get('email'),
+                    'email': form.cleaned_data.get('email'),
+                    'tel': form.cleaned_data.get('tel'),
+                    'password': make_password(form.cleaned_data.get('password1')),
+                    'user_type': form.cleaned_data.get('user_type')
+                } 
+
+                # action create new user
+                user = CustomUser.objects.create(**new_user)
+                user.save()
+                
+                # success
+                messages.success(self.request, 'Success, new user was created')
+                return redirect(reverse_lazy(self.success_url))
+            
+            return super().post(request, *args, **kwargs)
+        else:
+            return redirect(reverse_lazy('signup_extended'))
+
 
 # SIGN OUT
 

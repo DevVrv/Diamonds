@@ -9,71 +9,63 @@
 {% comment %} * content block * {% endcomment %}
 {% block content %}
     <div class="wrapper h-100 w-100 d-flex align-items-center justify-content-center">
-
         <div class="container d-flex align-items-center justify-content-center">
-            {% comment %} form start {% endcomment %}
             <form method="POST" enctype="multipart/form-data" class="auth-form border rounded shadow px-5 py-5" data-upload-file="white">
-                {% comment %} * token* {% endcomment %}
                 {% csrf_token %}
     
                 <div class="row">
-                    {% comment %} * logo * {% endcomment %}
+
                     <div class="col-12 d-flex align-items-center justify-content-center pb-4 border-bottom">
                         <i class="svg-logo logo-icon modal-logo"></i>
                     </div>
                     
-                    {% comment %} * links * {% endcomment %}
                     <div class="col-12 mt-4 pb-4 border-bottom d-flex justify-content-evenly align-items-center">
                         <a href="{% url 'white' %}" class="fs-5 link-def">White diamonds</a>
                         <a href="#" class="fs-5 link">Price Updated</a>
                     </div>
 
-                    {% comment %} * title * {% endcomment %}
                     <div class="col-12 mt-4 d-flex align-items-center justify-content-center">
                         <h3 class="h3 text-primary switch-title">Diamonds Prices</h3>
                     </div>
 
-                    {% comment %} * messages * {% endcomment %}
-                    {% include 'inc/messages/_messages.html' %}
-                    {% include 'inc/messages/_msg.html' %}
+                    {% if form.errors %}
+                        {% include 'messages/_form_errors.html' %}
+                    {% endif %}
+                        
+                    {% if messages %}
+                        {% include 'messages/_messages.html' %}
+                    {% endif %}
+                    
                     
                     {% comment %} * form inputs * {% endcomment %}
-                    <h5 class="h5 mt-4 text-center switch-text">Select the file with the list of new prices</h5>
-                    
                     {% for input in form %}
                         <div class="col-12 mt-2">
+                            <h5 class="h5 mt-4 text-start switch-text">Select the file with the list of new prices</h5>
                             <h5 class="h5 mb-3">{{input.label}}</h5>
                             {{input}}
                         </div>
                     {% endfor %}
                         
-                    {% comment %} * submit * {% endcomment %}
                     <div class="col-12 mt-4 d-flex justify-content-center align-items-center flex-column">
                         <button type="submit" class="btn btn-primary w-100">
                             Submit File
                         </button>
                     </div>
-                    {% if user.is_superuser %}
-                        {% comment %} * links * {% endcomment %}
-                        <div class="col-12 mt-4 d-flex justify-content-evenly align-items-center">
-                            <a href="/admin/" class="fs-6 link-def">Get back to admin</a>
-                        </div>
-                    {% endif %}
-                    {% if user.user_type == 2%}
-                    {% comment %} * links * {% endcomment %}
-                    <div class="col-12 mt-4 d-flex justify-content-evenly align-items-center">
-                        <a href="/user/signout/" class="fs-6 link-def">Signout</a>
+                    
+                    {% comment %} * get back to admin * {% endcomment %}
+                    <div class="col-12 mt-4 d-flex align-items-center justify-content-center">
+                        <p class="m-0">
+                            Get back to 
+                            <a href="{% url 'white' %}" class="link">Admin</a>
+                        </p>
                     </div>
-                    {% endif %}
                 </div>
             </form>
-            
-            {% comment %} form end {% endcomment %}
         </div>
     </div>
 {% endblock content %}
 
-
+{% comment %} * scripts * {% endcomment %}
 {% block scripts %}
     <script src="{% static 'js/public/bootstrap/bootstrap.bundle.min.js' %}"></script> 
 {% endblock scripts %}

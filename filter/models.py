@@ -6,7 +6,7 @@ from users.models import CustomUser
 # * filter diamond model
 class Diamond_Model(models.Model):
 
-    ref = models.CharField(max_length=255, verbose_name="Ref")
+    ref = models.CharField(max_length=255, verbose_name="Ref", unique=True, db_index=True)
     vendor = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name="vendor_id")
     best_selling = models.BooleanField(verbose_name="Best Selling", default=0)
 

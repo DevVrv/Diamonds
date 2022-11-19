@@ -27,11 +27,11 @@
                     </div>
                     
                     {% comment %} errors list {% endcomment %}
-                    {% if form.errors or messages.tags == 'errors' %}
-                        {% include 'inc/messages/_error_list.html' %}
+                    {% if form.errors %}
+                        {% include 'messages/_form_errors.html' %}
                         
                     {% elif form.errors or messages.tags != 'errors' %}
-                        {% include 'inc/messages/_messages.html' %}
+                        {% include 'messages/_messages.html' %}
                     {% endif %}
                     
                     {% comment %} form inputs {% endcomment %}
@@ -58,7 +58,7 @@
                             Register
                         </button>
         
-                        <p class="mt-4">Have an account ? <a href="{% url 'signin' %}" class="link">Sign in</a></p>
+                        <p class="mt-4">Get back to <a href="/admin/" class="link">Admin</a></p>
                     </div>
     
                 </div>

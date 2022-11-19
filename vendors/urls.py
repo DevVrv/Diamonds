@@ -1,16 +1,13 @@
 from django.urls import path
-from .views import diamonds_data, diamonds_white, CreateVendor
+from .views import White, RoundPear
 
 urlpatterns = [
 
     # * -------------------------------------------------------------------- Upload new diamonds
-    path('white/', diamonds_white, name='white'),
+    path('white/', White.as_view(), name='white'),
 
     # * -------------------------------------------------------------------- Upload diamonds data
-    path('data/', diamonds_data, name='round_pear'),
-
-    # * -------------------------------------------------------------------- create vendor
-    path('create/', CreateVendor.as_view(), name='create_vendor'),
+    path('round_pear/', RoundPear.as_view(), name='round_pear'),
 
 ]
 
