@@ -19,9 +19,19 @@
         <main class="main mt-4">
             <div class="container-fluid px-5 py-5 container-client-info">
                 
-                {% comment %} messages {% endcomment %}
-                {% include 'inc/messages/_messages.html' %}
 
+
+                {% comment %} messages {% endcomment %}
+                {% if messages %}
+                    {% include 'messages/_messages.html' %}
+                {% endif %}
+                
+                {% comment %} form errors {% endcomment %}
+                {% if form.errors %}
+                    {% include 'messages/_form_errors.html' %}
+                {% endif %}
+
+                {% comment %} -- form -- {% endcomment %}
                 <form method="POST" class="row m-0 d-flex justify-content-evenly w-100 client-info" id="client-info-form">
                     
                     {% csrf_token %}
@@ -213,6 +223,7 @@
                     {% endfor %}
 
                 </form>
+
                 <!-- - client info add shipping address - -->
                 <div class="client-info__shipping-add mt-4 border p-4 py-3 rounded shadow-sm d-flex justify-content-end">
                     <div class="d-block">
@@ -227,8 +238,6 @@
                     </button>
                 </div>
                 
-
-    
             </div>
         </main>
 

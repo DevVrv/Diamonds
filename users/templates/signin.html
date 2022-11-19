@@ -14,7 +14,9 @@
             <form method="POST" class="auth-form border rounded shadow-sm px-5 py-5">
                 {% comment %} * token* {% endcomment %}
                 {% csrf_token %}
-                <div class="row">
+                
+                <div class="row px-1">
+
                     <!-- logo -->
                     <div class="col-12 d-flex flex-column align-items-center justify-content-center pb-4 border-bottom">
                         <i class="svg-logo logo-icon modal-logo"></i>
@@ -22,8 +24,14 @@
                     </div>
                     
                     {% comment %} errors list {% endcomment %}
-                    {% include 'inc/messages/_messages.html' %}
-                    
+                    {% if form.errors %}
+                        {% include 'messages/_form_errors.html' %}
+                    {% endif %}
+                        
+                    {% if messages %}
+                        {% include 'messages/_messages.html' %}
+                    {% endif %}
+                
                     {% for input in form %}
                         {% if input.name == 'user_type' %}
                             <div class="col-12 mt-4 w-100 d-flex py-4 border-bottom border-top">
@@ -52,6 +60,7 @@
                     <div class="col-12 mt-4">
                         <div class="g-recaptcha mt-3 w-75" data-sitekey="6LfQ9XggAAAAALRfdFBAyQZJ-7ekoHARW8o7oMwJ"></div>
                     </div>
+
                     {% comment %} submit {% endcomment %}
                     <div class="col-12 mt-4 d-flex justify-content-center align-items-center flex-column">
                         <button type="submit" class="btn btn-primary w-100">

@@ -1,13 +1,15 @@
 from django.views.generic import FormView
 from django.contrib.auth.views import PasswordChangeView
-from django.contrib.auth import update_session_auth_hash
 from django.views.generic.base import TemplateView
+
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import login, logout
-from django.contrib import messages
 
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import login, logout
+
+from django.contrib import messages
 
 # -- models
 from .models import CustomUser, CompanyDetails, ShippingAddress
@@ -26,7 +28,7 @@ from mail.views import send_email
 class SignUpView(FormView):
     
     # -- class params
-    success_url = reverse_lazy('signup')
+    success_url = 'signin'
     template_name = 'signup.html'
     form_class = UsersCreationForm
     extra_context = {
@@ -43,7 +45,7 @@ class SignUpView(FormView):
                 
                 # <-- get user name from email
                 new_user = {
-                    'username': form.cleaned_data.get('email').rsplit('@', 2)[0],
+                    'username': form.cleaned_data.get('email'),
                     'email': form.cleaned_data.get('email'),
                     'tel': form.cleaned_data.get('tel'),
                     'password': make_password(form.cleaned_data.get('password1')),
@@ -54,24 +56,19 @@ class SignUpView(FormView):
                 user.save()
                 
                 # success
-                messages.success(self.request, 'Registration was successfule')
-                return redirect(self.success_url)
+                messages.success(self.request, 'Success, now you can log in to the site')
+                return redirect(reverse_lazy(self.success_url))
             
             return super().post(request, *args, **kwargs)
+        else:
+            return redirect(reverse_lazy('signup'))
 
-    # <-- GET
-    def get(self, request, *args: str, **kwargs):
-        return super().get(request, *args, **kwargs)
         
 # -- sign up extended view
 class SignUpExtendedView(SignUpView):
     form_class = ExtendedUsersCreationForm
     template_name = 'signup_extended.html'
     success_url = reverse_lazy('signup_extended')
-
-    def get(self, request, *args: str, **kwargs):
-        return super().get(request, *args, **kwargs)
-
 
 # SIGN OUT
 
@@ -128,26 +125,13 @@ class SignInView(FormView):
                     if user.exists():
                         login(self.request, user)
                     else:
-                        messages.error(self.request, 'Vendor with this data was not found')
                         return redirect(reverse_lazy('signin'))
-
-
-            # -- form invalid
-            else:
-                try:
-                    messages.error(self.request, form.errors.as_data()['__all__'][0].message)
-                except:
-                    messages.error(self.request, 'Something was wrong')
         
         # -- recaptcha false
         else:
             return redirect(reverse_lazy('signin'))
 
         return super().post(request, *args, **kwargs)
-
-    # <-- GET
-    def get(self, request, *args: str, **kwargs):
-        return super().get(request, *args, **kwargs)
 
 # -- auth confirm
 class SignInConfirmView(FormView):
@@ -157,7 +141,7 @@ class SignInConfirmView(FormView):
     extra_context = {
         'title': 'Email confirmation',
     }
-    success_url = reverse_lazy('user_info')
+    success_url = 'user_info'
 
     # --> POST
     def post(self, request, *args, **kwargs):
@@ -172,14 +156,13 @@ class SignInConfirmView(FormView):
             if int(form_code) == int(mail_code):
                 user = CustomUser.objects.get(email=email)
                 login(self.request, user=user)
+                messages.success(request, 'You have been successfully logged in')
+                return redirect(reverse_lazy(self.success_url))
+            else:
+                messages.error(request, 'Invalid code')
+                return redirect(reverse_lazy('signin_confirm'))
 
         return super().post(request, *args, **kwargs)
-
-    # <-- GET
-    def get(self, request, *args: str, **kwargs):
-        print(self.request.session['email'])
-        self.extra_context['email'] = self.request.session['email']
-        return super().get(request, *args, **kwargs)
 
 # -- auth confirm replay
 class SignInConfirmResend(SignInConfirmView):
@@ -251,10 +234,6 @@ class PasswordRecovery(FormView):
 
         return super().post(request, *args, **kwargs)
 
-    # <-- get
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
 # -- auth confirm
 class PasswordRecoveryConfirm(FormView):
 
@@ -280,10 +259,6 @@ class PasswordRecoveryConfirm(FormView):
                 return redirect(reverse_lazy(self.success_url))
 
         return super().post(request, *args, **kwargs)
-
-    # <-- GET
-    def get(self, request, *args: str, **kwargs):
-        return super().get(request, *args, **kwargs)
 
 # -- auth confirm replay
 class PasswordRecoveryResend(PasswordRecoveryConfirm):
@@ -478,8 +453,3 @@ class ChangePassword(PasswordChangeView):
             messages.error(request, form.errors.as_text())
 
         return super().post(request, *args, **kwargs)
-
-
-    # <-- GET
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)

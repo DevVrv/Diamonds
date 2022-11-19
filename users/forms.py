@@ -48,16 +48,20 @@ class UsersCreationForm(forms.Form):
     # password validation
     def clean(self):
         form_data = self.cleaned_data
+        
         if len(form_data['password1']) < 8:
-            self._errors["password1"] = "The password must be at least 8 characters long" # Will raise a error message
+            self._errors["password1"] = "The password must consist of at least 8 characters" # Will raise a error message
+        
         if form_data['password1'].isdigit():
-            self._errors["password1"] = "This password is entirely numeric." # Will raise a error message
-        elif not form_data['password1'].isdigit():
-            self._errors["password1"] = "This password is entirely letters." # Will raise a error message
+            self._errors["password1"] = "The password must consist of letters and numbers" # Will raise a error message
+        
+        elif form_data['password1'].isalpha():
+            self._errors["password1"] = "The password must consist of letters and numbers" # Will raise a error message
         
         if form_data['password1'] != form_data['password2']:
             self._errors["password1"] = "Password do not match" # Will raise a error message
             del form_data['password1']
+        
         return self.cleaned_data
 
 # -- signup form exntended

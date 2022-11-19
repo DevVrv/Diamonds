@@ -1,0 +1,17 @@
+{% for message in messages %}
+
+    {% if message.tags == 'error' %}
+        {% include 'messages/_error.html' %}
+
+    {% elif message.tags == 'success' %}
+        {% include 'messages/_success.html' %}
+
+    {% elif message.tags == 'warning' %}
+        {% include 'messages/_warning.html' %}
+
+    {% elif message.tags == 'info' %}
+        {% include 'messages/_info.html' %}
+
+    {% endif %}
+
+{% endfor %}
