@@ -287,10 +287,10 @@ background-color: #55b49e;
     height: 62%;
 }
 
-/* .client-info__shipping:last-child {
-    display: none;
+.client-info__shipping:last-child {
+    display: none !important;
 }
- */
+
 
 [data-shipping="0"] {
     display: block !important;

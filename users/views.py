@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login, logout
 
 from django.contrib import messages
@@ -63,6 +62,15 @@ class SignUpView(FormView):
         else:
             return redirect(reverse_lazy('signup'))
 
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        if permission.is_auth():
+            return redirect(reverse_lazy('user_info'))
+
+        return super().get(request, *args, **kwargs)
         
 # -- sign up extended view
 class SignUpExtendedView(FormView):
@@ -165,6 +173,16 @@ class SignInView(FormView):
 
         return super().post(request, *args, **kwargs)
 
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        if permission.is_auth():
+            return redirect(reverse_lazy('user_info'))
+
+        return super().get(request, *args, **kwargs)
+
 # -- auth confirm
 class SignInConfirmView(FormView):
 
@@ -196,11 +214,27 @@ class SignInConfirmView(FormView):
 
         return super().post(request, *args, **kwargs)
 
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        if permission.is_auth():
+            return redirect(reverse_lazy('user_info'))
+
+        return super().get(request, *args, **kwargs)
+
 # -- auth confirm replay
 class SignInConfirmResend(SignInConfirmView):
 
     # <-- GET
     def get(self, request, *args: str, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        if permission.is_auth():
+            return redirect(reverse_lazy('user_info'))
+
         
         mail = self.request.session['email']
         remember = self.request.session['remember']
@@ -442,6 +476,10 @@ class UserInfo(TemplateView):
 
     # <-- GET
     def get(self, request, *args: str, **kwargs):
+
+        # TODO INSPECTOR
+        permissions = Inspector(request, {'type': 2})
+        permissions_result = permissions.inspect()
 
         # -- user form
         self.user_form = self.user_form(instance=request.user or None)

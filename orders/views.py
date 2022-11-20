@@ -91,6 +91,7 @@ def create_order(request):
             'p_ct_offer': 0,
             'total_price_offer': 0,
             'hold_hours': 0,
+            'order_number': request.user.id,
             'diamonds_list': json.dumps([])
         }
 
@@ -180,21 +181,20 @@ def create_order(request):
         # --> send mail
         subject = 'New order'
         html_message = render_to_string('_mail_new_order.html', {
-                'login': user.username,
-                'user_email': user.email,
-                'user_tel': user.tel,
-                'fname': user.first_name,
-                'lname': user.last_name,
+            'login': user.username,
+            'user_email': user.email,
+            'user_tel': user.tel,
+            'fname': user.first_name,
+            'lname': user.last_name,
 
-                'company_name': company.company_name,
-                'company_tel': company.company_tel,
-                'company_email': company.company_email,
-                'company_address': company.company_address,
+            'company_name': company.company_name,
+            'company_tel': company.company_tel,
+            'company_email': company.company_email,
+            'company_address': company.company_address,
 
-                'order_number': order_data['order_number'],
-                'order_comment': requestData['comment'],
-                'order_type': requestData['order_type']
-
+            'order_number': order_data['order_number'],
+            'order_comment': requestData['comment'],
+            'order_type': requestData['order_type']
             })
         plain_message = strip_tags(html_message)
         from_email = DEFAULT_FROM_EMAIL

@@ -250,7 +250,7 @@ ShippingFormSet = modelformset_factory(
             attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
     },
 
-    extra=0,
+    extra=1,
 
     formset=ShippingAddressFormSet,
 

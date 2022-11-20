@@ -1,15 +1,23 @@
 from django.http import HttpResponse
 from django.core import serializers
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.contrib import messages
 import json
 # forms
 from .models import Diamond_Model, MaxMin
 from cart.models import CartModal
 
+from users.inspector import Inspector
+
 # <------------------------------ get filter page
 def filterPage(request):
 
+    # permissions
+    permission = Inspector(request, {'level': 2, 'type': 1})
+    if not permission.inspect():
+        messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
+        return redirect(reverse_lazy('user_info'))
 
     # * get cart items
     try:
