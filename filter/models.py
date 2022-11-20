@@ -2,19 +2,21 @@ from django.db import models
 from users.models import CustomUser
 
 # * filter diamond model
-class Diamond_Model(models.Model):
+class Base_Diamond_Model(models.Model):
 
     ref = models.CharField(max_length=255, verbose_name="Ref", unique=True, db_index=True)
     vendor = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name="vendor_id")
     best_selling = models.BooleanField(verbose_name="Best Selling", default=0)
+    cert_number = models.CharField(max_length=255, verbose_name="Cert Number", unique=True)
 
-    cert_number = models.CharField(max_length=255, verbose_name="Cert Number")
+    rap_1ct = models.IntegerField(verbose_name="Rap_1ct", blank=True)
+    rap_price = models.IntegerField(verbose_name='Rap Price', blank=True, null=True)
+    sale_price = models.IntegerField(verbose_name="Sale Price", blank=True)
+    disc = models.FloatField(verbose_name="Discount", blank=True)
+    
     shape = models.CharField(max_length=255, verbose_name="Shape")
     clarity = models.CharField(max_length=255, verbose_name="Clarity")
     color = models.CharField(max_length=255, verbose_name="Color")
-    rap_1ct = models.IntegerField(verbose_name="Rap_1ct", blank=True)
-    sale_price = models.IntegerField(verbose_name="Sale Price", blank=True)
-    disc = models.FloatField(verbose_name="Discount", blank=True)
     girdle = models.CharField(max_length=255, verbose_name="Gridle", blank=True)
     culet = models.CharField(max_length=255, verbose_name="Culet", blank=True)
     weight = models.FloatField(max_length=255, verbose_name="Weight", blank=True)
@@ -31,20 +33,15 @@ class Diamond_Model(models.Model):
     lab = models.CharField(max_length=255, verbose_name="Lab", blank=True)
     depth_procent = models.FloatField(verbose_name="Depth %", blank=True)
     table_procent = models.FloatField(verbose_name="Table %", blank=True)
+
     report_link = models.URLField(verbose_name="Table %", blank=True)
-
-    rap_price = models.IntegerField(verbose_name='Rap Price', blank=True, null=True)
-
     photo = models.URLField(verbose_name="Image URL", blank=True)
     video = models.URLField(verbose_name="Video URL", blank=True)
 
-    # dates
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created date")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated date")
 
-    # key
     is_published = models.BooleanField(default=False, verbose_name="Is Published")
-
 
     def __str__(self):
         return f'Clarity: {self.clarity}, Color: {self.color}, Weight: {self.weight}'
@@ -53,6 +50,11 @@ class Diamond_Model(models.Model):
         verbose_name = 'Diamond'
         verbose_name_plural = 'Diamonds'
         ordering = ['sale_price']
+        abstract = True
+
+# * filter diamond model
+class Diamond_Model(Base_Diamond_Model):
+    pass
 
 # * fitler max min values
 class MaxMin(models.Model):

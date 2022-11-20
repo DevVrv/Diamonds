@@ -1380,7 +1380,7 @@ class Comparison extends Control {
 
             if (this.comparing.length != 0) {
                 const forRequest = this.comparing.map(item => { return item.replace('chb_', ''); });
-                ajax('cart/pack/', forRequest, this.cartResponce, this);
+                ajax('/cart/pack/', forRequest, this.cartResponce, this);
             }
             else {
                 this.cart.title.textContent = this.cart.responceTitle.error
@@ -2121,19 +2121,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }).init();
 
-    // TODO SEND MAIL
-    function sendMail() {
-
-        const button = document.querySelector('.fa.fa-envelope-o')
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            ajax('/mail/test/', {}, (responce, context) => {
-                console.log(responce)
-            }, {});
-
-        });
-
-    }
-    sendMail();
 
 });

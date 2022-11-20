@@ -1,8 +1,7 @@
 import json
 from django.core import serializers
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.shortcuts import render
 
 from .models import CartModal
 from filter.models import Diamond_Model
@@ -45,7 +44,7 @@ def cart(request):
 
     return render(request, 'cart.html', context)
 
-# @ delte selected from cart
+# -- delte selected from cart
 def delete_selected(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         if request.method == 'POST':
@@ -91,7 +90,7 @@ def delete_selected(request):
 
             return HttpResponse (json.dumps(response), content_type="application/json")
 
-# * sort cart items
+# -- sort cart items
 def cart_sort(request):
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -159,10 +158,7 @@ def cart_pack(request):
             'cart_len': len(requestData),
             'update_len': len(requestData)
         }
-
     elif model_item.exists():
-
-        print(requestData)
 
         # arr for update values
         temp = []

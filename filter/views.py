@@ -1,14 +1,12 @@
 from django.http import HttpResponse
 from django.core import serializers
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.core.mail import send_mail
+from django.shortcuts import render
+
 import json
 # forms
 from .models import Diamond_Model, MaxMin
 from cart.models import CartModal
 
-from django.contrib import messages
 # <------------------------------ get filter page
 def filterPage(request):
 
