@@ -6,7 +6,7 @@ from users.models import CustomUser
 class Vedor_Diamond_Model(models.Model):
 
     ref = models.CharField(max_length=255, verbose_name="Ref", unique=True, db_index=True)
-    vendor = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name="vendor_id")
+    vendor = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name="vendor")
     best_selling = models.BooleanField(verbose_name="Best Selling", default=0)
     
     cert_number = models.CharField(max_length=255, verbose_name="Cert Number")
@@ -33,6 +33,8 @@ class Vedor_Diamond_Model(models.Model):
     lab = models.CharField(max_length=255, verbose_name="Lab", blank=True)
     depth_procent = models.FloatField(verbose_name="Depth %", blank=True)
     table_procent = models.FloatField(verbose_name="Table %", blank=True)
+    report_link = models.URLField(verbose_name="Table %", blank=True)
+    
 
     rap_price = models.IntegerField(verbose_name='Rap Price', blank=True, null=True)
 
@@ -42,7 +44,6 @@ class Vedor_Diamond_Model(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created date")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated date")
 
-    key = models.CharField(max_length=255, verbose_name="Key", db_index=True, unique=True)
     is_published = models.BooleanField(default=False, verbose_name="Is Published")
 
     def __str__(self):

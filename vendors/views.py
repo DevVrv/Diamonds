@@ -21,7 +21,6 @@ class White(FormView):
     success_url = reverse_lazy('white')
     extra_context = {
         'title': 'White',
-        'form': form_class
     }
 
     # --> POST
@@ -33,6 +32,7 @@ class White(FormView):
             
             num_created = 0
             num_exists = 0
+            num_error = 0
             file = request.FILES['csv']
             
             # -- decode and read file
@@ -43,59 +43,43 @@ class White(FormView):
             diamonds = []
             try:
                 for row in reader:
-                    # meke discount
-                    disc = row['Discount Percent']
-                    if disc != '':
-                        disc = float(disc)
-                        if disc < 0:
-                            disc = disc * -1
-                    else:
-                        disc = 0
-                    
-                    # make price
-                    price = row['Price']
-                    if price == '':
-                        price = 0
-
                     # make new diamond
                     diamond = {
-                        'ref': row['Stock #'],
+                        'ref': row['Ref'],
                         'vendor_id': request.user.id,
-                        'cert_number': row['Certificate #'],
+                        'cert_number': row['Cert. Number'],
+                        'lab': row['Cert. Company'], 
 
                         'shape': row['Shape'],
                         'clarity': row['Clarity'],
                         'color': row['Color'],
 
-                        'rap_1ct': price,
-                        'sale_price': row['Total Price'],
-                        'disc': disc,
+                        'rap_1ct': row['Rap. 1ct'],
+                        'sale_price': row['Sale Price'],
+                        'disc': 0,
                         
-                        'girdle': row['Girdle Condition'],
-                        'culet': row['Culet Condition'],
-                        'weight': row['Weight'],
-                        'cut': row['Cut Grade'],
+                        'weight': row['Weight'].replace(',', '.'),
+                        'width': row['Width'].replace(',', '.'),
+                        'length': row['Length'].replace(',', '.'),
+                        'girdle': row['Girdle Type'],
+                        'culet': row['Culet'],
+                        'cut': row['Cut'],
                         'polish': row['Polish'],
                         'symmetry': row['Symmetry'],
-                        'culet': row['Culet Condition'],
-                        'fluor': row['Fluorescence Intensity'],
-                        'length': row['Measurements Length'],
-                        'width': row['Measurements Width'],
-                        'depth': row['Measurements Depth'],
-                        'lw': round(float(row['Measurements Length']) / float(row['Measurements Width'])),
-                        'measurements': row['Measurements'],
-                        'lab': row['Lab'], 
+                        'fluor': row['Fluorescence'],
+                        'depth': row['Depth'].replace(',', '.'),
+                        'lw': round(float(row['Length'].replace(',', '.')) / float(row['Width'].replace(',', '.'))),
+                        'measurements': f"{row['Length']}x{row['Width']}x{row['Depth']}",
+                        'depth_procent': row['Depth %'].replace(',', '.'),
+                        'table_procent': row['Table %'].replace(',', '.'),
 
-                        'depth_procent': row['Depth Percent'],
-                        'table_procent': row['Table Percent'],
-                        'photo': row['Image Link'],
-                        'video': row['Video Link'],
-
-                        'key': f"{row['Stock #']};{request.user.id};{row['Certificate #']};{row['Color']};{row['Clarity']}",
+                        'video': row['Video'],
+                        'photo': '',
+                        'report_link': row['Report Link']
                     }
                     diamonds.append(diamond)
             except KeyError as ex:
-                messages.error(request, f'Error reading data from file, missing key {ex}')
+                messages.error(request, f'Error reading data from file, missing field {ex}')
                 return redirect(self.success_url)
             except Exception as ex:
                 messages.error(request, f'Something was wrong, error info: {ex}')
@@ -103,35 +87,41 @@ class White(FormView):
 
             # -- create diamonds
             for diamond in diamonds:
-                key = diamond['key']
-
-                ref_filter = Diamond_Model.objects.filter(ref=diamond['ref'])
-                ref_vendor = Vedor_Diamond_Model.objects.filter(ref=diamond['ref'])
+                ref_filter = Diamond_Model.objects.filter(ref=diamond['cert_number'])
+                ref_vendor = Vedor_Diamond_Model.objects.filter(ref=diamond['cert_number'])
 
                 if ref_filter.exists() or ref_vendor.exists():
                     num_exists += 1
                     continue
                 else:
-                    created = Vedor_Diamond_Model.objects.create(**diamond)
-                    if created:
-                        num_created += 1
- 
-            if num_created == 0:
-                messages.warning(request, 'All the presented stones have already been uploaded to the site')
-            else:
+                    try:
+                        created = Vedor_Diamond_Model.objects.create(**diamond)
+                        if created:
+                            num_created += 1
+                    except Exception as ex:
+                        print(ex)
+                        num_error += 1
+                        continue
+                        
+            if num_created:
                 messages.success(request, 'The data was uploaded successfully')
-                messages.info(request, f'Was created {num_created}, Alredy existed {num_exists}')
+                messages.info(request, f'Was created: {num_created} | Alredy existed: {num_exists}')
+            else:
+                messages.warning(request, 'All the presented stones have already been uploaded to the site')
+
+            if num_error:
+                messages.error(request, f'Error, some stones was not created: {num_error}')
+
 
         return super().post(request, *args, **kwargs)
 
 # -- round / pear
 class RoundPear(FormView):
     template_name = 'round_pear.html'
-    success_url = reverse_lazy('round_pear')
     form_class = UploadCSVForm
+    success_url = reverse_lazy('round_pear')
     extra_context = {
         'title': 'Round / Pear',
-        'form': form_class
     }
 
     # --> POST
@@ -140,10 +130,22 @@ class RoundPear(FormView):
         form = self.form_class(request.POST, request.FILES)
 
         if form.is_valid():
-            print(12345)
-        else:
-            return redirect(self.success_url)
 
+            # * decode and read file
+            file = request.FILES['csv'] 
+            decoded_file = file.read().decode('utf-8').splitlines()
+            reader = csv.reader(decoded_file, delimiter=";")
+            
+            # * get diamonds list 
+            diamonds_list = Diamond_Model.objects.all()
+
+            # * update diamonds list values
+            diamonds_updated_list = []
+            for row in reader:
+                for item in row:
+                    print(item)
+
+            
         return super().post(request, *args, **kwargs)
 
 # <-- download white template 

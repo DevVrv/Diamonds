@@ -1,5 +1,3 @@
-
-from email.policy import default
 from django.db import models
 from users.models import CustomUser
 
@@ -33,6 +31,7 @@ class Diamond_Model(models.Model):
     lab = models.CharField(max_length=255, verbose_name="Lab", blank=True)
     depth_procent = models.FloatField(verbose_name="Depth %", blank=True)
     table_procent = models.FloatField(verbose_name="Table %", blank=True)
+    report_link = models.URLField(verbose_name="Table %", blank=True)
 
     rap_price = models.IntegerField(verbose_name='Rap Price', blank=True, null=True)
 
@@ -42,9 +41,10 @@ class Diamond_Model(models.Model):
     # dates
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created date")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated date")
+
     # key
-    key = models.CharField(max_length=255, verbose_name="Key", db_index=True, unique=True)
     is_published = models.BooleanField(default=False, verbose_name="Is Published")
+
 
     def __str__(self):
         return f'Clarity: {self.clarity}, Color: {self.color}, Weight: {self.weight}'
