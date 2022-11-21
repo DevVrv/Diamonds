@@ -18,12 +18,11 @@ class Inspector(object):
             self.staff = self.user.is_staff
             self.type = self.user.user_type
 
-
     # -- inspect type and level
     def inspect(self):
         # -- super
-        # if self.super:
-        #     self.result = True
+        if self.super:
+            self.result = True
 
         # <-- get level
         try:
@@ -58,6 +57,28 @@ class Inspector(object):
 
         return self.result
 
-    # -- is auth
-    def is_auth(self):
-        return self.auth  
+    # -- permissions
+    def has_permission(self, permissions_list = [str]):
+        result = False
+
+        user_permissions = self.user.has_perms(permissions_list)
+        groups_permissions = self.user.get_group_permissions()
+        
+        # check permissions
+        group_result = 0
+        for group_permission in groups_permissions:
+            for permission in permissions_list:
+                if permission == group_permission:
+                    result += 1
+                else:
+                    continue
+        
+        # group permissions True
+        if group_result == len(permissions_list):
+            result = True
+
+        # user permissions True
+        if user_permissions:
+            result = True
+
+        return result

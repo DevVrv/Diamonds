@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib import messages
+from users.inspector import Inspector
 
 from django.views.generic import FormView
 
@@ -111,6 +112,16 @@ class White(FormView):
 
         return super().post(request, *args, **kwargs)
 
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        if not permission.auth and not permission.type == '2' and not permission.super:
+            return redirect(reverse_lazy('signin'))
+
+        return super().get(request, *args, **kwargs)
+
 # -- round / pear
 class RoundPear(FormView):
     template_name = 'round_pear.html'
@@ -197,6 +208,17 @@ class RoundPear(FormView):
                 messages.error(request, f'An error occurred while working with the file')
 
         return super().post(request, *args, **kwargs)
+
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+
+        permission = Inspector(request)
+        if not permission.auth:
+            return redirect(reverse_lazy('signin'))
+        elif permission.auth and not permission.has_permission(['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model']):
+                return redirect(reverse_lazy('403'))
+
+        return super().get(request, *args, **kwargs)
 
 # <-- download white template 
 def download(request, path):

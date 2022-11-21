@@ -13,7 +13,7 @@ from users.inspector import Inspector
 # <------------------------------ get filter page
 def filterPage(request):
 
-    # permissions
+    # -- PERMISSIONS
     permission = Inspector(request, {'level': 2, 'type': 1})
     if not permission.inspect():
         messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
@@ -54,6 +54,11 @@ def filterPage(request):
 
 # <------------------------------ filtering get filtered diamonds
 def filtering(request):
+
+    # -- PERMISSIONS
+    permission = Inspector(request, {'level': 2, 'type': 1})
+    if not permission.inspect():
+        return redirect(reverse_lazy('user_info'))
 
     # <-- get filtered
     def get_filtered(requestData):
@@ -293,7 +298,13 @@ def filtering(request):
 
 # <------------------------------ get diamond of keys
 def filtering_of_key(request):
+
     if request.method == 'POST':
+
+        # -- PERMISSIONS
+        permission = Inspector(request, {'level': 2, 'type': 1})
+        if not permission.inspect():
+            return redirect(reverse_lazy('user_info'))
 
         # <-- get request data
         requestData = json.loads(request.body)

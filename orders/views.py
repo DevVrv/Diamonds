@@ -5,8 +5,8 @@ from orders.models import Orders_model, Orders_Diamond_Model
 from cart.models import CartModal
 from filter.models import Diamond_Model
 from users.models import CustomUser, CompanyDetails
-import json
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 
 from django.utils import timezone
 
@@ -14,11 +14,18 @@ from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from core.settings import DEFAULT_FROM_EMAIL
-
+from django.contrib import messages
+from users.inspector import Inspector
+import json
 
 # * Get orders page
 def get_orders(request):
 
+    # -- PERMISSIONS
+    permission = Inspector(request, {'level': 2, 'type': 1})
+    if not permission.inspect():
+        messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
+        return redirect(reverse_lazy('user_info'))
 
     orders_model = Orders_model.objects.filter(user_id = request.user.id)
 
@@ -77,6 +84,11 @@ def get_order_details(request):
 
 # * create new order
 def create_order(request):
+
+    # -- PERMISSIONS
+    permission = Inspector(request, {'level': 2, 'type': 1})
+    if not permission.inspect():
+        return redirect(reverse_lazy('user_info'))
 
     # <-- get request data
     requestData = json.loads(request.body)

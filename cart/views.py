@@ -1,15 +1,24 @@
 import json
 from django.core import serializers
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.contrib import messages
 
 from .models import CartModal
 from filter.models import Diamond_Model
 from cart.models import CartModal
 
+from users.inspector import Inspector
 
 # <-- get cart template
 def cart(request):
+
+    # -- PERMISSIONS
+    permission = Inspector(request, {'level': 2, 'type': 1})
+    if not permission.inspect():
+        messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
+        return redirect(reverse_lazy('user_info'))
 
     try:
         cart_items = CartModal.objects.get(user = request.user.pk)
@@ -48,6 +57,7 @@ def cart(request):
 def delete_selected(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         if request.method == 'POST':
+
             # get request data
             requestData = json.loads(request.body)
             
@@ -139,6 +149,11 @@ def cart_sort(request):
 # --> Add to cart
 def cart_pack(request):
     
+    # -- PERMISSIONS
+    permission = Inspector(request, {'level': 2, 'type': 1})
+    if not permission.inspect():
+        return redirect(reverse_lazy('user_info'))
+
     requestData = json.loads(request.body)
 
     # kwargs for create cart

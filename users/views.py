@@ -67,7 +67,7 @@ class SignUpView(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if permission.is_auth():
+        if permission.auth:
             return redirect(reverse_lazy('user_info'))
 
         return super().get(request, *args, **kwargs)
@@ -80,6 +80,7 @@ class SignUpExtendedView(FormView):
     extra_context = {
         'title': 'Registration Extended'
     }
+    
     # --> POST
     def post(self, request, *args: str, **kwargs):
 
@@ -143,7 +144,7 @@ class SignInView(FormView):
                 user_type = form.cleaned_data.get('user_type')
                 
                 # --> client door
-                if user_type == '1':
+                if user_type == '1' or user_type == '0':
                     
                     # -- generate code
                     code = create_code(request, form.cleaned_data.get('username'), form.cleaned_data.get('remember_me'))
@@ -178,7 +179,7 @@ class SignInView(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if permission.is_auth():
+        if permission.auth:
             return redirect(reverse_lazy('user_info'))
 
         return super().get(request, *args, **kwargs)
@@ -219,7 +220,7 @@ class SignInConfirmView(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if permission.is_auth():
+        if permission.auth:
             return redirect(reverse_lazy('user_info'))
 
         return super().get(request, *args, **kwargs)
@@ -232,7 +233,7 @@ class SignInConfirmResend(SignInConfirmView):
 
         # -- permissions
         permission = Inspector(request)
-        if permission.is_auth():
+        if permission.auth:
             return redirect(reverse_lazy('user_info'))
 
         
@@ -299,6 +300,16 @@ class PasswordRecovery(FormView):
             return redirect(reverse_lazy(self.success_url))
 
         return super().post(request, *args, **kwargs)
+
+    # <-- get
+    def get(self, request, *args, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        if permission.auth:
+            return redirect(reverse_lazy('user_info'))
+
+        return super().get(request, *args, **kwargs)
 
 # -- auth confirm
 class PasswordRecoveryConfirm(FormView):
@@ -477,9 +488,11 @@ class UserInfo(TemplateView):
     # <-- GET
     def get(self, request, *args: str, **kwargs):
 
-        # TODO INSPECTOR
-        permissions = Inspector(request, {'type': 2})
-        permissions_result = permissions.inspect()
+        # -- permissions
+        permission = Inspector(request)
+        if not permission.auth:
+            messages.warning(request, 'You need to log in before you can use the site')
+            return redirect(reverse_lazy('signin'))
 
         # -- user form
         self.user_form = self.user_form(instance=request.user or None)
