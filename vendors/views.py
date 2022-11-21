@@ -215,7 +215,7 @@ class RoundPear(FormView):
         permission = Inspector(request)
         if not permission.auth:
             return redirect(reverse_lazy('signin'))
-        elif permission.auth and not permission.has_permission(['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model']):
+        elif permission.auth and not permission.has_permissions(['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model']):
                 return redirect(reverse_lazy('403'))
 
         return super().get(request, *args, **kwargs)

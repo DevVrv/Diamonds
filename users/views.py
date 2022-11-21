@@ -110,6 +110,17 @@ class SignUpExtendedView(FormView):
         else:
             return redirect(reverse_lazy('signup_extended'))
 
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+
+        permission = Inspector(request)
+        if not permission.auth:
+            return redirect(reverse_lazy('signin'))
+        elif permission.auth and not permission.has_permissions(['users.add_customuser']):
+            return redirect(reverse_lazy('403'))
+
+
+        return super().get(request, *args, **kwargs)
 
 # SIGN OUT
 

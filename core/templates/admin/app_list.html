@@ -35,14 +35,14 @@
                 <div></div>
             {% endif %}
 
-            {% if model.admin_url and show_changelinks %}
+            {% comment %} {% if model.admin_url and show_changelinks %}
                 {% if model.view_only %}
                 <div><a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a></div>
 
                 {% endif %}
             {% elif show_changelinks %}
                 <div></div>
-            {% endif %}
+            {% endif %} {% endcomment %}
             
             </div>
         {% endfor %}

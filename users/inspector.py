@@ -58,27 +58,23 @@ class Inspector(object):
         return self.result
 
     # -- permissions
-    def has_permission(self, permissions_list = [str]):
+    def has_permissions(self, permissions_list = [str]):
+
+        user_permissions = self.user.get_all_permissions()
+
+        user_result = 0
         result = False
-
-        user_permissions = self.user.has_perms(permissions_list)
-        groups_permissions = self.user.get_group_permissions()
         
-        # check permissions
-        group_result = 0
-        for group_permission in groups_permissions:
+        # check user permissions
+        for user_permission in user_permissions:
             for permission in permissions_list:
-                if permission == group_permission:
-                    result += 1
-                else:
-                    continue
-        
-        # group permissions True
-        if group_result == len(permissions_list):
-            result = True
+                if user_permission == permission:
+                    user_result += 1
 
-        # user permissions True
-        if user_permissions:
+        # check result
+        if user_result == len(permissions_list):
             result = True
 
         return result
+
+
