@@ -101,14 +101,18 @@ class UsersAuthForm(forms.Form):
         # <-- GET form clean data
         email = self.cleaned_data['username']
         password = self.cleaned_data['password']
+        user_type = self.cleaned_data['user_type']
         
         # -- check email
         if CustomUser.objects.filter(email=email).exists():
-            user = CustomUser.objects.get(email=email)
+            user = CustomUser.objects.filter(email=email).filter(user_type=user_type)
             
             # -- check password
-            if user.check_password(password) != True:
-                raise ValidationError('Incorrect username or password')
+            if user.exists():
+                if user[0].check_password(password) != True:
+                    raise ValidationError('Incorrect username or password')
+            else:
+                raise ValidationError('User with this email was not found')
         else:
             raise ValidationError('User with this email was not found')
 

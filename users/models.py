@@ -12,9 +12,9 @@ class CustomUser(AbstractUser):
         (3, '3 - Vip user'),
     )
     types_list = (
-        (0, '0 - Staff'),
-        (1, '1 - Client'),
-        (2, '2 - Vendor'),
+        (0, 'Staff'),
+        (1, 'Client'),
+        (2, 'Vendor'),
     )
     
     # user info

@@ -1,6 +1,4 @@
-import os
-from django.conf import settings
-from django.http import HttpResponse, Http404
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -22,6 +20,7 @@ class White(FormView):
     success_url = reverse_lazy('white')
     extra_context = {
         'title': 'White',
+        'has_permission': False
     }
 
     # --> POST
@@ -117,8 +116,18 @@ class White(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if not permission.auth and not permission.type == '2' and not permission.super:
+        perm_list = ['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model', 'vendors.change_vedor_diamond_model']
+
+        if not permission.auth:
             return redirect(reverse_lazy('signin'))
+
+        if not permission.type == 2 and not permission.super and not permission.has_permissions(perm_list):
+            raise PermissionDenied()
+
+        if permission.super or permission.staff and permission.has_permissions(perm_list):
+
+            self.extra_context['has_permission'] = True
+
 
         return super().get(request, *args, **kwargs)
 
@@ -129,6 +138,7 @@ class RoundPear(FormView):
     success_url = reverse_lazy('round_pear')
     extra_context = {
         'title': 'Round / Pear',
+        'has_permission': False
     }
 
     # --> POST
@@ -213,19 +223,16 @@ class RoundPear(FormView):
     def get(self, request, *args, **kwargs):
 
         permission = Inspector(request)
+        perm_list = ['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model', 'vendors.change_vedor_diamond_model']
+
         if not permission.auth:
             return redirect(reverse_lazy('signin'))
-        elif permission.auth and not permission.has_permissions(['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model']):
-                return redirect(reverse_lazy('403'))
+        
+        if not permission.super or not permission.staff and permission.has_permissions(perm_list):
+            raise PermissionDenied()
+
+        if permission.super or permission.staff and permission.has_permissions(perm_list):
+            self.extra_context['has_permission'] = True
 
         return super().get(request, *args, **kwargs)
 
-# <-- download white template 
-def download(request, path):
-    file_path = os.path.join(settings.MEDIA_ROOT, path)
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            return response
-    raise Http404

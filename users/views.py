@@ -2,6 +2,8 @@ from django.views.generic import FormView
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic.base import TemplateView
 
+from django.core.exceptions import PermissionDenied
+
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
@@ -101,9 +103,19 @@ class SignUpExtendedView(FormView):
                 # action create new user
                 user = CustomUser.objects.create(**new_user)
                 user.save()
-                
-                # success
-                messages.success(self.request, 'Success, new user was created')
+
+                if new_user['user_type'] == '0':
+                    user.is_staff = True
+                    user.save()
+
+                user_type_name = {
+                    '0': 'staff',
+                    '1': 'user',
+                    '2': 'vendor',
+                }
+
+                # success message
+                messages.success(self.request, f'Success, new {user_type_name[user.user_type]} was created')
                 return redirect(reverse_lazy(self.success_url))
             
             return super().post(request, *args, **kwargs)
@@ -112,12 +124,12 @@ class SignUpExtendedView(FormView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
-
         permission = Inspector(request)
         if not permission.auth:
             return redirect(reverse_lazy('signin'))
-        elif permission.auth and not permission.has_permissions(['users.add_customuser']):
-            return redirect(reverse_lazy('403'))
+        
+        if not permission.has_permissions(['users.add_customuser']):
+            raise PermissionDenied()
 
 
         return super().get(request, *args, **kwargs)
@@ -153,10 +165,12 @@ class SignInView(FormView):
             # -- form valid
             if form.is_valid():
                 user_type = form.cleaned_data.get('user_type')
+                user_name = form.cleaned_data.get('username')
                 
+
                 # --> client door
                 if user_type == '1' or user_type == '0':
-                    
+
                     # -- generate code
                     code = create_code(request, form.cleaned_data.get('username'), form.cleaned_data.get('remember_me'))
                     
@@ -173,11 +187,15 @@ class SignInView(FormView):
 
                 # --> vendor door
                 elif user_type == '2':
-                    user = CustomUser.objects.filter(email=form.cleaned_data.get('username')).filter(user_type='2')
-                    if user.exists():
-                        login(self.request, user)
-                    else:
-                        return redirect(reverse_lazy('signin'))
+                    user = CustomUser.objects.get(username=user_name)
+                    login(request, user)
+                    messages.success(request, 'You have been successfully logged in')
+                    return redirect(reverse_lazy('white'))
+
+                # -- unexpected
+                else:
+                    messages.error(request, 'Check the entered data')
+                    return redirect(reverse_lazy('signin'))
         
         # -- recaptcha false
         else:
@@ -190,8 +208,10 @@ class SignInView(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if permission.auth:
+        if permission.auth and permission.type == '1':
             return redirect(reverse_lazy('user_info'))
+        elif permission.auth and permission.type == '2':
+            return redirect(reverse_lazy('white'))
 
         return super().get(request, *args, **kwargs)
 

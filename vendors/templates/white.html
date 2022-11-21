@@ -17,7 +17,7 @@
                         <i class="svg-logo logo-icon modal-logo"></i>
                     </div>
 
-                    {% if user.is_superuser %}
+                    {% if has_permission %}
                         <div class="col-12 mt-4 pb-4 border-bottom d-flex justify-content-evenly align-items-center">
                             <a href="#" class="fs-5 link">White diamonds</a>
                             <a href="{% url 'round_pear' %}" class="fs-5 link-def">Price Updated</a>
@@ -54,10 +54,10 @@
                     <div class="col-12 mt-2">
                         <div class="col-12 mt-3 py-2 d-flex justify-content-between align-items-center border-top w-100 pt-3">
                             
-                            {% if user.is_superuser %}
+                            {% if has_permission %}
                                 <p class="m-0">
                                     Get back to 
-                                    <a href="{% url 'white' %}" class="link">Admin</a>
+                                    <a href="/admin/" class="link">Admin</a>
                                 </p>
                             {% else %}
                                 <a href="{% url 'signout' %}" class="link">Sign out</a>
