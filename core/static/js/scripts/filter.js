@@ -69,9 +69,17 @@ class Control {
 
         parent.innerHTML = '';
 
-        let photo = diamond.fields.photo;
+        let photo = ''
+
+        // if (diamond.video != '' && diamond.video != '-' && diamond.video != 'N/A') {
+        //     photo = `<iframe class="video_frame" src="${diamond.video}" frameborder="0"></iframe>`
+        // }
         if (photo == 'N/A' || photo == '' || photo == '-') {
-            photo = 'static/img/diamonds/base-diamond.jpg'
+            photo = `<img src="${diamond.photo}" alt="" class="img-fluid rounded"></img>`
+        }
+        else {
+            photo = '<img src="static/img/diamonds/base-diamond.jpg" alt="" class="img-fluid rounded"></img>'
+
         }
 
         const date = deliveryDate();
@@ -141,7 +149,7 @@ class Control {
             <div class="row">
                 
                 <div class="result__drop-down--col col-3">
-                    <img src="${photo}" alt="Diamond Photo" class="img-fluid rounded">
+                    ${photo}
                 </div>
                 
                 <div class="result__drop-down--col col-7">
@@ -273,9 +281,6 @@ class Control {
 
             context.updateViewEnd(responce);
         }, 200);
-
-        const inp = this._getElement('.inout-num-1');
-
     }
 
     
@@ -434,8 +439,8 @@ class NoUI extends Control {
 
         // -- get numeric input
         this.numericInputs[key] = {
-            min: this._getElement(`[data-numeric-input="min"]`, parent),
-            max: this._getElement(`[data-numeric-input="max"]`, parent)
+            min: this._getElement('[data-numeric-input="min"]', parent),
+            max: this._getElement('[data-numeric-input="max"]', parent)
         };
         
         // -- update numeric inputs
@@ -1434,6 +1439,7 @@ class InfinityScroll extends Control {
         super();
 
         this.step = 15;
+        this.stop = false
 
         this.key = kwargs.key;
         this.dataControl = kwargs.dataControl;
@@ -1489,7 +1495,9 @@ class InfinityScroll extends Control {
 
     // --> cursor next
     next() {
-        if (this.permission('next')) {
+        if (this.permission('next') && !this.stop) {
+
+            this.stop = true
 
             // <-- get ordering values
             const start = this.dataControl.ordering[this.key][0];
@@ -1560,11 +1568,24 @@ class InfinityScroll extends Control {
         // -- insert spiner and scroll to
         if (this.direction == 'next') {
             this.container.insertAdjacentHTML(this.insertPosition, this.spinerView('get'));
-            this.container.scrollTo(0, this.container.scrollHeight - 5);
+
+            let last = this._getElements('.result__item', this.container) 
+            last = last[last.length - 1]
+
+            last.scrollIntoView({
+                block: 'end',
+            });
         }
         else if (this.direction == 'prev') {
             this.container.insertAdjacentHTML(this.insertPosition, this.spinerView('get'));
-            this.container.scrollTo(0, 5);
+            
+            let first = this._getElements('.result__item', this.container) 
+            first = first[0]
+
+            first.scrollIntoView({
+                block: 'start',
+            });
+
         }
         
         // --> make request
@@ -1634,6 +1655,7 @@ class InfinityScroll extends Control {
         }
         // -- default this step
         this.step = 15;
+        this.stop = false
     }
 }
 
@@ -1750,7 +1772,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
             },
             options: {
-                key: 'table'
+                key: 'table_procent'
             }
         });
         
@@ -1768,8 +1790,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
             },
             options: {
-                key: 'len'
+                key: 'length_mm'
             }
+
         });
         
         // -- create depth
@@ -1955,7 +1978,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 replacePips: ["None", "Faint", "Medium", "Strong", "Very Strong"],
             },
             options: {
-                key: 'fluour'
+                key: 'fluor'
             },
         });
 

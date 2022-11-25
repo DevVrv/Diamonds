@@ -244,3 +244,9 @@ select:hover, select:focus {
   border-top: 1px solid #e8e8e8dc !important;
   border-bottom: 1px solid #e8e8e8dc !important;
 }
+
+
+.button.cancel-link {
+  background-color: #e44452 !important;
+  height: 100% !important;
+}

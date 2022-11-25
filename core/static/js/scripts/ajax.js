@@ -28,6 +28,7 @@ async function ajax(url, data, extension, context) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            
             'X-Requested-With': 'XMLHttpRequest',
             'X-CSRFToken': getToken('csrftoken'),
         },

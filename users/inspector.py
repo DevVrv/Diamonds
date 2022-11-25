@@ -23,6 +23,7 @@ class Inspector(object):
         # -- super
         if self.super:
             self.result = True
+            return self.result
 
         # <-- get level
         try:

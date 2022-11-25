@@ -9,36 +9,36 @@ def max_min():
     diamonds = Diamond_Model.objects.all()
     max_min = {
         'price': {
-            'min': diamonds.order_by('sale_price')[0].sale_price,
-            'max': diamonds.order_by('-sale_price')[0].sale_price
+            'min': round(diamonds.order_by('sale_price')[0].sale_price, 2),
+            'max': round(diamonds.order_by('-sale_price')[0].sale_price, 2)
         },
         'carat': {
-            'min': diamonds.order_by('weight')[0].weight,
-            'max': diamonds.order_by('-weight')[0].weight
+            'min': round(diamonds.order_by('weight')[0].weight, 2),
+            'max': round(diamonds.order_by('-weight')[0].weight, 2)
         },
-        'length': {
-            'min': diamonds.order_by('length')[0].length,
-            'max': diamonds.order_by('-length')[0].length
+        'length_mm': {
+            'min': round(diamonds.order_by('length_mm')[0].length_mm, 2),
+            'max': round(diamonds.order_by('-length_mm')[0].length_mm, 2)
         },
         'width': {
-            'min': diamonds.order_by('width')[0].width,
-            'max': diamonds.order_by('-width')[0].width
+            'min': round(diamonds.order_by('width')[0].width, 2),
+            'max': round(diamonds.order_by('-width')[0].width, 2)
         },
         'depth': {
             'min': diamonds.order_by('depth')[0].depth,
             'max': diamonds.order_by('-depth')[0].depth
         },
         'depth_procent': {
-            'min': diamonds.order_by('depth_procent')[0].depth_procent,
-            'max': diamonds.order_by('-depth_procent')[0].depth_procent
+            'min': round(diamonds.order_by('depth_procent')[0].depth_procent, 2),
+            'max': round(diamonds.order_by('-depth_procent')[0].depth_procent, 2)
         },
         'table': {
-            'min': diamonds.order_by('table_procent')[0].table_procent,
-            'max': diamonds.order_by('-table_procent')[0].table_procent
+            'min': round(diamonds.order_by('table_procent')[0].table_procent, 2),
+            'max': round(diamonds.order_by('-table_procent')[0].table_procent, 2)
         },
         'lw': {
-            'min': diamonds.order_by('lw')[0].lw,
-            'max': diamonds.order_by('-lw')[0].lw
+            'min': round(diamonds.order_by('lw')[0].lw, 2),
+            'max': round(diamonds.order_by('-lw')[0].lw, 2)
         },
     }
 
@@ -78,7 +78,7 @@ def accept(modeladmin, request, queryset):
             'symmetry': item.symmetry,
             'culet': item.culet,
             'fluor': item.fluor,
-            'length': item.length,
+            'length_mm': item.length_mm,
             'width': item.width,
             'depth': item.depth,
             'lw': item.lw,
@@ -89,7 +89,6 @@ def accept(modeladmin, request, queryset):
             'photo': item.photo,
             'video': item.video,
             'is_published': 0,
-            'rap_price': item.rap_price
         }
         
         vendor_diamond = Vedor_Diamond_Model.objects.get(cert_number=item.cert_number)
@@ -120,7 +119,7 @@ def accept_published(modeladmin, request, queryset):
             'symmetry': item.symmetry,
             'culet': item.culet,
             'fluor': item.fluor,
-            'length': item.length,
+            'length_mm': item.length_mm,
             'width': item.width,
             'depth': item.depth,
             'lw': item.lw,
@@ -131,7 +130,7 @@ def accept_published(modeladmin, request, queryset):
             'photo': item.photo,
             'video': item.video,
             'is_published': 1,
-            'rap_price': item.rap_price
+            
         }
         
         vendor_diamond = Vedor_Diamond_Model.objects.get(cert_number=item.cert_number)
@@ -162,7 +161,7 @@ def accept_best_published(modeladmin, request, queryset):
             'symmetry': item.symmetry,
             'culet': item.culet,
             'fluor': item.fluor,
-            'length': item.length,
+            'length_mm': item.length_mm,
             'width': item.width,
             'depth': item.depth,
             'lw': item.lw,
@@ -173,7 +172,7 @@ def accept_best_published(modeladmin, request, queryset):
             'photo': item.photo,
             'video': item.video,
             'is_published': 1,
-            'rap_price': item.rap_price
+            
         }
         
         vendor_diamond = Vedor_Diamond_Model.objects.get(cert_number=item.cert_number)

@@ -5,7 +5,7 @@ from orders.models import Orders_model, Orders_Diamond_Model
 from cart.models import CartModal
 from filter.models import Diamond_Model
 from users.models import CustomUser, CompanyDetails
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.utils import timezone
@@ -85,16 +85,16 @@ def get_order_details(request):
 # * create new order
 def create_order(request):
 
-    # -- PERMISSIONS
-    permission = Inspector(request, {'level': 2, 'type': 1})
-    if not permission.inspect():
-        return redirect(reverse_lazy('user_info'))
-
-    # <-- get request data
-    requestData = json.loads(request.body)
-    
     try:
-        # * create empty data list
+        # -- PERMISSIONS
+        permission = Inspector(request, {'level': 2, 'type': 1})
+        if not permission.inspect():
+            return redirect(reverse_lazy('user_info'))
+
+        #  get request data
+        requestData = json.loads(request.body)
+        
+        # create empty data list
         order_data = {
             'user_id': request.user.pk,
             'total_carat': 0,
@@ -107,92 +107,90 @@ def create_order(request):
             'diamonds_list': json.dumps([])
         }
 
-        # <-- get cart
+        # -- cart
         cart = CartModal.objects.get(user_id=request.user.id)
         user_cart = json.loads(cart.user_cart)
         cart_diamonds = Diamond_Model.objects.filter(pk__in=user_cart)
         cart.delete()
 
-        # -- order data - price , carat, len
+        # order - price , carat, len
         order_data['total_diamonds'] = len(cart_diamonds)
         for diamond in cart_diamonds:
             order_data['total_carat'] += diamond.weight
             order_data['total_price'] += diamond.sale_price
         order_data['total_carat'] = round(order_data['total_carat'], 2)
 
-        # -- order info
+        # order info
         for key in requestData:
             if key != 'comment':
                 order_data[key] = int(requestData[key])
             else:
                 order_data[key] = requestData[key]
 
-        # -- make new order
+        # -- make order
         new_order = Orders_model.objects.create(**order_data)
-
-        # -- make order number
         order_number = new_order.id
-
         length = 10 - len(f'{order_number}')
         while length:
             length -= 1
             order_number = '0' + f'{order_number}'
-        
         order_data['order_number'] = order_number
         new_order.order_number = order_number
         new_order.save()
 
-        # * create order diamonds list
+        # -- Order diamonds list
         order_keys = []
         for diamond in cart_diamonds:
             filter_diamonds_values = {
+                'ref': diamond.ref,
                 'cert_number': diamond.cert_number,
+
                 'shape': diamond.shape,
                 'clarity': diamond.clarity,
                 'color': diamond.color,
-                'rap_1ct': diamond.rap_1ct,
-                'rap_price': diamond.rap_price,
-                'sale_price': diamond.sale_price,
-                'disc': diamond.disc,
-                'girdle': diamond.girdle,
                 'culet': diamond.culet,
-                'weight': diamond.weight,
                 'cut': diamond.cut,
                 'polish': diamond.polish,
                 'symmetry': diamond.symmetry,
-                'culet': diamond.culet,
+                'girdle': diamond.girdle,
                 'fluor': diamond.fluor,
-                'length': diamond.length,
-                'width': diamond.width,
-                'depth': diamond.depth,
-                'lw': diamond.lw,
                 'measurements': diamond.measurements,
                 'lab': diamond.lab,
-                'depth_procent': diamond.depth_procent,
-                'table_procent': diamond.table_procent,
+
                 'photo': diamond.photo,
                 'video': diamond.video,
 
+                'rap_1ct': diamond.rap_1ct,
+                'sale_price': diamond.sale_price,
+                'disc': diamond.disc,
+
+                'weight': diamond.weight,
+                'length_mm': diamond.length_mm,
+                'width': diamond.width,
+                'depth': diamond.depth,
+                'lw': diamond.lw,
+                'depth_procent': diamond.depth_procent,
+                'table_procent': diamond.table_procent,
+
+                'vendor_id': diamond.vendor_id,
                 'buyer': request.user,
                 'order_id': new_order.id,
                 'order_number': order_number
             }
             Orders_Diamond_Model.objects.create(**filter_diamonds_values)
             order_keys.append(diamond.cert_number)
-        
-        # * update order diamonds list 
         new_order.diamonds_list = json.dumps(order_keys)
         new_order.save()
 
-        # <-- get email info
+        # -- ORDER EMAIL 
         user = request.user
         company = CompanyDetails.objects.get(user_id=user.id)
         manager = CustomUser.objects.get(pk=user.manager_id)
         manager_email = manager.email or DEFAULT_FROM_EMAIL
-
-        # --> send mail
+        sales_mail = 'sales@labrilliante.com'
+        
         subject = 'New order'
-        html_message = render_to_string('_mail_new_order.html', {
+        email_data = {
             'login': user.username,
             'user_email': user.email,
             'user_tel': user.tel,
@@ -207,22 +205,22 @@ def create_order(request):
             'order_number': order_data['order_number'],
             'order_comment': requestData['comment'],
             'order_type': requestData['order_type']
-            })
+        }
+        html_message = render_to_string('_mail_new_order.html', email_data)
         plain_message = strip_tags(html_message)
-        from_email = DEFAULT_FROM_EMAIL
-        # sales@labrilliante.com
-        to = manager_email
 
-        mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+        mail.send_mail(subject, plain_message, DEFAULT_FROM_EMAIL, [manager_email], html_message=html_message)
 
         responce = {
             'alert': 'success'
-        }
+        } 
+      
     except Exception as ex:
         print(ex)
         responce = {
             'alert': 'error'
         }
+        
     return HttpResponse (json.dumps(responce), content_type="application/json")
 
 # * order search form
@@ -263,3 +261,4 @@ def order_search(request):
     }
 
     return HttpResponse (json.dumps(responce), content_type="application/json")
+

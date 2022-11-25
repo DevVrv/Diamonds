@@ -144,7 +144,7 @@ class Cart {
         <div class="alert alert-danger border-0 shadow-sm" role="alert" id="responce_message">
             <h5 class="h5">Error: The basket cannot be empty</h5>
             You can get acquainted with the goods by following this link
-            <a href="/filter/" class="fs-5 link">Diamonds</a>
+            <a href="/" class="fs-5 link">Diamonds</a>
         </div>
         `;
         const success = `

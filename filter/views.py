@@ -99,9 +99,14 @@ def filtering(request):
             nums = {}
             
             for key in requestNums:
+
+                key = key.lower()
+                print(key)
+
                 # create lte / gte keys 
                 key_gte = key + '__gte';
                 key_lte = key + '__lte';
+                
                 # update nums list
                 nums[key_gte] = float(requestNums[key][0])
                 nums[key_lte] = float(requestNums[key][1])

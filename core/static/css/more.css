@@ -515,3 +515,10 @@ background-color: #55b49e;
     border-color: #3c3f3f !important;
     background-color: #3c3f3f !important;
 }
+
+.video_frame {
+    height: 100% !important;
+    max-height: fit-content !important;
+    width: 100% !important;
+    transition: height 0.3s ease !important;
+}
