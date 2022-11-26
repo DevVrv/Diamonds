@@ -69,18 +69,8 @@ class Control {
 
         parent.innerHTML = '';
 
-        let photo = ''
+        let photo = `<img src="{% static '/img/diamonds/base-diamond.jpg' %}" alt="" class="img-fluid rounded">`
 
-        // if (diamond.video != '' && diamond.video != '-' && diamond.video != 'N/A') {
-        //     photo = `<iframe class="video_frame" src="${diamond.video}" frameborder="0"></iframe>`
-        // }
-        if (photo == 'N/A' || photo == '' || photo == '-') {
-            photo = `<img src="${diamond.photo}" alt="" class="img-fluid rounded"></img>`
-        }
-        else {
-            photo = '<img src="static/img/diamonds/base-diamond.jpg" alt="" class="img-fluid rounded"></img>'
-
-        }
 
         const date = deliveryDate();
 

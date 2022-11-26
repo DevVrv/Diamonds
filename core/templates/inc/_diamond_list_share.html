@@ -82,7 +82,9 @@
             {% comment %} img {% endcomment %}
             <div class="result__drop-down--col col-3">
 
-                {% if diamond.photo != '' and diamond.photo != '-' and diamond.photo != 'N/A'%}
+                {% if diamond.video != '' and diamond.video != '-' and diamond.video != 'N/A'%}
+                    <iframe class="video_frame" src="{{diamond.video}}" frameborder="0"></iframe>
+                {% elif diamond.photo != '' and diamond.photo != '-' and diamond.photo != 'N/A'%}
                     <img src="{{diamond.photo}}" alt="" class="img-fluid rounded">
                 {% else %}
                     <img src="{% static '/img/diamonds/base-diamond.jpg' %}" alt="" class="img-fluid rounded">
