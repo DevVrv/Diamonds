@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'share.apps.ShareConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'ftp.apps.FtpConfig',
 
 ]
 

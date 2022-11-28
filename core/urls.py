@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import Access_denied
 
 urlpatterns = [
     path('', include('filter.urls')),
@@ -12,5 +11,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
 
-    path('403/', Access_denied.as_view(), name='403'),
+    path('ftp/', include('ftp.urls')),
+
+    
 ]

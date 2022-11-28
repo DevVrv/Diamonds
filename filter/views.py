@@ -16,8 +16,11 @@ def filterPage(request):
     # -- PERMISSIONS
     permission = Inspector(request, {'level': 2, 'type': 1})
     if not permission.inspect():
-        messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
+        if permission.auth:
+            messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
+        
         return redirect(reverse_lazy('user_info'))
+        
 
     # * get cart items
     try:
