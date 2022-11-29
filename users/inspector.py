@@ -1,81 +1,57 @@
+from django.core.exceptions import PermissionDenied
+
 class Inspector(object):
     
-    def __init__(self, request, rules = {'level': None, 'type': None}):
-        # -- base params
+    def __init__(self, request, rules = {'level': None, 'type': None}, messages = {'error': None, 'success': None}):
+
+        # base params
         self.request = request
-        self.result = False
         self.rules = rules
 
-        # <-- get user
+        #  get user
         self.user = request.user
 
-        # <-- get user status
+        #  get user status
         self.auth = self.user.is_authenticated
         if self.auth:
-            self.id = self.user.id
-            self.level = self.user.level
             self.super = self.user.is_superuser
-            self.staff = self.user.is_staff
+            self.level = self.user.level
             self.type = self.user.user_type
-
-    # -- inspect type and level
-    def inspect(self):
-        # -- super
-        if self.super:
-            self.result = True
-            return self.result
-
-        # <-- get level
-        try:
-            rLevel = self.rules['level']
-        except KeyError:
-            rLevel = None
-
-        # <-- get type
-        try:
-            rType = self.rules['type']
-        except KeyError:
-            rType = None        
         
-        self.level_result = None
-        if rLevel:
-            if rLevel <= self.level:
-                self.level_result = True
-            else:
-                self.level_result = False
+    # base user inspect
+    def inspect(self):
+        
+        # auth inspect
+        if self.auth:
 
-        self.type_result = None
-        if rType:
-            if rType == self.type:
-                self.type_result = True
-            else:
-                self.type_result = False
+            # super user
+            if self.super:
+                return True
 
-        if self.type_result and self.level_result:
-            self.result = True
-        else:
-            self.result = False
+            # user type
+            if self.rules['type'] != None and self.user.type == self.rules['type'] or self.user.type == 0:
+                return True
 
-        return self.result
+            if self.rules['level'] != None and self.user.leve >= self.rules['level']:
+                return True
 
-    # -- permissions
+        return False
+
+
+    # user permissions inspect
     def has_permissions(self, permissions_list = [str]):
 
         user_permissions = self.user.get_all_permissions()
-
         user_result = 0
-        result = False
         
-        # check user permissions
         for user_permission in user_permissions:
             for permission in permissions_list:
                 if user_permission == permission:
                     user_result += 1
 
-        # check result
         if user_result == len(permissions_list):
-            result = True
-
-        return result
+            return True
+        else:
+            raise PermissionDenied()
 
 

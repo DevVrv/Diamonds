@@ -14,12 +14,6 @@ from users.inspector import Inspector
 # <-- get cart template
 def cart(request):
 
-    # -- PERMISSIONS
-    permission = Inspector(request, {'level': 2, 'type': 1})
-    if not permission.inspect():
-        messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
-        return redirect(reverse_lazy('user_info'))
-
     try:
         cart_items = CartModal.objects.get(user = request.user.pk)
         cart_values = json.loads(cart_items.user_cart)
@@ -149,11 +143,6 @@ def cart_sort(request):
 # --> Add to cart
 def cart_pack(request):
     
-    # -- PERMISSIONS
-    permission = Inspector(request, {'level': 2, 'type': 1})
-    if not permission.inspect():
-        return redirect(reverse_lazy('user_info'))
-
     requestData = json.loads(request.body)
 
     # kwargs for create cart

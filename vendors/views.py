@@ -1,6 +1,4 @@
-from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
 from django.contrib import messages
 from users.inspector import Inspector
 
@@ -194,16 +192,9 @@ class White(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        perm_list = ['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model', 'vendors.change_vedor_diamond_model']
-
-        if not permission.auth:
-            return redirect(reverse_lazy('signin'))
-
-        if not permission.type == 2 and not permission.super and not permission.has_permissions(perm_list):
-            raise PermissionDenied()
-
-        if permission.super or permission.staff and permission.has_permissions(perm_list):
-            self.extra_context['has_permission'] = True
+        permission_list = ['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model', 'vendors.change_vedor_diamond_model']
+        permission.has_permissions(permission_list)
+        self.extra_context['has_permission'] = True
 
         return super().get(request, *args, **kwargs)
 
@@ -310,15 +301,8 @@ class RoundPear(FormView):
     def get(self, request, *args, **kwargs):
 
         permission = Inspector(request)
-        perm_list = ['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model', 'vendors.change_vedor_diamond_model']
-
-        if not permission.auth:
-            return redirect(reverse_lazy('signin'))
-        
-        if not permission.super or not permission.staff and permission.has_permissions(perm_list):
-            raise PermissionDenied()
-
-        if permission.super or permission.staff and permission.has_permissions(perm_list):
-            self.extra_context['has_permission'] = True
+        permission_list = ['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model', 'vendors.change_vedor_diamond_model']
+        permission.has_permissions(permission_list)
+        self.extra_context['has_permission'] = True
 
         return super().get(request, *args, **kwargs)

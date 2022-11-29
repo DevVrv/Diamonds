@@ -13,15 +13,6 @@ from users.inspector import Inspector
 # <------------------------------ get filter page
 def filterPage(request):
 
-    # -- PERMISSIONS
-    permission = Inspector(request, {'level': 2, 'type': 1})
-    if not permission.inspect():
-        if permission.auth:
-            messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
-        
-        return redirect(reverse_lazy('user_info'))
-        
-
     # * get cart items
     try:
         cart = CartModal.objects.get(user=request.user.pk)
@@ -57,11 +48,6 @@ def filterPage(request):
 
 # <------------------------------ filtering get filtered diamonds
 def filtering(request):
-
-    # -- PERMISSIONS
-    permission = Inspector(request, {'level': 2, 'type': 1})
-    if not permission.inspect():
-        return redirect(reverse_lazy('user_info'))
 
     # <-- get filtered
     def get_filtered(requestData):
@@ -308,11 +294,6 @@ def filtering(request):
 def filtering_of_key(request):
 
     if request.method == 'POST':
-
-        # -- PERMISSIONS
-        permission = Inspector(request, {'level': 2, 'type': 1})
-        if not permission.inspect():
-            return redirect(reverse_lazy('user_info'))
 
         # <-- get request data
         requestData = json.loads(request.body)

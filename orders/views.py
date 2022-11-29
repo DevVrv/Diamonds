@@ -21,12 +21,6 @@ import json
 # * Get orders page
 def get_orders(request):
 
-    # -- PERMISSIONS
-    permission = Inspector(request, {'level': 2, 'type': 1})
-    if not permission.inspect():
-        messages.warning(request, 'Please fill in the necessary information in your profile details to start your diamond search')
-        return redirect(reverse_lazy('user_info'))
-
     orders_model = Orders_model.objects.filter(user_id = request.user.id)
 
     try:
@@ -86,11 +80,6 @@ def get_order_details(request):
 def create_order(request):
 
     try:
-        # -- PERMISSIONS
-        permission = Inspector(request, {'level': 2, 'type': 1})
-        if not permission.inspect():
-            return redirect(reverse_lazy('user_info'))
-
         #  get request data
         requestData = json.loads(request.body)
         

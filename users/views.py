@@ -124,13 +124,6 @@ class SignUpExtendedView(FormView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
-        permission = Inspector(request)
-        if not permission.auth:
-            return redirect(reverse_lazy('signin'))
-        
-        if not permission.has_permissions(['users.add_customuser']):
-            raise PermissionDenied()
-
 
         return super().get(request, *args, **kwargs)
 
@@ -206,13 +199,6 @@ class SignInView(FormView):
     # <-- GET
     def get(self, request, *args, **kwargs):
 
-        # -- permissions
-        permission = Inspector(request)
-        if permission.auth and permission.type == '1':
-            return redirect(reverse_lazy('user_info'))
-        elif permission.auth and permission.type == '2':
-            return redirect(reverse_lazy('white'))
-
         return super().get(request, *args, **kwargs)
 
 # -- auth confirm
@@ -248,12 +234,6 @@ class SignInConfirmView(FormView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
-
-        # -- permissions
-        permission = Inspector(request)
-        if permission.auth:
-            return redirect(reverse_lazy('user_info'))
-
         return super().get(request, *args, **kwargs)
 
 # -- auth confirm replay
@@ -261,11 +241,6 @@ class SignInConfirmResend(SignInConfirmView):
 
     # <-- GET
     def get(self, request, *args: str, **kwargs):
-
-        # -- permissions
-        permission = Inspector(request)
-        if permission.auth:
-            return redirect(reverse_lazy('user_info'))
 
         
         mail = self.request.session['email']
@@ -334,11 +309,6 @@ class PasswordRecovery(FormView):
 
     # <-- get
     def get(self, request, *args, **kwargs):
-
-        # -- permissions
-        permission = Inspector(request)
-        if permission.auth:
-            return redirect(reverse_lazy('user_info'))
 
         return super().get(request, *args, **kwargs)
 
@@ -518,12 +488,6 @@ class UserInfo(TemplateView):
 
     # <-- GET
     def get(self, request, *args: str, **kwargs):
-
-        # -- permissions
-        permission = Inspector(request)
-        if not permission.auth:
-            messages.warning(request, 'You need to log in before you can use the site')
-            return redirect(reverse_lazy('signin'))
 
         # -- user form
         self.user_form = self.user_form(instance=request.user or None)
