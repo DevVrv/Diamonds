@@ -62,7 +62,6 @@ def get_share(request, user_id, share_id, share_key):
     share_name = 'Share with price'
     if share_type == 0: share_name = 'Share without price'
 
-
     # <-- get diamonds items
     diamonds = list(Diamond_Model.objects.filter(pk__in=share_list))
 

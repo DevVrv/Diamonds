@@ -29,6 +29,8 @@ class ShareLink {
             type: '0',
             list: '0'
         };
+
+        console.log(this)
     }
 
     // * init
@@ -98,8 +100,7 @@ class ShareLink {
             button.addEventListener('click', () => {
 
                 // * get type of link
-                if (button == this.with) {this.request.type = '1'}
-                else if (button == this.without) {this.request.type = '0'}
+                console.log(this)
 
                 // * get diamonds list
                 const list = JSON.parse(localStorage.getItem(this.key));

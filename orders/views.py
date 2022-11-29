@@ -5,7 +5,7 @@ from orders.models import Orders_model, Orders_Diamond_Model
 from cart.models import CartModal
 from filter.models import Diamond_Model
 from users.models import CustomUser, CompanyDetails
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.utils import timezone
@@ -14,12 +14,15 @@ from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from core.settings import DEFAULT_FROM_EMAIL
-from django.contrib import messages
 from users.inspector import Inspector
 import json
 
 # * Get orders page
 def get_orders(request):
+
+    permission = Inspector(request, {'type': 1, 'level': 2})
+    if not permission.inspect():
+        return redirect(reverse_lazy('user_info'))
 
     orders_model = Orders_model.objects.filter(user_id = request.user.id)
 
@@ -43,11 +46,13 @@ def get_order_details(request):
     # * request data
     requestData = json.loads(request.body)
 
+    print(requestData)
+
     # * order items
     order = Orders_model.objects.filter(user_id = request.user.id).get(order_number = requestData['number'])
 
     # * diamonds list
-    diamonds = Orders_Diamond_Model.objects.filter(cert_number__in = json.loads(order.diamonds_list)).filter(order.order_number)
+    diamonds = Orders_Diamond_Model.objects.filter(order_number = requestData['number'])
 
     # * user info
     user = CustomUser.objects.get(pk=request.user.pk)
@@ -202,8 +207,7 @@ def create_order(request):
 
         responce = {
             'alert': 'success'
-        } 
-      
+        }   
     except Exception as ex:
         print(ex)
         responce = {

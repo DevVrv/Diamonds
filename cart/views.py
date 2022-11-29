@@ -14,6 +14,10 @@ from users.inspector import Inspector
 # <-- get cart template
 def cart(request):
 
+    permission = Inspector(request, {'level': 2, 'type': 1})
+    if not permission.inspect():
+        return redirect(reverse_lazy('user_info'))
+
     try:
         cart_items = CartModal.objects.get(user = request.user.pk)
         cart_values = json.loads(cart_items.user_cart)

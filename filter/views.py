@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.contrib import messages
 import json
 # forms
 from .models import Diamond_Model, MaxMin
@@ -12,6 +11,10 @@ from users.inspector import Inspector
 
 # <------------------------------ get filter page
 def filterPage(request):
+
+    permission = Inspector(request, { 'type': 1, 'level': 2 })
+    if not permission.inspect():
+        return redirect(reverse_lazy('user_info'))
 
     # * get cart items
     try:
@@ -56,7 +59,6 @@ def filtering(request):
         diamonds = Diamond_Model.objects.filter(is_published = 1)
 
         # * get request items
-        print(requestData['requestOrdering'])
         requestShapes = requestData['filter']['shape']
         requestNums = requestData['filter']['nums']
         requestLabs = requestData['filter']['lab']
@@ -90,7 +92,6 @@ def filtering(request):
             for key in requestNums:
 
                 key = key.lower()
-                print(key)
 
                 # create lte / gte keys 
                 key_gte = key + '__gte';

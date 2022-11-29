@@ -110,7 +110,6 @@ class Orders {
 
     // debug mode
     debug(info = this) {
-        console.log(info);
         return this;
     }
 
@@ -247,7 +246,6 @@ class Orders {
         // <-- get diamonds list
         const diamonds = JSON.parse(responce.diamonds);
         
-        console.log(responce)
         // * check context key
         let modal;
         let modalItems;
@@ -324,13 +322,16 @@ class Orders {
                 fields[name] = input.value;
             });
 
-            // @ search
+            // search
+            let search_number = '';
             if (fields.search.length < 10) {
                 let num = 10 - fields.search.length;
 
                 for (let i = 0; i < num; i++) {
-                    fields.search += 0;
+                    search_number += '0'
                 }
+
+                fields.search = `${search_number}${fields.search}`;
             }  
 
             // * set spiner
@@ -401,4 +402,4 @@ const orders = new Orders({
     searchBody: '#orders-search-body',
     searchTriger: '#orders-search-btn',
 
-}).debug().init();
+}).init();

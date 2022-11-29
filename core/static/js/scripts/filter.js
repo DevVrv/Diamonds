@@ -69,8 +69,7 @@ class Control {
 
         parent.innerHTML = '';
 
-        let photo = `<img src="{% static '/img/diamonds/base-diamond.jpg' %}" alt="" class="img-fluid rounded">`
-
+        let photo = `<img src="static/img/diamonds/base-diamond.jpg" alt="" class="img-fluid rounded">`
 
         const date = deliveryDate();
 
@@ -1230,6 +1229,9 @@ class Comparison extends Control {
             if (this.share.data.comparing.length > 0) {
                 // <-- get radio value 
                 this.share.radio.map(inp => {
+                    if (inp.checked) {
+                        this.share.data.share = inp.value
+                    }
                 });
 
                 // --> send ajax

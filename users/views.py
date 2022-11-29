@@ -2,8 +2,6 @@ from django.views.generic import FormView
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic.base import TemplateView
 
-from django.core.exceptions import PermissionDenied
-
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
@@ -69,7 +67,7 @@ class SignUpView(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if permission.auth:
+        if permission.inspect():
             return redirect(reverse_lazy('user_info'))
 
         return super().get(request, *args, **kwargs)
@@ -124,6 +122,11 @@ class SignUpExtendedView(FormView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        permission_list = ['users.add_customuser']
+        permission.has_permissions(permissions_list=permission_list)
 
         return super().get(request, *args, **kwargs)
 
@@ -198,7 +201,10 @@ class SignInView(FormView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
-
+        # -- permissions
+        permission = Inspector(request)
+        if permission.inspect():
+            return redirect(reverse_lazy('user_info'))
         return super().get(request, *args, **kwargs)
 
 # -- auth confirm
@@ -225,6 +231,11 @@ class SignInConfirmView(FormView):
                 user = CustomUser.objects.get(email=email)
                 login(self.request, user=user)
                 messages.success(request, 'You have been successfully logged in')
+
+                if user.level == 0:
+                    user.level = 1
+                    user.save()
+
                 return redirect(reverse_lazy(self.success_url))
             else:
                 messages.error(request, 'Invalid code')
@@ -234,6 +245,10 @@ class SignInConfirmView(FormView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
+        # -- permissions
+        permission = Inspector(request)
+        if permission.inspect():
+            return redirect(reverse_lazy('user_info'))
         return super().get(request, *args, **kwargs)
 
 # -- auth confirm replay
@@ -242,7 +257,11 @@ class SignInConfirmResend(SignInConfirmView):
     # <-- GET
     def get(self, request, *args: str, **kwargs):
 
-        
+        # -- permissions
+        permission = Inspector(request)
+        if permission.inspect():
+            return redirect(reverse_lazy('user_info'))
+
         mail = self.request.session['email']
         remember = self.request.session['remember']
 
@@ -309,6 +328,11 @@ class PasswordRecovery(FormView):
 
     # <-- get
     def get(self, request, *args, **kwargs):
+
+        # -- permissions
+        permission = Inspector(request)
+        if not permission.inspect():
+            return redirect(reverse_lazy('signin'))
 
         return super().get(request, *args, **kwargs)
 
@@ -489,6 +513,10 @@ class UserInfo(TemplateView):
     # <-- GET
     def get(self, request, *args: str, **kwargs):
 
+        permission = Inspector(request, {'level': 0, 'type': 1})
+        if not permission.inspect():
+            return redirect(reverse_lazy('signin'))
+
         # -- user form
         self.user_form = self.user_form(instance=request.user or None)
 
@@ -531,3 +559,13 @@ class ChangePassword(PasswordChangeView):
             messages.error(request, form.errors.as_text())
 
         return super().post(request, *args, **kwargs)
+
+    # <-- GET
+    def get(self, request, *args, **kwargs):
+        
+        # -- permissions
+        permission = Inspector(request)
+        if not permission.inspect():
+            return redirect(reverse_lazy('signin'))
+
+        return super().get(request, *args, **kwargs)
