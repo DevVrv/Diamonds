@@ -1,3 +1,4 @@
+import os
 from django.views.generic import FormView
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic.base import TemplateView
@@ -17,7 +18,7 @@ from .models import CustomUser, CompanyDetails, ShippingAddress
 from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm, PasswordRecoveryForm, CompanyDetailsForm,  ShippingFormSet, CustomUserChangeForm, ChangePasswordForm
 
 # -- tools
-from .code import create_code
+from .verification_code import create_code
 from .inspector import Inspector
 from mail.views import send_email
 
@@ -105,6 +106,27 @@ class SignUpExtendedView(FormView):
                 if new_user['user_type'] == '0':
                     user.is_staff = True
                     user.save()
+                elif new_user['user_type'] == '2':
+                    
+                    user_name = new_user['username']
+                    user_password = user.password
+
+                    # create ftp user
+                    get_ftp_user(user_name)
+
+                    # create ftp dir for vendor
+                    try:
+                        os.chdir('ftp/ftp_folders')
+                    except FileNotFoundError:
+                        pass
+
+                    if not os.path.isdir(user_name):
+                        os.mkdir(user_name)
+                    else:
+                        messages.error(request, 'Vendor Folder was not created, folder name already exists')
+                        return self.get(request, *args, **kwargs)
+
+                    messages.info(request, f'Folder: {user_name}, was created')        
 
                 user_type_name = {
                     '0': 'staff',
@@ -114,6 +136,7 @@ class SignUpExtendedView(FormView):
 
                 # success message
                 messages.success(self.request, f'Success, new {user_type_name[user.user_type]} was created')
+
                 return redirect(reverse_lazy(self.success_url))
             
             return super().post(request, *args, **kwargs)

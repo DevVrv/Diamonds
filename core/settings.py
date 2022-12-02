@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'share.apps.ShareConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
-    'ftp.apps.FtpConfig',
+    'ftp.apps.FtpConfig'
 
 ]
 
@@ -168,4 +168,6 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'dev.vrv@gmail.com'
 
 
-
+# FTP
+FTP_IP = '127.0.0.1'
+FTP_PORT = '21'
