@@ -1,4 +1,6 @@
 import os
+import hashlib
+
 from django.views.generic import FormView
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic.base import TemplateView
@@ -6,7 +8,7 @@ from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import login, logout
 
 from django.contrib import messages
@@ -21,6 +23,9 @@ from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, 
 from .verification_code import create_code
 from .inspector import Inspector
 from mail.views import send_email
+
+# -- ftp
+from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user
 
 # SIGN UP
 
@@ -109,10 +114,15 @@ class SignUpExtendedView(FormView):
                 elif new_user['user_type'] == '2':
                     
                     user_name = new_user['username']
-                    user_password = user.password
-
+                    user_password = form.cleaned_data.get('password1').encode('utf-8')
+                    hash_password = hashlib.md5(user_password).hexdigest()
+                    
                     # create ftp user
-                    get_ftp_user(user_name)
+                    if not get_ftp_user(username=user_name):
+                        add_ftp_user(f'{user_name} {hash_password}')
+                    else:
+                        del_ftp_user(username=user_name)
+                        add_ftp_user(f'{user_name} {hash_password}')
 
                     # create ftp dir for vendor
                     try:
@@ -150,7 +160,6 @@ class SignUpExtendedView(FormView):
         permission = Inspector(request)
         permission_list = ['users.add_customuser']
         permission.has_permissions(permissions_list=permission_list)
-
         return super().get(request, *args, **kwargs)
 
 # SIGN OUT
@@ -585,7 +594,7 @@ class ChangePassword(PasswordChangeView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
-        
+
         # -- permissions
         permission = Inspector(request)
         if not permission.inspect():

@@ -1,0 +1,358 @@
+INFO:pyftpdlib:127.0.0.1:53165-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53165-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53165-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53165-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53165-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53165-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53165-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53165-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53165-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] <- PWD
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] -> 257 "/" is the current directory.
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] <- TYPE I
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] -> 200 Type set to: Binary.
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,207,174).
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] <- MLSD
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x20d970a7880>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x20d970a7880>)
+DEBUG:pyftpdlib:[debug] starting transfer using send() (<DTPHandler(id=2257391875984, addr='127.0.0.1:53165', user='test2@example.com')>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2257391875984, addr='127.0.0.1:53165', user='test2@example.com')>)
+DEBUG:pyftpdlib:127.0.0.1:53165-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53169-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53169-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53169-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53169-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53169-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53169-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53169-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53169-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53169-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- CWD /
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 250 "/" is the current directory.
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- TYPE I
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 200 Type set to: Binary.
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,207,178).
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- STOR git_93585.png
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x20d970a7940>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x20d970a7940>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2257391876224, addr='127.0.0.1:53169', user='test2@example.com', sending-file=<_io.BufferedWriter name='A:\\code\\Current\\dj\\core\\ftp\\ftp_folders\\test2@example.com\\git_93585.png'>, bytes-trans=18628)>)
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53169-[test2@example.com] STOR A:\code\Current\dj\core\ftp\ftp_folders\test2@example.com\git_93585.png completed=1 bytes=18628 seconds=0.0
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8000
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8000 "GET /ftp/search/ HTTP/1.1" 200 7
+INFO:root:200
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,207,181).
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] <- MLSD
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x20d970a7940>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x20d970a7940>)
+DEBUG:pyftpdlib:[debug] starting transfer using send() (<DTPHandler(id=2257391876224, addr='127.0.0.1:53169', user='test2@example.com')>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2257391876224, addr='127.0.0.1:53169', user='test2@example.com')>)
+DEBUG:pyftpdlib:127.0.0.1:53169-[test2@example.com] -> 226 Transfer complete.
+DEBUG:pyftpdlib:[debug] call: close() (<MyHandler(id=2257391876224, addr='127.0.0.1:53169', user='test2@example.com')>)
+INFO:pyftpdlib:127.0.0.1:53169-[test2@example.com] FTP session closed (disconnect).
+INFO:pyftpdlib:concurrency model: async
+INFO:pyftpdlib:masquerade (NAT) address: None
+INFO:pyftpdlib:passive ports: None
+DEBUG:pyftpdlib:poller: 'pyftpdlib.ioloop.Select'
+DEBUG:pyftpdlib:authorizer: '__main__.MyDummyAuthorizer'
+DEBUG:pyftpdlib:handler: '__main__.type'
+DEBUG:pyftpdlib:max connections: 512
+DEBUG:pyftpdlib:max connections per ip: unlimited
+DEBUG:pyftpdlib:timeout: 300
+DEBUG:pyftpdlib:banner: 'pyftpdlib 1.5.7 ready.'
+DEBUG:pyftpdlib:max login attempts: 3
+INFO:pyftpdlib:>>> starting FTP server on 127.0.0.1:21, pid=12056 <<<
+INFO:pyftpdlib:127.0.0.1:53209-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53209-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53209-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53209-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53209-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53209-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53209-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53209-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53209-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53209-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53209-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53209-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53209-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53209-[test2@example.com] <- PWD
+DEBUG:pyftpdlib:127.0.0.1:53209-[test2@example.com] -> 257 "/" is the current directory.
+INFO:pyftpdlib:127.0.0.1:53218-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53218-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53218-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53218-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53218-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53218-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53218-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53218-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53218-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] <- CWD /
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] -> 250 "/" is the current directory.
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] <- TYPE I
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] -> 200 Type set to: Binary.
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,207,227).
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] <- STOR ts.kg.png
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x220ec3c8970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x220ec3c8970>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2340425599152, addr='127.0.0.1:53218', user='test2@example.com', sending-file=<_io.BufferedWriter name='A:\\code\\Current\\dj\\core\\ftp\\ftp_folders\\test2@example.com\\ts.kg.png'>, bytes-trans=28552)>)
+DEBUG:pyftpdlib:127.0.0.1:53218-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53218-[test2@example.com] STOR A:\code\Current\dj\core\ftp\ftp_folders\test2@example.com\ts.kg.png completed=1 bytes=28552 seconds=0.0
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8000
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8000 "GET /ftp/search/ HTTP/1.1" 200 7
+INFO:root:200
+INFO:root:<Response [200]>
+DEBUG:pyftpdlib:[debug] call: close() (<MyHandler(id=2340425599152, addr='127.0.0.1:53218', user='test2@example.com')>)
+INFO:pyftpdlib:127.0.0.1:53218-[test2@example.com] FTP session closed (disconnect).
+INFO:pyftpdlib:concurrency model: async
+INFO:pyftpdlib:masquerade (NAT) address: None
+INFO:pyftpdlib:passive ports: None
+DEBUG:pyftpdlib:poller: 'pyftpdlib.ioloop.Select'
+DEBUG:pyftpdlib:authorizer: '__main__.MyDummyAuthorizer'
+DEBUG:pyftpdlib:handler: '__main__.type'
+DEBUG:pyftpdlib:max connections: 512
+DEBUG:pyftpdlib:max connections per ip: unlimited
+DEBUG:pyftpdlib:timeout: 300
+DEBUG:pyftpdlib:banner: 'pyftpdlib 1.5.7 ready.'
+DEBUG:pyftpdlib:max login attempts: 3
+INFO:pyftpdlib:>>> starting FTP server on 127.0.0.1:21, pid=10940 <<<
+INFO:pyftpdlib:127.0.0.1:53251-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53251-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53251-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53251-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53251-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53251-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53251-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53251-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53251-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] <- PWD
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] -> 257 "/" is the current directory.
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] <- TYPE I
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] -> 200 Type set to: Binary.
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,4).
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] <- MLSD
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x27e4eae78b0>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x27e4eae78b0>)
+DEBUG:pyftpdlib:[debug] starting transfer using send() (<DTPHandler(id=2741509191616, addr='127.0.0.1:53251', user='test2@example.com')>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2741509191616, addr='127.0.0.1:53251', user='test2@example.com')>)
+DEBUG:pyftpdlib:127.0.0.1:53251-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53255-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53255-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53255-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53255-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53255-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53255-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53255-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53255-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53255-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- CWD /
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 250 "/" is the current directory.
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- TYPE I
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 200 Type set to: Binary.
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,8).
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- STOR oc.kg.png
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2741509191856, addr='127.0.0.1:53255', user='test2@example.com', sending-file=<_io.BufferedWriter name='A:\\code\\Current\\dj\\core\\ftp\\ftp_folders\\test2@example.com\\oc.kg.png'>, bytes-trans=31198)>)
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53255-[test2@example.com] STOR A:\code\Current\dj\core\ftp\ftp_folders\test2@example.com\oc.kg.png completed=1 bytes=31198 seconds=0.0
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8000
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8000 "GET /ftp/search/ HTTP/1.1" 200 7
+INFO:root:200
+INFO:root:<Response [200]>
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,11).
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- MLSD
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] starting transfer using send() (<DTPHandler(id=2741509191856, addr='127.0.0.1:53255', user='test2@example.com')>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2741509191856, addr='127.0.0.1:53255', user='test2@example.com')>)
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 226 Transfer complete.
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,19).
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- STOR imgs.png
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2741509191856, addr='127.0.0.1:53255', user='test2@example.com', sending-file=<_io.BufferedWriter name='A:\\code\\Current\\dj\\core\\ftp\\ftp_folders\\test2@example.com\\imgs.png'>, bytes-trans=31812)>)
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53255-[test2@example.com] STOR A:\code\Current\dj\core\ftp\ftp_folders\test2@example.com\imgs.png completed=1 bytes=31812 seconds=0.0
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8000
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8000 "GET /ftp/search/ HTTP/1.1" 200 7
+INFO:root:200
+INFO:root:<Response [200]>
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,22).
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] <- MLSD
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x27e4eae7970>)
+DEBUG:pyftpdlib:[debug] starting transfer using send() (<DTPHandler(id=2741509191856, addr='127.0.0.1:53255', user='test2@example.com')>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2741509191856, addr='127.0.0.1:53255', user='test2@example.com')>)
+DEBUG:pyftpdlib:127.0.0.1:53255-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:concurrency model: async
+INFO:pyftpdlib:masquerade (NAT) address: None
+INFO:pyftpdlib:passive ports: None
+DEBUG:pyftpdlib:poller: 'pyftpdlib.ioloop.Select'
+DEBUG:pyftpdlib:authorizer: '__main__.MyDummyAuthorizer'
+DEBUG:pyftpdlib:handler: '__main__.type'
+DEBUG:pyftpdlib:max connections: 512
+DEBUG:pyftpdlib:max connections per ip: unlimited
+DEBUG:pyftpdlib:timeout: 300
+DEBUG:pyftpdlib:banner: 'pyftpdlib 1.5.7 ready.'
+DEBUG:pyftpdlib:max login attempts: 3
+INFO:pyftpdlib:>>> starting FTP server on 127.0.0.1:21, pid=2988 <<<
+INFO:pyftpdlib:127.0.0.1:53300-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53300-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53300-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53300-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53300-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53300-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53300-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53300-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53300-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53300-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53300-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53300-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53300-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53300-[test2@example.com] <- PWD
+DEBUG:pyftpdlib:127.0.0.1:53300-[test2@example.com] -> 257 "/" is the current directory.
+INFO:pyftpdlib:127.0.0.1:53302-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53302-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53302-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53302-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53302-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53302-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53302-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53302-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53302-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- CWD /
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 250 "/" is the current directory.
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- TYPE I
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 200 Type set to: Binary.
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,55).
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- STOR cssGradien.png
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x19058bd8970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x19058bd8970>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=1719475734704, addr='127.0.0.1:53302', user='test2@example.com', sending-file=<_io.BufferedWriter name='A:\\code\\Current\\dj\\core\\ftp\\ftp_folders\\test2@example.com\\cssGradien.png'>, bytes-trans=99855)>)
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53302-[test2@example.com] STOR A:\code\Current\dj\core\ftp\ftp_folders\test2@example.com\cssGradien.png completed=1 bytes=99855 seconds=0.0
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8000
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8000 "GET /ftp/search/ HTTP/1.1" 200 7
+INFO:root:200
+INFO:root:<PreparedRequest [GET]>
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,58).
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] <- MLSD
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x19058bd8970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x19058bd8970>)
+DEBUG:pyftpdlib:[debug] starting transfer using send() (<DTPHandler(id=1719475734704, addr='127.0.0.1:53302', user='test2@example.com')>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=1719475734704, addr='127.0.0.1:53302', user='test2@example.com')>)
+DEBUG:pyftpdlib:127.0.0.1:53302-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:concurrency model: async
+INFO:pyftpdlib:masquerade (NAT) address: None
+INFO:pyftpdlib:passive ports: None
+DEBUG:pyftpdlib:poller: 'pyftpdlib.ioloop.Select'
+DEBUG:pyftpdlib:authorizer: '__main__.MyDummyAuthorizer'
+DEBUG:pyftpdlib:handler: '__main__.type'
+DEBUG:pyftpdlib:max connections: 512
+DEBUG:pyftpdlib:max connections per ip: unlimited
+DEBUG:pyftpdlib:timeout: 300
+DEBUG:pyftpdlib:banner: 'pyftpdlib 1.5.7 ready.'
+DEBUG:pyftpdlib:max login attempts: 3
+INFO:pyftpdlib:>>> starting FTP server on 127.0.0.1:21, pid=6076 <<<
+INFO:pyftpdlib:127.0.0.1:53325-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53325-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53325-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53325-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53325-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53325-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53325-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53325-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53325-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53325-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53325-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53325-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53325-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53325-[test2@example.com] <- PWD
+DEBUG:pyftpdlib:127.0.0.1:53325-[test2@example.com] -> 257 "/" is the current directory.
+INFO:pyftpdlib:127.0.0.1:53328-[] FTP session opened (connect)
+DEBUG:pyftpdlib:127.0.0.1:53328-[] -> 220 pyftpdlib 1.5.7 ready.
+DEBUG:pyftpdlib:127.0.0.1:53328-[] <- AUTH TLS
+DEBUG:pyftpdlib:127.0.0.1:53328-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53328-[] <- AUTH SSL
+DEBUG:pyftpdlib:127.0.0.1:53328-[] -> 500 Command "AUTH" not understood.
+DEBUG:pyftpdlib:127.0.0.1:53328-[] <- USER test2@example.com
+DEBUG:pyftpdlib:127.0.0.1:53328-[] -> 331 Username ok, send password.
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- PASS ******
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 230 Login successful.
+INFO:pyftpdlib:127.0.0.1:53328-[test2@example.com] USER 'test2@example.com' logged in.
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- OPTS UTF8 ON
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 501 Invalid argument.
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- CWD /
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 250 "/" is the current directory.
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- TYPE I
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 200 Type set to: Binary.
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,81).
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- STOR animevost fox.png
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x252cdc37970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x252cdc37970>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2554662713520, addr='127.0.0.1:53328', user='test2@example.com', sending-file=<_io.BufferedWriter name='A:\\code\\Current\\dj\\core\\ftp\\ftp_folders\\test2@example.com\\animevost fox.png'>, bytes-trans=117585)>)
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 226 Transfer complete.
+INFO:pyftpdlib:127.0.0.1:53328-[test2@example.com] STOR A:\code\Current\dj\core\ftp\ftp_folders\test2@example.com\animevost fox.png completed=1 bytes=117585 seconds=0.0
+DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): 127.0.0.1:8000
+DEBUG:urllib3.connectionpool:http://127.0.0.1:8000 "GET /ftp/search/ HTTP/1.1" 200 7
+INFO:root:200
+INFO:root:b'message'
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- PASV
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 227 Entering passive mode (127,0,0,1,208,84).
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] <- MLSD
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 150 File status okay. About to open data connection.
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP listening 127.0.0.1:0 at 0x252cdc37970>)
+DEBUG:pyftpdlib:[debug] call: close() (<pyftpdlib.handlers.PassiveDTP 127.0.0.1:0 at 0x252cdc37970>)
+DEBUG:pyftpdlib:[debug] starting transfer using send() (<DTPHandler(id=2554662713520, addr='127.0.0.1:53328', user='test2@example.com')>)
+DEBUG:pyftpdlib:[debug] call: close() (<DTPHandler(id=2554662713520, addr='127.0.0.1:53328', user='test2@example.com')>)
+DEBUG:pyftpdlib:127.0.0.1:53328-[test2@example.com] -> 226 Transfer complete.
+DEBUG:pyftpdlib:[debug] call: close() (<MyHandler(id=2554662713520, addr='127.0.0.1:53328', user='test2@example.com')>)
+INFO:pyftpdlib:127.0.0.1:53328-[test2@example.com] FTP session closed (disconnect).

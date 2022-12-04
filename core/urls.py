@@ -10,4 +10,5 @@ urlpatterns = [
     path('share/', include('share.urls')),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
+    path('ftp/', include('ftp.urls')),
 ]
