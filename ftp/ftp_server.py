@@ -15,11 +15,11 @@ ftp_folders = 'A:\code\Current\dj\core\\ftp\\ftp_folders'
 ftpd_log_path = 'A:\code\Current\dj\core\\ftp\\log\\ftpd.log'
 perm = 'elradfmw'
 
-request_url = 'http://127.0.0.1:8000/ftp/search/'
+request_url = 'http://127.0.0.1:8000/ftp/'
 
 # =========================================== #
-def request():
-    req = requests.get(request_url)
+def request(user):
+    req = requests.get(f'{request_url}{user}/')
     return req
 
 # ftp server preparing + add user list to autorizer
@@ -119,7 +119,7 @@ class MyHandler(FTPHandler):
 
     def on_file_received(self, file):
         # do something when a file has been received
-        responce = request()
+        responce = request(self.username)
         logging.info(msg = f'{responce.status_code}')
         logging.info(msg = f'{responce.content}')
 
@@ -143,7 +143,7 @@ class Command(BaseCommand):
         
         handler = MyHandler
         authorizer = MyDummyAuthorizer()
-        logging.basicConfig(level=logging.DEBUG, filename=ftpd_log_path)
+        # logging.basicConfig(level=logging.DEBUG, filename=ftpd_log_path)
         handler.authorizer = authorizer
         ftp_server(authorizer)
         server = FTPServer((FTP_IP, FTP_PORT), handler)

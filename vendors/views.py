@@ -6,9 +6,11 @@ from django.views.generic import FormView
 
 from .forms import UploadCSVForm
 import csv
+import os
 
 from filter.models import Diamond_Model
 from .models import Vedor_Diamond_Model
+from users.models import CustomUser
 
 # -- white
 class White(FormView):
@@ -154,7 +156,7 @@ class RoundPear(FormView):
         return super().get(request, *args, **kwargs)
 
 # CSV file rieader
-class csv_reader(object):
+class Reader_CSV(object):
 
     def __init__(self):
         # enumirated actions
@@ -360,5 +362,25 @@ class csv_reader(object):
             messages.error(request, f'{msg} {self.missing_rows}')
 
     # --> FTP file
-    def ftp_file(self):
-        pass
+    def ftp_file(self, username, file_path):
+        try:
+            user = CustomUser.objects.get(username=username)
+
+            with open(file_path, encoding='utf-8') as r_file:
+                reader = csv.DictReader(r_file, delimiter = ",")
+
+                # check rows and continue if is empty
+                self.missing_rows = self._check_file_rows(reader=reader)
+                if not self.missing_rows:
+                    # get acepted and rejected stones
+                    stones = self._create_stones(reader=reader)
+                    self.stones_acepted = stones['acepted']
+                    self.stones_rejected = stones['rejected']
+                    
+                    # create diamond list
+                    if self.stones_acepted:
+                        self.diamonds_list = self._create_diamonds(self.stones_acepted, vendor=user)
+                        self._upload_diamonds(self.diamonds_list)
+        except:
+            pass
+        os.remove(file_path)
