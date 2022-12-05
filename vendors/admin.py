@@ -63,7 +63,7 @@ def accept(modeladmin, request, queryset):
             'ref': item.ref,
             'vendor': item.vendor,
             'best_selling': 0,
-            'cert_number': item.cert_number,
+            'certificate': item.certificate,
             'shape': item.shape,
             'clarity': item.clarity,
             'color': item.color,
@@ -91,7 +91,7 @@ def accept(modeladmin, request, queryset):
             'is_published': 0,
         }
         
-        vendor_diamond = Vedor_Diamond_Model.objects.get(cert_number=item.cert_number)
+        vendor_diamond = Vedor_Diamond_Model.objects.get(certificate=item.certificate)
         vendor_diamond.delete()
 
         Diamond_Model.objects.create(**diamond)
@@ -104,7 +104,7 @@ def accept_published(modeladmin, request, queryset):
             'ref': item.ref,
             'vendor': item.vendor,
             'best_selling': 0,
-            'cert_number': item.cert_number,
+            'certificate': item.certificate,
             'shape': item.shape,
             'clarity': item.clarity,
             'color': item.color,
@@ -133,7 +133,7 @@ def accept_published(modeladmin, request, queryset):
             
         }
         
-        vendor_diamond = Vedor_Diamond_Model.objects.get(cert_number=item.cert_number)
+        vendor_diamond = Vedor_Diamond_Model.objects.get(certificate=item.certificate)
         vendor_diamond.delete()
 
         Diamond_Model.objects.create(**diamond)
@@ -146,7 +146,7 @@ def accept_best_published(modeladmin, request, queryset):
             'ref': item.ref,
             'vendor': item.vendor,
             'best_selling': 1,
-            'cert_number': item.cert_number,
+            'certificate': item.certificate,
             'shape': item.shape,
             'clarity': item.clarity,
             'color': item.color,
@@ -175,7 +175,7 @@ def accept_best_published(modeladmin, request, queryset):
             
         }
         
-        vendor_diamond = Vedor_Diamond_Model.objects.get(cert_number=item.cert_number)
+        vendor_diamond = Vedor_Diamond_Model.objects.get(certificate=item.certificate)
         vendor_diamond.delete()
 
         Diamond_Model.objects.create(**diamond)
@@ -188,7 +188,7 @@ class VendorDiamondsAdmin(admin.ModelAdmin):
         'id', 
         'vendor',
         'shape',
-        'cert_number', 
+        'certificate', 
         'weight', 
         'color', 
         'clarity', 

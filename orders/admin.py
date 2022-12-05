@@ -111,7 +111,7 @@ class Orders_Diamonds_Admin(admin.ModelAdmin):
         'order_id',
         'buyer_id',
         'shape',
-        'cert_number', 
+        'certificate', 
         'weight', 
         'color', 
         'clarity', 

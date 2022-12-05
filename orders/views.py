@@ -137,7 +137,7 @@ def create_order(request):
         for diamond in cart_diamonds:
             filter_diamonds_values = {
                 'ref': diamond.ref,
-                'cert_number': diamond.cert_number,
+                'certificate': diamond.certificate,
 
                 'shape': diamond.shape,
                 'clarity': diamond.clarity,
@@ -172,7 +172,7 @@ def create_order(request):
                 'order_number': order_number
             }
             Orders_Diamond_Model.objects.create(**filter_diamonds_values)
-            order_keys.append(diamond.cert_number)
+            order_keys.append(diamond.certificate)
         new_order.diamonds_list = json.dumps(order_keys)
         new_order.save()
 

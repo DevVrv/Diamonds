@@ -4,8 +4,8 @@ from users.models import CustomUser
 # * filter diamond model
 class Base_Diamond_Model(models.Model):
 
-    ref = models.CharField(max_length=255, verbose_name="Stock #")
-    cert_number = models.CharField(max_length=255, verbose_name="Certificate", unique=True, db_index=True)
+    stock = models.CharField(max_length=255, verbose_name="Stock #")
+    certificate = models.CharField(max_length=255, verbose_name="Certificate", unique=True, db_index=True)
 
     shape = models.CharField(max_length=255, verbose_name="Shape")
     clarity = models.CharField(max_length=255, verbose_name="Clarity")

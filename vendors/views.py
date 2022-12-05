@@ -25,163 +25,9 @@ class White(FormView):
     def post(self, request, *args: str, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            # message more info
-            num_created = 0
-            num_exists = 0
-            num_error = 0
-            rejected_rows = []
-            
-            # read file
-            file = request.FILES['csv']
-            decoded_file = file.read().decode('utf-8').splitlines()
-            reader = csv.DictReader(decoded_file, delimiter=",")
 
-            # create keys and stones
-            stones = []
-            diamonds = []
-            string_keys = [
-                'Stock #',
-                'Certificate #',
-                'Shape',
-                'Clarity',
-                'Color',
-                'Culet Condition',
-                'Cut Grade',
-                'Polish',
-                'Symmetry',
-                'Culet Condition',
-                'Girdle Condition',
-                'Fluorescence Intensity',
-                'Measurements',
-                'Lab',
-                'Image Link',
-                'Video Link',
-            ]
-            nums_keys = [
-                'Price',
-                'Total Price',
-                'Weight',
-                'Discount Percent',
-                'Measurements Length',
-                'Measurements Width',
-                'Measurements Depth',
-                'Table Percent',
-                'Depth Percent',
-            ]
-            
-            # <-- get rows
-            try:
-                for index, row in enumerate(reader):
-                    
-                    # new diaomond 
-                    stone = {}
-                    missing = []
-                    rejected = False
-
-                    # get string field
-                    for key in string_keys:
-                        if key in row:
-                            stone[key] = row[key]
-                        else:
-                            missing.append(key)
-                    
-                    # get num field
-                    for key in nums_keys:
-
-                        if key in row:
-
-                            if row[key] == '':
-                                stone[key] = 0
-                                continue
-
-                            num = row[key]
-                            if num.find(','):
-                                num = num.replace(',', '.')
-                            
-                            try:
-                                num = float(num)
-                            except:
-                                rejected = True
-
-                            stone[key] = num
-                        else:
-                            missing.append(key)
-                    
-                    # has missing filds
-                    if missing:
-                        messages.error(request, f'Error! missing fields: {missing}')
-                        return self.get(request, *args, **kwargs)
-                    elif rejected:
-                        rejected_rows.append(index)
-                        continue
-                    else:
-                        stones.append(stone)
-                        
-            except Exception as ex:
-                messages.error(request, f'Something was wrong: {ex}')
-                return self.get(request, *args, **kwargs)
-
-            # diamonds format regulation
-            for stone in stones:
-                diamond = {
-                    'ref': stone['Stock #'],
-                    'cert_number': stone['Certificate #'],
-                    'shape': stone['Shape'],
-                    'clarity': stone['Clarity'],
-                    'color': stone['Color'],
-                    'culet': stone['Culet Condition'],
-                    'cut': stone['Cut Grade'],
-                    'polish': stone['Polish'],
-                    'symmetry': stone['Symmetry'],
-                    'girdle': stone['Girdle Condition'],
-                    'fluor': stone['Fluorescence Intensity'],
-                    'measurements': stone['Measurements'],
-                    'lab': stone['Lab'],
-                    'photo': stone['Image Link'],
-                    'video': stone['Video Link'],
-
-                    'rap_1ct': round(stone['Price'], 2),
-                    'sale_price': round(stone['Total Price'] * stone['Weight'], 2),
-                    'disc': round(stone['Discount Percent'], 2),
-                    'weight': round(stone['Weight'], 2),
-                    'length_mm': round(stone['Measurements Length'], 2),
-                    'width': round(stone['Measurements Width'], 2),
-                    'depth': round(stone['Measurements Depth'], 2),
-                    'depth_procent': round(stone['Depth Percent'], 2),
-                    'table_procent': round(stone['Table Percent'], 2),
-                    'lw': round(stone['Measurements Length'] / stone['Measurements Width'], 2),
-                    'vendor': request.user
-                }
-                diamonds.append(diamond)
-
-            # -- diamonds create
-            filter_diamonds = Diamond_Model.objects.all()
-            vendor_diamonds = Vedor_Diamond_Model.objects.all()
-            for diamond in diamonds:
-                if filter_diamonds.filter(cert_number=diamond['cert_number']).exists() or vendor_diamonds.filter(cert_number=diamond['cert_number']).exists():
-                        num_exists += 1
-                        continue
-                else:
-                    try:
-                        vendor_diamonds.create(**diamond)
-                        num_created += 1
-                    except Exception as ex:
-                        print(ex)
-                        num_error += 1
-                        continue
-            
-            # messages
-            if num_created:
-                messages.success(request, 'The data was uploaded successfully')
-                messages.info(request, f'Was created: {num_created} | Alredy existed: {num_exists}')
-            elif not num_created and num_exists:
-                messages.warning(request, 'All the presented stones have already been uploaded to the site')
-
-            if num_error:
-                messages.error(request, f'Error, some stones was not created: {num_error}')
-            
-            if rejected_rows:
-                messages.error(request, f'Some stones bin rejected, was stones data is wrong! Rejected rows: {rejected_rows}')
+            file_worker = csv_reader()
+            file_worker.post_file(request)
 
             return self.get(request, *args, **kwargs)
 
@@ -306,3 +152,213 @@ class RoundPear(FormView):
         self.extra_context['has_permission'] = True
 
         return super().get(request, *args, **kwargs)
+
+# CSV file rieader
+class csv_reader(object):
+
+    def __init__(self):
+        # enumirated actions
+        self.x_rejected = 0
+        self.x_created = 0
+        self.x_exists = 0
+        self.x_error = 0
+
+        # keys for reader
+        self.string_keys = [
+            'Stock #',
+            'Certificate #',
+            'Shape',
+            'Clarity',
+            'Color',
+            'Culet Condition',
+            'Cut Grade',
+            'Polish',
+            'Symmetry',
+            'Culet Condition',
+            'Girdle Condition',
+            'Fluorescence Intensity',
+            'Measurements',
+            'Lab',
+            'Image Link',
+            'Video Link',
+            ]
+        self.nums_keys = [
+            'Price',
+            'Total Price',
+            'Weight',
+            'Discount Percent',
+            'Measurements Length',
+            'Measurements Width',
+            'Measurements Depth',
+            'Table Percent',
+            'Depth Percent',
+            ]
+
+        # rejected and missing rows info
+        self.missing_rows = []
+        
+        # diamonds and stones list
+        self.stones_acepted = []
+        self.stones_rejected = []
+        self.diamonds_list = []
+
+        # messages
+        self.messages = {
+            'missing': f'The file does not meet the requirements, there are no required fields:',
+            'rejected': f'The following stones were rejected, incorrect data:',
+            'error': f'The following stones were not created, an error loading into the database:',
+            'created': f'The stones were successfully created:',
+            'exists': f'The stones were not created because they already exist:',
+        }
+
+    # checking existing rows
+    def _check_file_rows(self, reader):
+        missing_rows = []
+        for row in reader:
+            for key in self.string_keys:
+                if not key in row:
+                    missing_rows.append(key)
+            for key in self.nums_keys:
+                if not key in row:
+                    missing_rows.append(key)
+            return missing_rows
+
+    # create stones acepted and rejected list
+    def _create_stones(self, reader):
+            rejected_stones = []
+            acepted_stones = []
+
+            try:
+                for index, row in enumerate(reader):
+                    curent_stone = {}
+                    rejected = False
+
+                    # get str fields
+                    for key in self.string_keys:
+                        curent_stone[key] = row[key]
+
+                    # get num fields
+                    for key in self.nums_keys:
+                        num = row[key]
+
+                        # value is empty
+                        if num == '':
+                            curent_stone[key] = 0
+                            continue
+                        
+                        # num replace ',' '.'
+                        if num.find(','):
+                            num = num.replace(',', '.')
+
+                        # convert to float
+                        try:
+                            num = float(num)
+                            curent_stone[key] = num
+                        except:
+                            rejected_stones.append({
+                                'row': index,
+                                'column': key
+                            })
+                            rejected = True
+                            
+                    if not rejected:
+                        acepted_stones.append(curent_stone)    
+            except Exception as ex:
+                print(ex)
+
+            return {'acepted': acepted_stones, 'rejected': rejected_stones}
+
+    # crate diamonds list
+    def _create_diamonds(self, list, vendor):
+        diamonds = []
+        for stone in list:
+            diamond = {
+                'stock': stone['Stock #'],
+                'certificate': stone['Certificate #'],
+                'shape': stone['Shape'],
+                'clarity': stone['Clarity'],
+                'color': stone['Color'],
+                'culet': stone['Culet Condition'],
+                'cut': stone['Cut Grade'],
+                'polish': stone['Polish'],
+                'symmetry': stone['Symmetry'],
+                'girdle': stone['Girdle Condition'],
+                'fluor': stone['Fluorescence Intensity'],
+                'measurements': stone['Measurements'],
+                'lab': stone['Lab'],
+                'photo': stone['Image Link'],
+                'video': stone['Video Link'],
+
+                'rap_1ct': round(stone['Price'], 2),
+                'sale_price': round(stone['Total Price'] * stone['Weight'], 2),
+                'disc': round(stone['Discount Percent'], 2),
+                'weight': round(stone['Weight'], 2),
+                'length_mm': round(stone['Measurements Length'], 2),
+                'width': round(stone['Measurements Width'], 2),
+                'depth': round(stone['Measurements Depth'], 2),
+                'depth_procent': round(stone['Depth Percent'], 2),
+                'table_procent': round(stone['Table Percent'], 2),
+                'lw': round(stone['Measurements Length'] / stone['Measurements Width'], 2),
+                'vendor': vendor
+            }
+            diamonds.append(diamond)
+        return diamonds
+
+    # uploading diamonds in db
+    def _upload_diamonds(self, diamonds_list):
+        filter_diamonds = Diamond_Model.objects.all()
+        vendor_diamonds = Vedor_Diamond_Model.objects.all()
+        for diamond in diamonds_list:
+            if filter_diamonds.filter(certificate=diamond['certificate']).exists() or vendor_diamonds.filter(certificate=diamond['certificate']).exists():
+                    self.x_exists += 1
+                    continue
+            else:
+                try:
+                    vendor_diamonds.create(**diamond)
+                    self.x_created += 1
+                except Exception as ex:
+                    print(ex)
+                    self.x_error += 1
+                    continue
+
+    # --> if method POST
+    def post_file(self, request):
+        # file read
+        file = request.FILES['csv']
+        decoded_file = file.read().decode('utf-8').splitlines()
+        reader = csv.DictReader(decoded_file, delimiter=",")
+
+        # check rows and continue if is empty
+        self.missing_rows = self._check_file_rows(reader=reader)
+        if not self.missing_rows:
+            # get acepted and rejected stones
+            stones = self._create_stones(reader=reader)
+            self.stones_acepted = stones['acepted']
+            self.stones_rejected = stones['rejected']
+            
+            # create diamond list
+            if self.stones_acepted:
+                self.diamonds_list = self._create_diamonds(self.stones_acepted, vendor=request.user)
+                self._upload_diamonds(self.diamonds_list)
+
+                # messages
+                if self.x_error:
+                    msg = self.messages['error']
+                    messages.error(request, f'{msg} {self.x_error}')
+                if self.x_created:
+                    msg = self.messages['created']
+                    messages.success(request, f'{msg} {self.x_created}')
+                if self.x_exists:
+                    msg = self.messages['exists']
+                    messages.warning(request, f'{msg} {self.x_exists}')
+                
+            if self.stones_rejected:
+                msg = self.messages['rejected']
+                messages.error(request, f'{msg} {self.stones_rejected}')
+        else:
+            msg = self.messages['missing']
+            messages.error(request, f'{msg} {self.missing_rows}')
+
+    # --> FTP file
+    def ftp_file(self):
+        pass

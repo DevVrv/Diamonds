@@ -56,7 +56,7 @@ class Orders_model(models.Model):
 # * filter diamond model
 class Orders_Diamond_Model(Base_Diamond_Model):
 
-    cert_number = models.CharField(verbose_name='Cert Number', max_length=255, db_index=True, unique=False)
+    certificate = models.CharField(verbose_name='Cert Number', max_length=255, db_index=True, unique=False)
 
     buyer = models.ForeignKey(CustomUser, verbose_name="Buyer", on_delete=models.CASCADE, db_index=True, related_name='buyer_id')
     order = models.ForeignKey(Orders_model, verbose_name="Order ID", on_delete=models.CASCADE, db_index=True)

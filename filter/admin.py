@@ -23,7 +23,7 @@ class Diamond_Model_admin(admin.ModelAdmin):
     list_display = (
         'id', 
         'shape',
-        'cert_number', 
+        'certificate', 
         'best_selling', 
         'weight', 
         'color', 
