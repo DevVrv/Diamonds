@@ -201,5 +201,3 @@ def cart_pack(request):
         }
 
     return HttpResponse (json.dumps(response), content_type="application/json")
-
-

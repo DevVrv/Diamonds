@@ -193,6 +193,8 @@ class Cart {
                     formData[key] = 0;
                 }
             }
+
+            
             ajax('/orders/create/', formData, this.afterSubmit, this);
         }
     }

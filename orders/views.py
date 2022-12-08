@@ -46,8 +46,6 @@ def get_order_details(request):
     # * request data
     requestData = json.loads(request.body)
 
-    print(requestData)
-
     # * order items
     order = Orders_model.objects.filter(user_id = request.user.id).get(order_number = requestData['number'])
 
@@ -136,7 +134,7 @@ def create_order(request):
         order_keys = []
         for diamond in cart_diamonds:
             filter_diamonds_values = {
-                'ref': diamond.ref,
+                'stock': diamond.stock,
                 'certificate': diamond.certificate,
 
                 'shape': diamond.shape,
@@ -198,7 +196,10 @@ def create_order(request):
 
             'order_number': order_data['order_number'],
             'order_comment': requestData['comment'],
-            'order_type': requestData['order_type']
+            'order_type': requestData['order_type'],
+            'total_price': order_data['total_price'],
+            'total_carat': order_data['total_carat'],
+            'total_diamonds': order_data['total_diamonds'],
         }
         html_message = render_to_string('_mail_new_order.html', email_data)
         plain_message = strip_tags(html_message)
