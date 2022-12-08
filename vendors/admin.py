@@ -60,7 +60,7 @@ def max_min():
 def accept(modeladmin, request, queryset):
     for item in queryset:
         diamond = {
-            'ref': item.ref,
+            'stock': item.stock,
             'vendor': item.vendor,
             'best_selling': 0,
             'certificate': item.certificate,
@@ -101,7 +101,7 @@ def accept(modeladmin, request, queryset):
 def accept_published(modeladmin, request, queryset):
     for item in queryset:
         diamond = {
-            'ref': item.ref,
+            'stock': item.stock,
             'vendor': item.vendor,
             'best_selling': 0,
             'certificate': item.certificate,
@@ -143,7 +143,7 @@ def accept_published(modeladmin, request, queryset):
 def accept_best_published(modeladmin, request, queryset):
     for item in queryset:
         diamond = {
-            'ref': item.ref,
+            'stock': item.stock,
             'vendor': item.vendor,
             'best_selling': 1,
             'certificate': item.certificate,

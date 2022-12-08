@@ -59,9 +59,7 @@ class Inspector(object):
                     return True
             else:
                 return False
-
         else:
-            self.messages('error', 'You need to log in before you can use the site')
             return False
 
     # user permissions inspect

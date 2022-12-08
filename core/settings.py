@@ -161,11 +161,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'dev.vrv@gmail.com'
-EMAIL_HOST_PASSWORD = 'uopsjogzmuvxehec'
+EMAIL_HOST_USER = 'sales@labrilliante.com'
+EMAIL_HOST_PASSWORD = 'mlieejztbavlckrm'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'dev.vrv@gmail.com'
+DEFAULT_FROM_EMAIL = 'sales@labrilliante.com'
 
 
 # FTP

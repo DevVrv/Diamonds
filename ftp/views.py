@@ -1,12 +1,10 @@
 import os
-
 from django.http import HttpResponse
-from vendors.views import Reader_CSV
+from vendors.csv_reader import Reader_CSV
 from .ftp_server import ftp_folders
-# Create your views here.
 
 
-
+# FTP API
 def ftp_responce(request, username):
     
     curent_file = ''

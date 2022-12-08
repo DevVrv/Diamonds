@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import login, logout
 
 from django.contrib import messages
@@ -73,7 +73,7 @@ class SignUpView(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if permission.inspect():
+        if permission.auth:
             return redirect(reverse_lazy('user_info'))
 
         return super().get(request, *args, **kwargs)
@@ -235,7 +235,7 @@ class SignInView(FormView):
     def get(self, request, *args, **kwargs):
         # -- permissions
         permission = Inspector(request)
-        if permission.inspect():
+        if permission.auth:
             return redirect(reverse_lazy('user_info'))
         return super().get(request, *args, **kwargs)
 
@@ -363,7 +363,7 @@ class PasswordRecovery(FormView):
 
         # -- permissions
         permission = Inspector(request)
-        if not permission.inspect():
+        if permission.inspect():
             return redirect(reverse_lazy('signin'))
 
         return super().get(request, *args, **kwargs)
@@ -525,14 +525,18 @@ class UserInfo(TemplateView):
             messages.success(request, 'You have successfully updated your profile information')
             company = CompanyDetails.objects.get(user_id=request.user.pk)
             manager = CustomUser.objects.get(pk=request.user.manager_id)
+
+            user = request.user
+
             send_email({
                 'subject': f'User {request.user.email} was updated',
                 'email': manager.email,
                 'template': '_mail_user_updated.html',
                 'context': {
-                    'fname': request.user.first_name,
-                    'user_email': request.user.email,
-                    'user_tel': request.user.tel,
+                    'fname': user.first_name,
+                    'lname': user.last_name,
+                    'user_email': user.email,
+                    'user_tel': user.tel,
                     'company_name': company.company_name,
                     'company_tel': company.company_tel,
                     'company_email': company.company_email,

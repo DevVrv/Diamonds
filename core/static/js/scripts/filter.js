@@ -69,7 +69,7 @@ class Control {
 
         parent.innerHTML = '';
 
-        let photo = `<img src="static/img/diamonds/base-diamond.jpg" alt="" class="img-fluid rounded">`
+        let photo = `<img src="/static/img/diamonds/base-diamond.jpg" alt="" class="img-fluid rounded">`
 
         const date = deliveryDate();
 
@@ -1769,7 +1769,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         
         // -- create length
-        const length_values = noUI.getMaxMin('#range_length');
+        const length_values = noUI.getMaxMin('#range_length_mm');
         const lengthNoUI = noUI.numeric('[data-slider="length"]', {
             params: {
                 start: [length_values.min, length_values.max],
