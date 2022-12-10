@@ -101,7 +101,13 @@ def create_order(request):
         }
 
         # -- cart
-        cart = CartModal.objects.get(user_id=request.user.id)
+        try:
+            cart = CartModal.objects.get(user_id=request.user.id)
+        except:
+            return HttpResponse (json.dumps({
+                'alert': 'empty'
+            }), content_type="application/json")
+
         user_cart = json.loads(cart.user_cart)
         cart_diamonds = Diamond_Model.objects.filter(pk__in=user_cart)
         cart.delete()
@@ -205,7 +211,7 @@ def create_order(request):
         html_message = render_to_string('_mail_new_order.html', email_data)
         plain_message = strip_tags(html_message)
 
-        mail.send_mail(subject, plain_message, DEFAULT_FROM_EMAIL, [manager_email, sales_mail], html_message=html_message)
+        mail.send_mail(subject, plain_message, DEFAULT_FROM_EMAIL, [manager_email], html_message=html_message)
 
         responce = {
             'alert': 'success'

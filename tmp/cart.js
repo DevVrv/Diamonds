@@ -4,27 +4,27 @@
 class Cart {
     constructor(kwargs) {
 
-        // delete selected button
+        // @ delete selected button
         this.deleteButton = document.querySelector(kwargs.deleteButton); 
 
-        // active key
+        // * active key
         this.activeKey = 'cart';
 
-        // get contaner for diamonds
+        // * get contaner for diamonds
         this.container = document.querySelector(kwargs.container);
 
-        // buy responce values
+        // * buy responce values
         this.formBuy = document.querySelector(kwargs.formBuy);
         this.formHold = document.querySelector(kwargs.formHold);
         this.formMemo = document.querySelector(kwargs.formMemo);
 
-        // total info
+        // * total info
         this.total_carat = document.querySelector(kwargs.total_carat);
         this.total_price = document.querySelector(kwargs.total_price);
         this.total_stone = document.querySelector(kwargs.total_stone);
         this.cart_length = document.querySelector(kwargs.cart_length);
 
-        // cart init
+        // * cart init
         this.init();
 
     }
@@ -39,21 +39,21 @@ class Cart {
         this.deleteSelected();
 
         // ? forms
-        this.orderSubmit(this.formBuy, this);
-        this.orderSubmit(this.formMemo, this);
-        this.orderSubmit(this.formHold, this);
+        this.getFormData(this.formBuy, this);
+        this.getFormData(this.formMemo, this);
+        this.getFormData(this.formHold, this);
 
         // * return this
         return this;
     }
 
-    // debug
+    // * debug
     debug(info = this) {
         console.log(info);
         return this;
     }
 
-    // cheched / unchecked
+    // * unchecked function
     unchecked(value) {
 
         // get storage values
@@ -67,6 +67,8 @@ class Cart {
         // update storage
         localStorage.setItem('cart', JSON.stringify(values));
     }
+
+    // * checked function
     checked(value) {
         // get storage values
         const values = JSON.parse(localStorage.getItem('cart'));
@@ -78,8 +80,16 @@ class Cart {
         localStorage.setItem('cart', JSON.stringify(values));
     }
 
+    // * get elements in arr
+    removeByKey(pks, parent = document) {
+        pks.map(key => {
+            const node = parent.querySelector(`#${key}`);
+            const elem = node.closest('.result-section--element');
+            elem.remove();
+        });
+    }
 
-    // -- delete selected
+    // * delete selected
     deleteSelected() {
 
         // * create delete event
@@ -104,18 +114,12 @@ class Cart {
                 
                 // --> send reques
                 ajax('delete_selected/', deleteValues, this.afterDelete, this);
-                
             }
 
         });
     }
-    removeByKey(pks, parent = document) {
-        pks.map(key => {
-            const node = parent.querySelector(`#${key}`);
-            const elem = node.closest('.result-section--element');
-            elem.remove();
-        });
-    }
+
+    // * after deleted
     afterDelete(responce, context) {
         context.total_price.textContent = responce.total_price;
         context.total_carat.textContent = responce.total_carat;
@@ -123,24 +127,53 @@ class Cart {
         context.cart_length.textContent = responce.total_stone;
     }
 
-    // -- Form Data
-    orderSubmit(form) {
-        form.addEventListener('submit', (e) => {
+    // * after submit
+    afterSubmit(responce, context) {
+        context.container.innerHTML = '';
+        context.total_price.textContent = 0;
+        context.total_carat.textContent = 0;
+        context.total_stone.textContent = 0;
+        if (context.cart_length !== undefined && context.cart_length !== null) { context.cart_length.remove(); }
+        context.alert(responce.alert, context.submitedForm);
+    }
+
+    // * create alert
+    alert(type, parent) {
+
+        const error = `
+        <div class="alert alert-danger border-0 shadow-sm" role="alert" id="responce_message">
+            <h5 class="h5">Error: The basket cannot be empty</h5>
+            You can get acquainted with the goods by following this link
+            <a href="/" class="fs-5 link">Diamonds</a>
+        </div>
+        `;
+        const success = `
+        <div class="alert alert-success border-0 shadow-sm" role="alert" id="responce_message">
+           <h5 class="h5">Success: your request was placed!</h5> <br>
+            You can view it at this link <a href="/orders/" class="fs-5 link">Orders</a>
+        </div>
+        `;
+
+        let message = ''
+        
+        if (type == 'success') { message = success; }
+        else if (type == 'error') { message = error; }
+
+        const messageElement = parent.querySelector('#responce_message');
+        if (messageElement !== null && messageElement !== undefined) { messageElement.remove(); }
+
+        const body = parent.querySelector('.modal-body');
+
+        body.insertAdjacentHTML('afterbegin', message)
+    }
+
+    // --> get form data
+    getFormData(form, context) {
+        form.onsubmit = (e) => {
+
+            context.submitedForm = form;
+
             e.preventDefault();
-
-            const button = form.querySelector('button[type="submit"]');
-            const button_text = button.querySelector('.order-btn-text')
-            const button_main_text = button_text.textContent;
-            
-            button_text.textContent = 'Order creating'
-            button.classList.add('active');
-            button.setAttribute('disabled', true);
-
-            this.active_button = {
-                text: button_main_text,
-                btn_text: button_text,
-                btn: button
-            }
 
             // * create empty form values
             const formData = {}
@@ -161,76 +194,23 @@ class Cart {
                 }
             }
 
+            
             ajax('/orders/create/', formData, this.afterSubmit, this);
-        });
-    }
-    afterSubmit(responce, context) {
-        
-        const shopping_alert = document.querySelector('.shopping_alert');
-        const forms = [context.formBuy.parentElement.parentElement, context.formMemo.parentElement.parentElement, context.formHold.parentElement.parentElement];
-        const close_btns = [];
-        forms.map(form => {
-            let btn = form.querySelector('.btn-close');
-            close_btns.push(btn);
-        });
-        close_btns.map(btn => {
-            btn.click();
-        });
-
-        const btn = context.active_button.btn;
-        const btn_text = context.active_button.btn_text;
-        const btn_old_text = context.active_button.text;
-
-        btn.classList.remove('active');
-        btn.removeAttribute('disabled');
-        btn_text.textContent = btn_old_text;
-
-        if (responce.alert == 'success') {
-            shopping_alert.innerHTML = `<div class="alert alert-success mt-2 shadow-sm alert-dismissible fade show border-0" role="alert">
-                                            <div class="my-2">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
-                                                    <h5 class="h5 m-0 p-0">Your order was created ! Go to <a href="/orders/" class="link">Orders</a></h5>
-                                                </div>
-                                                <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                        </div>
-            `;
-        } 
-        else if (responce.alert == 'empty') {
-            shopping_alert.innerHTML = `<div class="alert alert-warning mt-2 shadow-sm alert-dismissible fade show border-0" role="alert">
-                                            <div class="my-2">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
-                                                    <h5 class="h5 m-0 p-0">Shopping cart can not be empty !</h5>
-                                                </div>
-                                                <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                        </div>
-            `;
-        } 
-        else if (responce.alert == 'error') {
-            shopping_alert.innerHTML = `<div class="alert alert-danger mt-2 shadow-sm alert-dismissible fade show border-0" role="alert">
-                                            <div class="my-2">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
-                                                    <h5 class="h5 m-0 p-0">Something was wrong, order was not created</h5>
-                                                </div>
-                                                <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                        </div>
-            `;
         }
+    }
+
+    // --> checked
+    selected() {
+        const selected = JSON.parse(localStorage.getItem('cart'));
         
-        context.container.innerHTML = `<div class="w-100 py-4 d-flex align-items-center justify-content-center border flex-column">
-                                            <h3 class="h3 text-success">Your shopping cart is empty</h3>
-                                            <p class="text-dark fs-5">
-                                                <span>
-                                                    Go to Products
-                                                <span>
-                                                <a href="/filter/" class="text-success">Filter</a>
-                                            </span></span></p>
-                                        </div>`;
+        const nodes = selected.map(value => {
+            return this.container.querySelector(`#${value}`);
+        });
+
+        nodes.map(node => {
+            node.checked = true;
+            node.parentElement.classList.add('active');
+        });
     }
 }
 
@@ -249,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         total_carat: '#total_carat',
         total_stone: '#total_stone',
         cart_length: '#cart_length'
-    });
+    }).init();
 
     // * -------------------------- diamond drop down
     const diamondItem = new ElementsControl({

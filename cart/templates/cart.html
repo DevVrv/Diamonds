@@ -17,6 +17,10 @@
             <!-- ? start diamond item ? -->
             <div class="container-fluid container-io px-5 mt-2 content-container diamond-items-container pb-5">
                 <h2 class="h2 px-2 py-3">Shopping Bag <i class="fa fa-shopping-bag ms-2 text-primary"></i></h2>
+
+                <div class="shopping_alert">
+                </div>
+
                 <!-- content sections -->
                 <div class="content tab-content cart-content">
     
@@ -327,7 +331,12 @@
 
                         </div>
                         <div class="modal-footer border-top">
-                            <button type="submit" class="btn btn-primary w-100">Place Your Request</button>
+                            <button type="submit" class="btn btn-primary order-btn w-100">
+                                <span class="order-btn-text ms-4">Place Your Request</span>
+                                <div class="spinner-border ms-3 order-spiner" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -361,7 +370,12 @@
                             </div>
                         </div>
                         <div class="modal-footer border-top">
-                            <button type="submit" class="btn btn-primary w-100">Place Your Request</button>
+                            <button type="submit" class="btn btn-primary order-btn w-100">
+                                <span class="order-btn-text ms-4">Place Your Request</span>
+                                <div class="spinner-border ms-3 order-spiner" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -439,7 +453,12 @@
                             </div>
                         </div>
                         <div class="modal-footer border-top">
-                            <button type="submit" class="btn btn-primary w-100">Place Your Request</button>
+                            <button type="submit" class="btn btn-primary order-btn w-100">
+                                <span class="order-btn-text ms-4">Place Your Request</span>
+                                <div class="spinner-border ms-3 order-spiner" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -455,7 +474,7 @@
     <script src="{% static 'js/public/ajax.min.js' %}"></script>
     <script src="{% static 'js/public/delivery_date.min.js' %}"></script>
     <script src="{% static 'js/public/diamond_view.min.js' %}"></script>
-    <script src="{% static 'js/public/cart.min.js' %}"></script>
+    <script src="{% static 'js/scripts/cart.js' %}"></script>
     <script src="{% static 'js/public/canvas.min.js' %}"></script>
     <script src="{% static 'js/public/in-dev.min.js' %}"></script>
 
