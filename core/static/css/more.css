@@ -198,6 +198,11 @@ background-color: #55b49e;
     justify-content: center;
     position: relative;
 }
+.order-details__header > h5 {
+    max-width: 96%;
+    text-align: center;
+}
+
 .order-details__info {
     width: 100%;
     height: 10%;
@@ -376,6 +381,22 @@ background-color: #55b49e;
     display: none !important;
 }
 
+
+
+.order-details__content > .result__item > .result__item-list >  .item-list-element {
+    height: 40px !important;
+    max-width: 33.333%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #2222222b;
+}
+
+/* orders models */
+.order-details__content > .result__item > .result__item-list >  .item-list-element:nth-child(1) {
+    display: flex;
+    align-items: flex-end;
+}
+
 #share_items > .result__item > .result__item-list > .item-list-element:nth-child(2) {
     display: none !important;
 }
@@ -473,6 +494,17 @@ background-color: #55b49e;
 }
 
 
+@media (max-width: 768px) {
+    .invoice-content-name {
+        height: 20px !important;
+    }
+
+    .invoice-content-name > .w-100 > .item-list-name {
+        display: none !important;
+    }
+}
+
+
 @media (max-width: 650px) {
 
     .order-details__content {
@@ -488,6 +520,24 @@ background-color: #55b49e;
     } 
 }
 
+@media (max-width: 450px) {
+    .close-modal {
+        top: 10px !important;
+    }
+
+    .invoice-header {
+        height: 20% !important;
+    }
+
+    .invoice-info {
+        margin-top: 10px;
+    }
+
+    .order-details__info-item {
+        flex: 1 1 49% !important;
+    }
+}
+
 @media (max-width: 425px) {
     .auth-form-container {
         width: 98%;
@@ -498,6 +548,7 @@ background-color: #55b49e;
         padding: 30px 10px !important;
     }
 }
+
 
 @media (max-width: 380px) {
     

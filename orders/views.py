@@ -48,9 +48,10 @@ def get_order_details(request):
 
     # * order items
     order = Orders_model.objects.filter(user_id = request.user.id).get(order_number = requestData['number'])
-
+    
     # * diamonds list
     diamonds = Orders_Diamond_Model.objects.filter(order_number = requestData['number'])
+    
 
     # * user info
     user = CustomUser.objects.get(pk=request.user.pk)
@@ -204,7 +205,7 @@ def create_order(request):
         html_message = render_to_string('_mail_new_order.html', email_data)
         plain_message = strip_tags(html_message)
 
-        mail.send_mail(subject, plain_message, DEFAULT_FROM_EMAIL, [manager_email], html_message=html_message)
+        mail.send_mail(subject, plain_message, DEFAULT_FROM_EMAIL, [manager_email, sales_mail], html_message=html_message)
 
         responce = {
             'alert': 'success'

@@ -2,6 +2,8 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.contrib.messages import get_messages
 
+from users.models import CustomUser, CompanyDetails
+
 class Inspector(object):
     
     def __init__(self, request, rules = {'level': None, 'type': None}):
@@ -45,7 +47,15 @@ class Inspector(object):
                 if int(self.user.level) >= int(self.rules['level']):
                     inspect_level = True
                 else:
-                    self.messages('error', 'Please fill in the necessary information in your profile details to start your diamond search')
+                    
+                    company = CompanyDetails.objects.get(user_id = self.user.id)
+
+                    if company.company_name != '' and company.company_tel != '' and company.company_email != '' and company.company_address != '' and self.user.first_name != '' and self.user.job_title != '':
+                        self.messages('warning', 'You have filled in all the necessary data, at the moment your account is under review')
+                    else:
+                        self.messages('error', 'Please fill in all the required information to complete creating your account')
+
+
                     return False
 
             if self.rules['type'] != None and self.rules['level'] != None:

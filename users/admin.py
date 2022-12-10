@@ -22,7 +22,6 @@ class CustomUsersAdmin(admin.ModelAdmin):
     save_on_top = True
     readonly_fields = ('password',)
     
-    
 # -- Company details 
 @admin.register(CompanyDetails)
 class CompanyDetailsAdmin(admin.ModelAdmin):

@@ -27,6 +27,10 @@ from mail.views import send_email
 # -- ftp
 from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user
 
+# -- reciver
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
 # SIGN UP
 
 # -- sign up view
@@ -522,7 +526,7 @@ class UserInfo(TemplateView):
         if not self.user_form.has_changed() and not self.company_form.has_changed() and not self.shipping_forms.has_changed():
             messages.info(self.request, 'You haven\'t made any changes')
         else:
-            messages.success(request, 'You have successfully updated your profile information')
+            messages.success(request, 'Thank you for registering at LaBrilliante.com. We’ll take just a few minutes to check your information and give you an open access to our website. Browse lab-grown diamonds with LaBrilliante!')
             company = CompanyDetails.objects.get(user_id=request.user.pk)
             manager = CustomUser.objects.get(pk=request.user.manager_id)
 
@@ -605,3 +609,36 @@ class ChangePassword(PasswordChangeView):
             return redirect(reverse_lazy('signin'))
 
         return super().get(request, *args, **kwargs)
+
+
+# * ------------------------------------------------------------------- receiver for update user level and user email
+@receiver(pre_save, sender=CustomUser)
+def on_change(sender, instance: CustomUser, **kwargs):
+    if instance.id is None: # new object will be created
+        pass # write your code here
+    else:
+        try:
+            # send email message if level was update
+            previous = CustomUser.objects.get(id=instance.id)
+            if previous.level != instance.level: # field will be updated
+                if previous.level < instance.level and instance.level >= 2:
+                    send_email({
+                        'subject': 'Raising the level',
+                        'email': instance.email,
+                        'template': '_mail_user_raise.html',
+                        'context': {
+                            'title': 'Your level has been upgraded',
+                            'message': 'New features are available to you on the site',
+                            'level': instance.level,
+                        }
+                    })
+
+            # user name update if email was changed
+            if previous.email != instance.email:
+                instance.username = instance.email
+                instance.save()
+        except:
+            pass
+                
+
+            

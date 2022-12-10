@@ -245,7 +245,7 @@ class Orders {
     makeResponce(responce, context) {
         // <-- get diamonds list
         const diamonds = JSON.parse(responce.diamonds);
-        
+       
         // * check context key
         let modal;
         let modalItems;
