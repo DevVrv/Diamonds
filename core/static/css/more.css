@@ -381,22 +381,6 @@ background-color: #55b49e;
     display: none !important;
 }
 
-
-
-.order-details__content > .result__item > .result__item-list >  .item-list-element {
-    height: 40px !important;
-    max-width: 33.333%;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #2222222b;
-}
-
-/* orders models */
-.order-details__content > .result__item > .result__item-list >  .item-list-element:nth-child(1) {
-    display: flex;
-    align-items: flex-end;
-}
-
 .order-btn {
     height: 40px;
     display: flex;
@@ -499,6 +483,21 @@ background-color: #55b49e;
     .order-details__content > .result__item {
         width: 48% !important;
     }
+
+    .order-details__content > .result__item > .result__item-list >  .item-list-element {
+        height: 40px !important;
+        max-width: 33.333%;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #2222222b;
+    }
+
+    /* orders models */
+    .order-details__content > .result__item > .result__item-list >  .item-list-element:nth-child(1) {
+        display: flex;
+        align-items: flex-end;
+    }
+
 }
 
 @media (max-width: 890px) {
@@ -517,7 +516,6 @@ background-color: #55b49e;
     }
 }
 
-
 @media (max-width: 768px) {
     .invoice-content-name {
         height: 20px !important;
@@ -527,7 +525,6 @@ background-color: #55b49e;
         display: none !important;
     }
 }
-
 
 @media (max-width: 650px) {
 
@@ -573,7 +570,6 @@ background-color: #55b49e;
     }
 }
 
-
 @media (max-width: 380px) {
     
     .item-list-element {
@@ -581,6 +577,7 @@ background-color: #55b49e;
     }
 
 }
+
 #edit-client-info {
     border: 1px solid #5DC2AA !important;
     transition: background-color 0.3s ease, border-color 0.3s ease;

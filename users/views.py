@@ -209,7 +209,7 @@ class SignInView(FormView):
                     # --> send email
                     send_email({
                         'subject': 'Labrilliante email confirm',
-                        'email': self.request.session['email'],
+                        'email': [self.request.session['email']],
                         'template': '_mail_confirm.html',
                         'context': {
                             'code': code,
@@ -310,7 +310,7 @@ class SignInConfirmResend(SignInConfirmView):
         # --> send email
         send_email({
             'subject': 'Labrilliante email confirm',
-            'email': self.request.session['email'],
+            'email': [self.request.session['email']],
             'template': '_mail_confirm.html',
             'context': {
                 'code': code,
@@ -348,7 +348,7 @@ class PasswordRecovery(FormView):
             # --> send email
             send_email({
                 'subject': 'Password recovery',
-                'email': self.request.session['email'],
+                'email': [self.request.session['email']],
                 'template': '_mail_confirm.html',
                 'context': {
                     'code': code,
@@ -415,7 +415,7 @@ class PasswordRecoveryResend(PasswordRecoveryConfirm):
         # --> send email
         send_email({
             'subject': 'Password recovery',
-            'email': self.request.session['email'],
+            'email': [self.request.session['email']],
             'template': '_mail_confirm.html',
             'context': {
                 'code': code,
@@ -534,7 +534,7 @@ class UserInfo(TemplateView):
 
             send_email({
                 'subject': f'User {request.user.email} was updated',
-                'email': manager.email,
+                'email': [manager.email],
                 'template': '_mail_user_updated.html',
                 'context': {
                     'fname': user.first_name,
@@ -564,7 +564,13 @@ class UserInfo(TemplateView):
         self.company_form = self.get_company()
         
         # -- shipping formset
-        self.shipping_forms = self.shipping_forms()
+        shipping = ShippingAddress.objects.filter(user_id = request.user.id)
+        if not shipping.exists():
+            self.shipping_forms = self.shipping_forms(queryset= ShippingAddress.objects.none())
+        else:
+            self.shipping_forms = self.shipping_forms(queryset= shipping)
+
+
 
         # -- extra context
         self.extra_context = {
@@ -624,7 +630,7 @@ def on_change(sender, instance: CustomUser, **kwargs):
                 if previous.level < instance.level and instance.level >= 2:
                     send_email({
                         'subject': 'Raising the level',
-                        'email': instance.email,
+                        'email': [instance.email],
                         'template': '_mail_user_raise.html',
                         'context': {
                             'title': 'Your level has been upgraded',

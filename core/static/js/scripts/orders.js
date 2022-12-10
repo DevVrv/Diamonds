@@ -95,6 +95,10 @@ class Orders {
         
         // * key
         this.key = 'details';
+
+        this.alert_container = document.querySelector('.alert_block');
+
+        this.init();
     }
     
     // init methods
@@ -106,6 +110,7 @@ class Orders {
 
         this.search('search/');
         this.searchShow();
+        this.removeOrder();
     }
 
     // debug mode
@@ -363,6 +368,30 @@ class Orders {
         context.makeRequest(context.orders.orderInvoice, context.modalInvoice);
     }
 
+    // remove order
+    removeOrder() {
+        const remove = [...document.querySelectorAll('.remove-order')];
+        remove.map(btn => {
+            btn.addEventListener('click', () => {
+                const number = btn.dataset.orderNumber;
+                ajax('/orders/remove/', number, this.afterRemoveOrder, this);
+            });
+        });
+    }
+    afterRemoveOrder(responce, context) {
+        const order = document.querySelector(`[data-orders-item="${responce.number}"]`);
+        order.remove();
+        const alert = `<div class="alert alert-warning mt-2 shadow-sm alert-dismissible fade show border-0" role="alert">
+                            <div class="my-2">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
+                                    <h5 class="h5 m-0 p-0">Order #${responce.number} was removed.</h5>
+                                </div>
+                                <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>`;
+        context.alert_container.innerHTML = alert;
+    }
 }
 
 const orders = new Orders({
@@ -402,4 +431,4 @@ const orders = new Orders({
     searchBody: '#orders-search-body',
     searchTriger: '#orders-search-btn',
 
-}).init();
+});

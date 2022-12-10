@@ -10,12 +10,14 @@ from django.urls import reverse_lazy
 
 from django.utils import timezone
 
-from django.core import mail
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from core.settings import DEFAULT_FROM_EMAIL
 from users.inspector import Inspector
 import json
+
+from mail.views import send_email
+
+# -- reciver
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 # * Get orders page
 def get_orders(request):
@@ -185,33 +187,34 @@ def create_order(request):
         user = request.user
         company = CompanyDetails.objects.get(user_id=user.id)
         manager = CustomUser.objects.get(pk=user.manager_id)
-        manager_email = manager.email or DEFAULT_FROM_EMAIL
+        manager_email = manager.email
         sales_mail = 'sales@labrilliante.com'
-        
-        subject = 'New order'
-        email_data = {
-            'login': user.username,
-            'user_email': user.email,
-            'user_tel': user.tel,
-            'fname': user.first_name,
-            'lname': user.last_name,
 
-            'company_name': company.company_name,
-            'company_tel': company.company_tel,
-            'company_email': company.company_email,
-            'company_address': company.company_address,
+        # --> send email
+        send_email({
+            'subject': 'New order',
+            'email': [manager_email, sales_mail],
+            'template': '_mail_new_order.html',
+            'context': {
+                'login': user.username,
+                'user_email': user.email,
+                'user_tel': user.tel,
+                'fname': user.first_name,
+                'lname': user.last_name,
 
-            'order_number': order_data['order_number'],
-            'order_comment': requestData['comment'],
-            'order_type': requestData['order_type'],
-            'total_price': order_data['total_price'],
-            'total_carat': order_data['total_carat'],
-            'total_diamonds': order_data['total_diamonds'],
-        }
-        html_message = render_to_string('_mail_new_order.html', email_data)
-        plain_message = strip_tags(html_message)
+                'company_name': company.company_name,
+                'company_tel': company.company_tel,
+                'company_email': company.company_email,
+                'company_address': company.company_address,
 
-        mail.send_mail(subject, plain_message, DEFAULT_FROM_EMAIL, [manager_email], html_message=html_message)
+                'order_number': order_data['order_number'],
+                'order_comment': requestData['comment'],
+                'order_type': new_order.get_order_type_display(),
+                'total_price': order_data['total_price'],
+                'total_carat': order_data['total_carat'],
+                'total_diamonds': order_data['total_diamonds'],
+            }
+        })
 
         responce = {
             'alert': 'success'
@@ -263,3 +266,52 @@ def order_search(request):
 
     return HttpResponse (json.dumps(responce), content_type="application/json")
 
+# * remove order
+def order_remove(request):
+
+    number = json.loads(request.body)
+
+    try:
+        order = Orders_model.objects.get(order_number = number)
+        order.delete()
+    except Exception as ex:
+        print(ex)
+
+    return HttpResponse (json.dumps({
+        'alert': 'success',
+        'number': number
+    }), content_type="application/json")
+
+
+
+# * ------------------------------------------------------------------- receiver for update order status
+@receiver(pre_save, sender=Orders_model)
+def on_change(sender, instance: Orders_model, **kwargs):
+    if instance.id is None: # new object will be created
+        pass # write your code here
+    else:
+        try:
+            # send email message if level was update
+            previous = Orders_model.objects.get(id=instance.id)
+
+            if previous.order_status != instance.order_status:
+
+                user = CustomUser.objects.get(id = instance.user_id)
+
+                send_email({
+                    'subject': 'Order status was updated',
+                    'email': [user.email],
+                    'template': '_mail_order_status.html',
+                    'context': {
+                        'order_status': instance.get_order_status_display(),
+                        'order_number': instance.order_number,
+                    }
+                })
+            else:
+                pass
+
+        except:
+            pass
+                
+
+            
