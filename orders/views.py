@@ -85,50 +85,64 @@ def get_order_details(request):
 # * create new order
 def create_order(request):
 
-    try:
-        #  get request data
-        requestData = json.loads(request.body)
-        
-        # create empty data list
-        order_data = {
-            'user_id': request.user.pk,
-            'total_carat': 0,
-            'total_price': 0,
-            'pay_within': 0,
-            'p_ct_offer': 0,
-            'total_price_offer': 0,
-            'hold_hours': 0,
-            'order_number': request.user.id,
-            'diamonds_list': json.dumps([])
-        }
+    responce = {'alert': 'success'}   
 
-        # -- cart
+    requestData = json.loads(request.body)
+    order_data = {
+        'user_id': request.user.pk,
+        'total_carat': 0,
+        'total_price': 0,
+        'pay_within': 0,
+        'p_ct_offer': 0,
+        'total_price_offer': 0,
+        'hold_hours': 0,
+        'order_number': request.user.id,
+        'diamonds_list': json.dumps([])
+    }
+
+    try:
+        # <-- get cart
         try:
             cart = CartModal.objects.get(user_id=request.user.id)
+            user_cart = json.loads(cart.user_cart)
         except:
             return HttpResponse (json.dumps({
                 'alert': 'empty'
             }), content_type="application/json")
-
-        user_cart = json.loads(cart.user_cart)
-        cart_diamonds = Diamond_Model.objects.filter(pk__in=user_cart)
-        cart.delete()
-
+        
+        # if checked exists
+        unchecked_items = []
+        if requestData['checked']:
+            for cart_item in user_cart:
+                if cart_item not in requestData['checked']:
+                    unchecked_items.append(cart_item)
+        if unchecked_items:
+            cart.user_cart = json.dumps(unchecked_items)
+            cart.save()
+            user_cart = requestData['checked']
+            cart_diamonds = Diamond_Model.objects.filter(pk__in=user_cart)
+        elif not unchecked_items:
+            cart_diamonds = Diamond_Model.objects.filter(pk__in=user_cart)
+            cart.delete()
+        
         # order - price , carat, len
         order_data['total_diamonds'] = len(cart_diamonds)
         for diamond in cart_diamonds:
             order_data['total_carat'] += diamond.weight
             order_data['total_price'] += diamond.sale_price
         order_data['total_carat'] = round(order_data['total_carat'], 2)
+        responce['order_data'] = order_data
 
-        # order info
+        # create order data
         for key in requestData:
-            if key != 'comment':
+            if key != 'comment' and key != 'checked':
                 order_data[key] = int(requestData[key])
+            elif key == 'checked':
+                continue
             else:
                 order_data[key] = requestData[key]
 
-        # -- make order
+        # create order
         new_order = Orders_model.objects.create(**order_data)
         order_number = new_order.id
         length = 10 - len(f'{order_number}')
@@ -139,7 +153,7 @@ def create_order(request):
         new_order.order_number = order_number
         new_order.save()
 
-        # -- Order diamonds list
+        # create order diamond list
         order_keys = []
         for diamond in cart_diamonds:
             filter_diamonds_values = {
@@ -183,14 +197,12 @@ def create_order(request):
         new_order.diamonds_list = json.dumps(order_keys)
         new_order.save()
 
-        # -- ORDER EMAIL 
+        # --> send order to email 
         user = request.user
         company = CompanyDetails.objects.get(user_id=user.id)
         manager = CustomUser.objects.get(pk=user.manager_id)
         manager_email = manager.email
         sales_mail = 'sales@labrilliante.com'
-
-        # --> send email
         send_email({
             'subject': 'New order',
             'email': [manager_email, sales_mail],
@@ -215,16 +227,9 @@ def create_order(request):
                 'total_diamonds': order_data['total_diamonds'],
             }
         })
-
-        responce = {
-            'alert': 'success'
-        }   
     except Exception as ex:
         print(ex)
-        responce = {
-            'alert': 'error'
-        }
-        
+        responce['alert'] = 'error'
     return HttpResponse (json.dumps(responce), content_type="application/json")
 
 # * order search form

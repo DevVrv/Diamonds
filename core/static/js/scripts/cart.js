@@ -29,11 +29,17 @@ class Cart {
 
     }
 
-    // * init
+    // init
     init() {
 
         // * create local storage
         localStorage.setItem('cart', JSON.stringify([]));
+
+        // <-- get diamonds list
+        this.diamonds = [...this.container.querySelectorAll('.result-section--element')];
+        this.diamonds_chb = this.diamonds.map(diamond => {
+            return diamond.querySelector('input[type="checkbox"]');
+        });
 
         // * delete selected diamonds - method
         this.deleteSelected();
@@ -46,6 +52,7 @@ class Cart {
         // * return this
         return this;
     }
+
 
     // debug
     debug(info = this) {
@@ -78,8 +85,30 @@ class Cart {
         localStorage.setItem('cart', JSON.stringify(values));
     }
 
+    // clean cart info
+    cleanInfo() {
+        this.total_price.textContent = 0;
+        this.total_carat.textContent = 0;
+        this.total_stone.textContent = 0;
+        this.cart_length.textContent = 0;
+    }
+    updateInfo(responce) {
+        this.total_price.textContent = Math.floor((Number(this.total_price.textContent.replace('$', '')) - responce.order_data.total_price));
+        this.total_carat.textContent = (this.total_carat.textContent - responce.order_data.total_carat).toFixed(1)
+        this.total_stone.textContent = this.total_stone.textContent - responce.order_data.total_diamonds;
+        this.cart_length.textContent = this.total_stone.textContent;
+        return this.total_stone.textContent;
+    }
+
 
     // -- delete selected
+    removeByKey(pks, parent = document) {
+        pks.map(key => {
+            const node = parent.querySelector(`#${key}`);
+            const elem = node.closest('.result-section--element');
+            elem.remove();
+        });
+    }
     deleteSelected() {
 
         // * create delete event
@@ -107,13 +136,6 @@ class Cart {
                 
             }
 
-        });
-    }
-    removeByKey(pks, parent = document) {
-        pks.map(key => {
-            const node = parent.querySelector(`#${key}`);
-            const elem = node.closest('.result-section--element');
-            elem.remove();
         });
     }
     afterDelete(responce, context) {
@@ -161,10 +183,31 @@ class Cart {
                 }
             }
 
+            // if cart checked exists
+            const cartChecked = JSON.parse(localStorage.getItem('cart'));
+            if (cartChecked) {
+                formData.checked = cartChecked.map(
+                    item => {``
+                        return item.replace('chb_', '');
+                    });
+            }
+
             ajax('/orders/create/', formData, this.afterSubmit, this);
         });
     }
     afterSubmit(responce, context) {
+        
+        const emptyCart = `
+            <div class="w-100 py-4 d-flex align-items-center justify-content-center border flex-column">
+                <h3 class="h3 text-success">Your shopping cart is empty</h3>
+                <p class="text-dark fs-5">
+                    <span>
+                        Go to Products
+                    <span>
+                    <a href="/filter/" class="text-success">Filter</a>
+                </span></span></p>
+            </div>
+        `;
         
         const shopping_alert = document.querySelector('.shopping_alert');
         const forms = [context.formBuy.parentElement.parentElement, context.formMemo.parentElement.parentElement, context.formHold.parentElement.parentElement];
@@ -190,7 +233,7 @@ class Cart {
                                             <div class="my-2">
                                                 <div class="d-flex align-items-center justify-content-center">
                                                     <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
-                                                    <h5 class="h5 m-0 p-0">Your order was created ! Go to <a href="/orders/" class="link">Orders</a></h5>
+                                                    <h5 class="h5 m-0 p-0">Your order was created ! Order number: #${responce.order_data.order_number} - Go to <a href="/orders/" class="link">Orders</a></h5>
                                                 </div>
                                                 <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
@@ -222,15 +265,26 @@ class Cart {
             `;
         }
         
-        context.container.innerHTML = `<div class="w-100 py-4 d-flex align-items-center justify-content-center border flex-column">
-                                            <h3 class="h3 text-success">Your shopping cart is empty</h3>
-                                            <p class="text-dark fs-5">
-                                                <span>
-                                                    Go to Products
-                                                <span>
-                                                <a href="/filter/" class="text-success">Filter</a>
-                                            </span></span></p>
-                                        </div>`;
+        // cart is empty 
+        const storage =  JSON.parse(localStorage.getItem('cart'));
+        if (storage.length != 0) {
+            storage.map(value => {
+                context.diamonds_chb.map((chb, index) => {
+                    if (chb.name == value) {
+                        context.diamonds[index].remove();
+                    }
+                });
+            });
+            localStorage.setItem('cart', JSON.stringify([]));
+            const len = context.updateInfo(responce);
+            if (len == 0) {
+                context.container.innerHTML = emptyCart;
+            }
+        }
+        else {
+            context.cleanInfo();
+            context.container.innerHTML = emptyCart;
+        }
     }
 }
 
