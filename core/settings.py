@@ -167,7 +167,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'sales@labrilliante.com'
 
-
 # FTP
 FTP_IP = '127.0.0.1'
 FTP_PORT = '21'

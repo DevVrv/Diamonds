@@ -23,6 +23,7 @@ from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, 
 from .verification_code import create_code
 from .inspector import Inspector
 from mail.views import send_email
+from core.settings import DEFAULT_FROM_EMAIL
 
 # -- ftp
 from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user
@@ -64,8 +65,19 @@ class SignUpView(FormView):
                 user = CustomUser.objects.create(**new_user)
                 user.save()
                 
-                # success
+                email = user.email
+                tel = user.tel
                 messages.success(self.request, 'Success, now you can log in to the site')
+                send_email({
+                    'subject': f'New user was created',
+                    'email': [DEFAULT_FROM_EMAIL],
+                    'template': '_mail_user_created.html',
+                    'context': {
+                        'email': email,
+                        'tel': tel
+                    }
+                })
+
                 return redirect(reverse_lazy(self.success_url))
             
             return super().post(request, *args, **kwargs)
@@ -136,12 +148,10 @@ class SignUpExtendedView(FormView):
 
                     if not os.path.isdir(user_name):
                         os.mkdir(user_name)
+                        messages.info(request, f'Folder: {user_name}, was created')        
                     else:
                         messages.error(request, 'Vendor Folder was not created, folder name already exists')
-                        return self.get(request, *args, **kwargs)
-
-                    messages.info(request, f'Folder: {user_name}, was created')        
-
+                    
                 user_type_name = {
                     '0': 'staff',
                     '1': 'user',
@@ -534,7 +544,7 @@ class UserInfo(TemplateView):
 
             send_email({
                 'subject': f'User {request.user.email} was updated',
-                'email': [manager.email],
+                'email': [manager.email, DEFAULT_FROM_EMAIL],
                 'template': '_mail_user_updated.html',
                 'context': {
                     'fname': user.first_name,

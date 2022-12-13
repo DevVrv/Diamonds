@@ -250,3 +250,7 @@ select:hover, select:focus {
   background-color: #e44452 !important;
   height: 100% !important;
 }
+
+.related-widget-wrapper > a {
+  display: none !important;
+}

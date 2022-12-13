@@ -1,5 +1,6 @@
 from django.core import serializers
 
+from core.settings import DEFAULT_FROM_EMAIL
 from django.shortcuts import HttpResponse
 from orders.models import Orders_model, Orders_Diamond_Model
 from cart.models import CartModal
@@ -202,10 +203,9 @@ def create_order(request):
         company = CompanyDetails.objects.get(user_id=user.id)
         manager = CustomUser.objects.get(pk=user.manager_id)
         manager_email = manager.email
-        sales_mail = 'sales@labrilliante.com'
         send_email({
             'subject': 'New order',
-            'email': [manager_email, sales_mail],
+            'email': [manager_email, DEFAULT_FROM_EMAIL],
             'template': '_mail_new_order.html',
             'context': {
                 'login': user.username,
