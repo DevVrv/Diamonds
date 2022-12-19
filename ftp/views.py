@@ -1,8 +1,7 @@
-import os
+import os, json
 from django.http import HttpResponse
 from vendors.csv_reader import Reader_CSV
 from .ftp_server import ftp_folders
-
 
 # FTP API
 def ftp_responce(request, username):
@@ -13,14 +12,14 @@ def ftp_responce(request, username):
     for file in os.listdir(f'{ftp_folders}\\{username}'):
         if file.endswith('.csv'):
             curent_file = f'{ftp_folders}\\{username}\\{file}'
-            responce_message = 'File is CSV'
+
+            csv = Reader_CSV()
+            responce_message = csv.ftp_file(username, curent_file)
+            responce_message = json.dumps(responce_message)
         else:
             file_path = f'{ftp_folders}\\{username}\\{file}'
             os.remove(file_path)
             responce_message = 'File is not CSV'
             
-
-    csv = Reader_CSV()
-    csv.ftp_file(username, curent_file)
-
-    return HttpResponse(content=responce_message)
+    
+    return HttpResponse(content=responce_message, content_type="application/json")

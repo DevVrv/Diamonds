@@ -9,8 +9,13 @@ import csv
 
 from filter.models import Diamond_Model
 
-
 from .csv_reader import Reader_CSV
+
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 # -- white
 class White(FormView):
@@ -37,7 +42,6 @@ class White(FormView):
 
     # <-- GET
     def get(self, request, *args, **kwargs):
-
         # -- permissions
         permission = Inspector(request)
         permission_list = ['vendors.view_vedor_diamond_model', 'vendors.add_vedor_diamond_model', 'vendors.change_vedor_diamond_model']
@@ -154,4 +158,5 @@ class RoundPear(FormView):
         self.extra_context['has_permission'] = True
 
         return super().get(request, *args, **kwargs)
+
 

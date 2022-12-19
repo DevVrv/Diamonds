@@ -32,6 +32,12 @@ from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 # SIGN UP
 
 # -- sign up view

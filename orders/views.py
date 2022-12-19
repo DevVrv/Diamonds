@@ -20,6 +20,12 @@ from mail.views import send_email
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 # * Get orders page
 def get_orders(request):
 

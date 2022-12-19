@@ -61,3 +61,8 @@ class Orders_Diamond_Model(Base_Diamond_Model):
     buyer = models.ForeignKey(CustomUser, verbose_name="Buyer", on_delete=models.CASCADE, db_index=True, related_name='buyer_id')
     order = models.ForeignKey(Orders_model, verbose_name="Order ID", on_delete=models.CASCADE, db_index=True)
     order_number = models.CharField(max_length=255, verbose_name="Order Number", db_index=True)
+    
+    class Meta:
+        verbose_name = 'Order Diamond'
+        verbose_name_plural = 'Orders Diamonds'
+        ordering = ['sale_price']

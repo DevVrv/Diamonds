@@ -1,0 +1,91 @@
+Internal Server Error: /vendor/white/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\vendors\views.py", line 36, in post
+    file_worker = Reader_CSV()
+  File "A:\code\Current\dj\core\vendors\csv_reader.py", line 77, in __init__
+    self.loger.logging.debug('This is a debug message')
+AttributeError: 'Reader_CSV' object has no attribute 'loger'
+"POST /vendor/white/ HTTP/1.1" 500 80775
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /vendor/white/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\vendors\views.py", line 36, in post
+    file_worker = Reader_CSV()
+  File "A:\code\Current\dj\core\vendors\csv_reader.py", line 77, in __init__
+    self.logger.logging.debug('This is a debug message')
+AttributeError: 'NoneType' object has no attribute 'logging'
+"POST /vendor/white/ HTTP/1.1" 500 80909
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /vendor/white/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\vendors\views.py", line 36, in post
+    file_worker = Reader_CSV()
+  File "A:\code\Current\dj\core\vendors\csv_reader.py", line 77, in __init__
+    self.logger.debug('This is a debug message')
+AttributeError: 'NoneType' object has no attribute 'debug'
+"POST /vendor/white/ HTTP/1.1" 500 80853
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /vendor/white/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\vendors\views.py", line 36, in post
+    file_worker = Reader_CSV()
+  File "A:\code\Current\dj\core\vendors\csv_reader.py", line 76, in __init__
+    self.logger = logging()
+TypeError: 'module' object is not callable
+"POST /vendor/white/ HTTP/1.1" 500 80800
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /ftp/vrv.lfm@gmail.com/
+Traceback (most recent call last):
+  File "A:\code\Current\dj\core\vendors\csv_reader.py", line 296, in ftp_file
+    self.ftp_msg['missing']['msg'] = msg
+KeyError: 'missing'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 24, in ftp_responce
+    csv.ftp_file(username, curent_file)
+  File "A:\code\Current\dj\core\vendors\csv_reader.py", line 300, in ftp_file
+    self.ftp_msg['missing']['msg'] = msg
+KeyError: 'missing'
+"GET /ftp/vrv.lfm@gmail.com/ HTTP/1.1" 500 73591

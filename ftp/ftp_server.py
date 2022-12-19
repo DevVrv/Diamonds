@@ -1,7 +1,5 @@
-import os
-import logging
-import requests
-import hashlib
+import os, logging, requests, hashlib, json
+from datetime import date
 from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
@@ -19,8 +17,8 @@ request_url = 'http://127.0.0.1:8000/ftp/'
 
 # =========================================== #
 def request(user):
-    req = requests.get(f'{request_url}{user}/')
-    return req
+    responce = requests.get(f'{request_url}{user}/')
+    return responce
 
 # ftp server preparing + add user list to autorizer
 def ftp_server(autorizer):
@@ -120,9 +118,35 @@ class MyHandler(FTPHandler):
     def on_file_received(self, file):
         # do something when a file has been received
         responce = request(self.username)
-        logging.info(msg = f'{responce.status_code}')
-        logging.info(msg = f'{responce.content}')
+        content = json.loads(responce.content)
 
+        current_date = str(date.today())
+
+        if content['created']:
+            msg = content['created']['msg']
+            value = content['created']['value']
+            logging.warning(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
+
+        if content['error']:
+            msg = content['error']['msg']
+            value = content['error']['value']
+            logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
+
+        if content['exists']:
+            msg = content['exists']['msg']
+            value = content['exists']['value']
+            logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
+
+        if content['rejected']:
+            msg = content['rejected']['msg']
+            value = content['rejected']['value']
+            logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
+
+        if content['missing']:
+            msg = content['missing']['msg']
+            value = content['missing']['value']
+            logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
+        
     def on_incomplete_file_sent(self, file):
         # do something when a file is partially sent
         pass
@@ -143,7 +167,7 @@ class Command(BaseCommand):
         
         handler = MyHandler
         authorizer = MyDummyAuthorizer()
-        # logging.basicConfig(level=logging.DEBUG, filename=ftpd_log_path)
+        logging.basicConfig(level=logging.WARNING, filename=ftpd_log_path, format='%(process)d-%(levelname)s-%(message)s', datefmt='%d-%b-%y %H:%M:%S')
         handler.authorizer = authorizer
         ftp_server(authorizer)
         server = FTPServer((FTP_IP, FTP_PORT), handler)

@@ -9,6 +9,12 @@ from cart.models import CartModal
 
 from users.inspector import Inspector
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 # <------------------------------ get filter page
 def filterPage(request):
 

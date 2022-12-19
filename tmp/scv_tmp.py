@@ -1,16 +1,9 @@
 import csv, os
-from filter.models import Diamond_Model, Fancy_Diamond_Model
-from .models import Vedor_Diamond_Model, Fancy_Vedor_Diamond_Model
+from filter.models import Diamond_Model
+from .models import Vedor_Diamond_Model
 from users.models import CustomUser
 from django.contrib import messages
 
-# import settings
-import sys
-import logging
-
-# Get an instance of a logger
-log_file = 'A:\\code\\Current\\dj\\core\\vendors\\log\\vendor.log'
-logger = logging.getLogger(__name__)
 
 # --> CSV file rieader
 class Reader_CSV(object):
@@ -63,12 +56,11 @@ class Reader_CSV(object):
 
         # messages
         self.messages = {
-            'missing': 'The file does not meet the requirements, there are no required fields:',
-            'rejected': 'The following stones were rejected, incorrect data:',
-            'error': 'The following stones were not created, an error loading into the database:',
-            'created': 'The stones were successfully created:',
-            'exists': 'The stones were not created because they already exist:',
-            'unexpected': 'Unexpected Exception'
+            'missing': f'The file does not meet the requirements, there are no required fields:',
+            'rejected': f'The following stones were rejected, incorrect data:',
+            'error': f'The following stones were not created, an error loading into the database:',
+            'created': f'The stones were successfully created:',
+            'exists': f'The stones were not created because they already exist:',
         }
 
     # checking existing rows
@@ -131,7 +123,6 @@ class Reader_CSV(object):
     # crate diamonds list
     def _create_diamonds(self, list, vendor):
         diamonds = []
-        fancy_diamonds = []
         for stone in list:
             diamond = {
                 'stock': stone['Stock #'],
@@ -162,33 +153,20 @@ class Reader_CSV(object):
                 'lw': round(stone['Measurements Length'] / stone['Measurements Width'], 2),
                 'vendor': vendor
             }
-            
-            if diamond['color'].startswith('Fancy') or diamond['color'].startswith('fancy'):
-                fancy_diamonds.append(diamond);
-            else:
-                diamonds.append(diamond)
-        return {
-            'diamonds': diamonds,
-            'fancy': fancy_diamonds
-        }
+            diamonds.append(diamond)
+        return diamonds
 
     # uploading diamonds in db
-    def _upload_diamonds(self, diamonds_list, path = 'vendor'):
+    def _upload_diamonds(self, diamonds_list):
         filter_diamonds = Diamond_Model.objects.all()
-        fancy_filter_diamonds = Fancy_Diamond_Model.objects.all()
         vendor_diamonds = Vedor_Diamond_Model.objects.all()
-        fancy_vendor_diamonds = Fancy_Vedor_Diamond_Model.objects.all()
         for diamond in diamonds_list:
-            if filter_diamonds.filter(certificate=diamond['certificate']).exists() or vendor_diamonds.filter(certificate=diamond['certificate']).exists() or fancy_vendor_diamonds.filter(certificate=diamond['certificate']).exists() or fancy_filter_diamonds.filter(certificate=diamond['certificate']).exists():
+            if filter_diamonds.filter(certificate=diamond['certificate']).exists() or vendor_diamonds.filter(certificate=diamond['certificate']).exists():
                     self.x_exists += 1
                     continue
             else:
                 try:
-                    if path == 'vendor':
-                        vendor_diamonds.create(**diamond)
-                    elif path == 'fancy':
-                        fancy_vendor_diamonds.create(**diamond)
-
+                    vendor_diamonds.create(**diamond)
                     self.x_created += 1
                 except Exception as ex:
                     print(ex)
@@ -205,21 +183,15 @@ class Reader_CSV(object):
         # check rows and continue if is empty
         self.missing_rows = self._check_file_rows(reader=reader)
         if not self.missing_rows:
-            # get stones
-            stones = self._create_stones(reader=reader)
-
             # get acepted and rejected stones
+            stones = self._create_stones(reader=reader)
             self.stones_acepted = stones['acepted']
             self.stones_rejected = stones['rejected']
             
             # create diamond list
             if self.stones_acepted:
-                self.full_diamonds_list = self._create_diamonds(self.stones_acepted, vendor=request.user)
-                self.diamonds_list = self.full_diamonds_list['diamonds']
-                self.fancy_diamonds_list = self.full_diamonds_list['fancy']
-                # upload diamonds
-                self._upload_diamonds(self.diamonds_list, 'vendor')
-                self._upload_diamonds(self.fancy_diamonds_list, 'fancy')
+                self.diamonds_list = self._create_diamonds(self.stones_acepted, vendor=request.user)
+                self._upload_diamonds(self.diamonds_list)
 
                 # messages
                 if self.x_error:
@@ -241,15 +213,6 @@ class Reader_CSV(object):
 
     # --> FTP file
     def ftp_file(self, username, file_path):
-
-        self.ftp_msg= {
-            'created': {},
-            'error': {},
-            'exists': {},
-            'rejected': {},
-            'missing': {}
-        }
-
         try:
             user = CustomUser.objects.get(username=username)
 
@@ -266,38 +229,8 @@ class Reader_CSV(object):
                     
                     # create diamond list
                     if self.stones_acepted:
-                        self.full_diamonds_list = self._create_diamonds(self.stones_acepted, vendor=user)
-                        self.diamonds_list = self.full_diamonds_list['diamonds']
-                        self.fancy_diamonds_list = self.full_diamonds_list['fancy']
-                        # upload diamonds
-                        self._upload_diamonds(self.diamonds_list, 'vendor')
-                        self._upload_diamonds(self.fancy_diamonds_list, 'fancy')
-
-                        # messages
-                        if self.x_error:
-                            msg = self.messages['error']
-                            self.ftp_msg['error']['msg'] = msg
-                            self.ftp_msg['error']['value'] = self.x_error
-                        if self.x_created:
-                            msg = self.messages['created']
-                            self.ftp_msg['created']['msg'] = msg
-                            self.ftp_msg['created']['value'] = self.x_created
-                        if self.x_exists:
-                            msg = self.messages['exists']
-                            self.ftp_msg['exists']['msg'] = msg
-                            self.ftp_msg['exists']['value'] = self.x_exists
-
-                    if self.stones_rejected:
-                        msg = self.messages['rejected']
-                        self.ftp_msg['rejected']['msg'] = msg
-                        self.ftp_msg['rejected']['value'] = self.stones_rejected
-                else:
-                    msg = self.messages['missing']
-                    self.ftp_msg['missing']['msg'] = msg
-                    self.ftp_msg['missing']['value'] = self.missing_rows  
+                        self.diamonds_list = self._create_diamonds(self.stones_acepted, vendor=user)
+                        self._upload_diamonds(self.diamonds_list)
         except:
-            msg = self.messages['unexpected']
-            self.ftp_msg['missing']['msg'] = msg
+            pass
         os.remove(file_path)
-
-        return self.ftp_msg

@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Diamond_Model, MaxMin
+from .models import Diamond_Model, Fancy_Diamond_Model, MaxMin
 
 @admin.action(description='To publish')
 def set_published(modeladmin, request, queryset):
@@ -20,6 +20,29 @@ def unset_best(modeladmin, request, queryset):
 
 @admin.register(Diamond_Model)
 class Diamond_Model_admin(admin.ModelAdmin):
+    list_display = (
+        'id', 
+        'shape',
+        'certificate', 
+        'best_selling', 
+        'weight', 
+        'color', 
+        'clarity', 
+        'rap_1ct', 
+        'sale_price', 
+        'created_at', 
+        'updated_at',
+    )
+    list_display_links = ('id', 'shape')
+    list_editable = ['best_selling']
+    list_filter = ['shape', 'color', 'clarity', 'is_published', 'best_selling']
+    search_fields = ('id', 'rap_1ct', 'rap_price', 'sale_price',)
+    save_on_top = True
+    actions = [set_best, set_published, unset_best, unset_published]
+
+
+@admin.register(Fancy_Diamond_Model)
+class Fancy_Diamond_Model_admin(admin.ModelAdmin):
     list_display = (
         'id', 
         'shape',

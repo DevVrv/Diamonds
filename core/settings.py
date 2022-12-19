@@ -170,3 +170,24 @@ DEFAULT_FROM_EMAIL = 'sales@labrilliante.com'
 # FTP
 FTP_IP = '127.0.0.1'
 FTP_PORT = '21'
+
+# Logging
+DJANGO_LOG_PATH = 'A:\\code\\Current\\dj\\core\\core\\log\\core.log'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': DJANGO_LOG_PATH,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}

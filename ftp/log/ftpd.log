@@ -1,14 +1,2 @@
-DEBUG:pyftpdlib:[debug] call: close() (<MyHandler(id=2022304483408, addr='127.0.0.1:53044', user='vrv.lfm@gmail.com')>)
-INFO:pyftpdlib:127.0.0.1:53044-[vrv.lfm@gmail.com] FTP session closed (disconnect).
-INFO:pyftpdlib:concurrency model: async
-INFO:pyftpdlib:masquerade (NAT) address: None
-INFO:pyftpdlib:passive ports: None
-DEBUG:pyftpdlib:poller: 'pyftpdlib.ioloop.Select'
-DEBUG:pyftpdlib:authorizer: '__main__.MyDummyAuthorizer'
-DEBUG:pyftpdlib:handler: '__main__.type'
-DEBUG:pyftpdlib:max connections: 512
-DEBUG:pyftpdlib:max connections per ip: unlimited
-DEBUG:pyftpdlib:timeout: 300
-DEBUG:pyftpdlib:banner: 'pyftpdlib 1.5.7 ready.'
-DEBUG:pyftpdlib:max login attempts: 3
-INFO:pyftpdlib:>>> starting FTP server on 127.0.0.1:21, pid=3220 <<<
+6724-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+6724-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
