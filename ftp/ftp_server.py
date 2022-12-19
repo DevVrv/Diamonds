@@ -15,6 +15,7 @@ perm = 'elradfmw'
 
 request_url = 'http://127.0.0.1:8000/ftp/'
 
+
 # =========================================== #
 def request(user):
     responce = requests.get(f'{request_url}{user}/')
@@ -69,6 +70,43 @@ def del_ftp_user(username):
         for l in lines:
             if not l.startswith(username):
                 w.write(l)
+
+# personal logging
+def personal_logging(username, content):
+    personal_file = f'{ftp_folders}\{username}\personal.log'
+    try:
+        file = open(personal_file, 'w+')
+        current_date = str(date.today())
+        if content['created']:
+            msg = content['created']['msg']
+            value = content['created']['value']
+            file.write(f'User: {username}, date: {current_date}, info - {msg}{value} \n')
+
+        if content['error']:
+            msg = content['error']['msg']
+            value = content['error']['value']
+            file.write(f'User: {username}, date: {current_date}, info - {msg}{value} \n')
+
+        if content['exists']:
+            msg = content['exists']['msg']
+            value = content['exists']['value']
+            file.write(f'User: {username}, date: {current_date}, info - {msg}{value} \n')
+
+        if content['rejected']:
+            msg = content['rejected']['msg']
+            value = content['rejected']['value']
+            file.write(f'User: {username}, date: {current_date}, info - {msg}{value} \n')
+
+        if content['missing']:
+            msg = content['missing']['msg']
+            value = content['missing']['value']
+            file.write(f'User: {username}, date: {current_date}, info - {msg}{value} \n')
+
+        file.close()
+    except:
+        pass
+    finally:
+        file.close()
 
 # FTP My Aytorizer
 class MyDummyAuthorizer(DummyAuthorizer):
@@ -147,6 +185,8 @@ class MyHandler(FTPHandler):
             value = content['missing']['value']
             logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
         
+        personal_logging(self.username, content)
+
     def on_incomplete_file_sent(self, file):
         # do something when a file is partially sent
         pass

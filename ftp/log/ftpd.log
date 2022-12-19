@@ -1,2 +1,42 @@
-6724-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
-6724-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+13336-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+13336-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+11592-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+11592-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+11592-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+11592-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+11248-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+11248-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+11248-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+11248-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+3636-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The file does not meet the requirements, there are no required fields:['Stock #', 'Certificate #', 'Shape', 'Clarity', 'Color', 'Culet Condition', 'Cut Grade', 'Polish', 'Symmetry', 'Culet Condition', 'Girdle Condition', 'Fluorescence Intensity', 'Measurements', 'Lab', 'Image Link', 'Video Link', 'Price', 'Total Price', 'Weight', 'Discount Percent', 'Measurements Length', 'Measurements Width', 'Measurements Depth', 'Table Percent', 'Depth Percent']
+5408-ERROR-unhandled exception in instance <DTPHandler(id=2797641508704, addr='127.0.0.1:58764', user='vrv.lfm@gmail.com', sending-file=<_io.BufferedWriter name='A:\\code\\Current\\dj\\core\\ftp\\ftp_folders\\vrv.lfm@gmail.com\\PEAR.csv'>, bytes-trans=56686)>
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\asyncore.py", line 83, in read
+    obj.handle_read_event()
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\pyftpdlib\handlers.py", line 796, in handle_read
+    chunk = self.recv(self.ac_in_buffer_size)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\pyftpdlib\ioloop.py", line 915, in recv
+    self.handle_close()
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\pyftpdlib\handlers.py", line 885, in handle_close
+    self.close()
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\pyftpdlib\handlers.py", line 916, in close
+    self.cmd_channel.on_file_received(filename)
+  File "a:\code\Current\dj\core\ftp\tempCodeRunnerFile.py", line 161, in on_file_received
+    content = json.loads(responce.content)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\json\__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+5408-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The file does not meet the requirements, there are no required fields:['Stock #', 'Certificate #', 'Shape', 'Clarity', 'Color', 'Culet Condition', 'Cut Grade', 'Polish', 'Symmetry', 'Culet Condition', 'Girdle Condition', 'Fluorescence Intensity', 'Measurements', 'Lab', 'Image Link', 'Video Link', 'Price', 'Total Price', 'Weight', 'Discount Percent', 'Measurements Length', 'Measurements Width', 'Measurements Depth', 'Table Percent', 'Depth Percent']
+5408-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+5408-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+5408-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The file does not meet the requirements, there are no required fields:['Stock #', 'Certificate #', 'Shape', 'Clarity', 'Color', 'Culet Condition', 'Cut Grade', 'Polish', 'Symmetry', 'Culet Condition', 'Girdle Condition', 'Fluorescence Intensity', 'Measurements', 'Lab', 'Image Link', 'Video Link', 'Price', 'Total Price', 'Weight', 'Discount Percent', 'Measurements Length', 'Measurements Width', 'Measurements Depth', 'Table Percent', 'Depth Percent']
+5408-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+5408-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+3144-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+3144-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]
+12684-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The stones were not created because they already exist:229
+12684-ERROR-User: vrv.lfm@gmail.com, date: 2022-12-19, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}]

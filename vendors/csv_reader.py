@@ -299,5 +299,5 @@ class Reader_CSV(object):
             msg = self.messages['unexpected']
             self.ftp_msg['missing']['msg'] = msg
         os.remove(file_path)
-
+    
         return self.ftp_msg
