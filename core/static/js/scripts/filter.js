@@ -271,9 +271,6 @@ class Control {
             context.updateViewEnd(responce);
         }, 200);
     }
-
-    
-
 }
 
 // @ Data Control
@@ -505,23 +502,20 @@ class NoUI extends Control {
         sliderObj.on('change', () => {
             
             // <-- get slider values
-            const value = sliderObj.get()[1];
+            const start = sliderObj.get()[0];
+            const end = sliderObj.get()[1];
             const names = sliderObj.options.replacePips;
 
-            // <-- get current string values
-            const strValues = [];
-            for (let i = 0; i < value; i++) {
-                strValues.push(names[i]);
-            }
-            
-            // -- check differences and update strs data
-            if (strValues.length == names.length) {
-                delete (this.data.strs[key]);
-            } else {
-                this.data.strs[key] = strValues;
-            }
+            const current_values = names.filter((name, index) => {
+                if (index >= start - 1 && index <= end - 1) {
+                    return name;
+                }
+            });
+
+            this.data.strs[key] = current_values;
 
             this.apply();
+
             
         });
     }
@@ -2138,3 +2132,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
+

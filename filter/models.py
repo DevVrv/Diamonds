@@ -43,7 +43,7 @@ class Base_Diamond_Model(models.Model):
     vendor = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name="vendor_email")
 
     def __str__(self):
-        return f'Clarity: {self.clarity}, Color: {self.color}, Weight: {self.weight}, Shape: {self.shape}'
+        return f'Clarity: {self.clarity}, Color: {self.color}'
 
     class Meta:
         verbose_name = 'Diamond'
