@@ -72,6 +72,7 @@ class Control {
         let photo = `<img src="/static/img/diamonds/base-diamond.jpg" alt="" class="img-fluid rounded">`
 
         const date = deliveryDate();
+        
 
         const diamondHTML = `
         <div class="result__item result-section--element">
@@ -371,6 +372,10 @@ class NoUI extends Control {
     constructor(kwargs) {
         super()
 
+        this.active_size = 768;
+        this.active_button = this._getElement('#show_filter_result');
+        this.filter_exit = this._getElement('#filter-exit-btn');
+
         this.data = {
             shape: [],
             lab: [],
@@ -640,8 +645,22 @@ class NoUI extends Control {
         // @ drop infinity data
         this.dataControl.dropInfinity();
 
-        // --> send request
-        ajax('filtering/', this.dataControl, this.view.updateView, this.view);
+        const window_size = document.documentElement.getBoundingClientRect().width;
+        
+        if (window_size > this.active_size) {
+            // --> send request
+            ajax('filtering/', this.dataControl, this.view.updateView, this.view);
+        }
+        else {
+            this.active_button.classList.add('active');
+            this.active_button.onclick = () => {
+                // --> send request
+                ajax('filtering/', this.dataControl, this.view.updateView, this.view);
+                this.active_button.classList.remove('active');
+                this.filter_exit.click();
+            }
+        }
+        
     }
 }
 
@@ -2130,6 +2149,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }).init();
 
-
+    function setDate() {
+        const date = deliveryDate();
+        const elements = [...document.querySelectorAll('.delivery_date')];
+        elements.map(element => {
+            element.textContent = `${date.day} ${date.dayNum} ${date.month}`;
+        });
+    } setDate();
 });
 

@@ -44,6 +44,24 @@
     display: none !important;
 }
 
+/* buttons */
+
+
+#show_filter_result {
+    background-color: #3c3f3f;
+    border-color: #3c3f3f;
+}
+#show_filter_result.active {
+    background-color: #55b49e;
+    border-color: #55b49e;
+}
+
+.item-list-element--info + span {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 50%;
+}
 
 
 /* cart enumerate */
