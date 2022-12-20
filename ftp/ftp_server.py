@@ -3,7 +3,6 @@ from datetime import date
 from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
-from django.core.management import BaseCommand
 
 FTP_IP = '127.0.0.1'
 FTP_PORT = '21'
@@ -14,7 +13,6 @@ ftpd_log_path = 'A:\code\Current\dj\core\\ftp\\log\\ftpd.log'
 perm = 'elradfmw'
 
 request_url = 'http://127.0.0.1:8000/ftp/'
-
 
 # =========================================== #
 def request(user):
@@ -113,9 +111,9 @@ class MyDummyAuthorizer(DummyAuthorizer):
 
     def validate_authentication(self, username, password, handler):
         """
-            Raises AuthenticationFailed if supplied username and
-            password don't match the stored credentials, else return
-            None.
+        Raises AuthenticationFailed if supplied username and
+        password don't match the stored credentials, else return
+        None.
         """
         msg = "Authentication failed"
         if not self.has_user(username):
@@ -128,12 +126,11 @@ class MyDummyAuthorizer(DummyAuthorizer):
             if self.user_table[username]['pwd'] != received_pass:
                 raise AuthenticationFailed(msg)
             
-# FTP Handler
+# FTP Handler 
 class MyHandler(FTPHandler):
     """
-        Callback methods
+    Callback methods
     """
-
     def on_connect(self):
         print("%s:%s connected" % (self.remote_ip, self.remote_port))
 
@@ -196,7 +193,14 @@ class MyHandler(FTPHandler):
         os.remove(file)
 
 # FTP start server
-class Command(BaseCommand):
+class Command(object):
+
+    def __init__(self):
+        self.handler = MyHandler
+        self.authorizer = MyDummyAuthorizer()
+        self.handler.authorizer = self.authorizer
+        self.server = FTPServer((FTP_IP, FTP_PORT), self.handler)
+
     def handle(self, *args, **options):
         """
             To achieve the main logic, start ftp service
@@ -205,14 +209,22 @@ class Command(BaseCommand):
             :return:
         """
         
-        handler = MyHandler
-        authorizer = MyDummyAuthorizer()
-        logging.basicConfig(level=logging.WARNING, filename=ftpd_log_path, format='%(process)d-%(levelname)s-%(message)s', datefmt='%d-%b-%y %H:%M:%S')
-        handler.authorizer = authorizer
-        ftp_server(authorizer)
-        server = FTPServer((FTP_IP, FTP_PORT), handler)
-        server.serve_forever()
-
+        # logging
+        logging.basicConfig(
+            level=logging.WARNING, 
+            filename=ftpd_log_path, 
+            format='%(process)d-%(levelname)s-%(message)s', 
+            datefmt='%d-%b-%y %H:%M:%S')
+        
+        ftp_server(self.authorizer)
+        self.start()
+        
+    def start(self): 
+        self.server.serve_forever()
+     
+    def stop(self):
+        self.server.close_all()
+    
 # --> server runer
 if __name__ == '__main__':
     command = Command()

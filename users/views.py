@@ -26,7 +26,7 @@ from mail.views import send_email
 from core.settings import DEFAULT_FROM_EMAIL
 
 # -- ftp
-from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user
+from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user, get_users_list
 
 # -- reciver
 from django.db.models.signals import pre_save
@@ -158,6 +158,7 @@ class SignUpExtendedView(FormView):
                     else:
                         messages.error(request, 'Vendor Folder was not created, folder name already exists')
                     
+
                 user_type_name = {
                     '0': 'staff',
                     '1': 'user',

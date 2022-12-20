@@ -89,3 +89,137 @@ Traceback (most recent call last):
     self.ftp_msg['missing']['msg'] = msg
 KeyError: 'missing'
 "GET /ftp/vrv.lfm@gmail.com/ HTTP/1.1" 500 73591
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 166, in post
+    server.end()
+TypeError: end() missing 1 required positional argument: 'self'
+"POST /user/signup/extended/ HTTP/1.1" 500 85993
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 166, in post
+    server.end()
+  File "A:\code\Current\dj\core\ftp\ftp_server.py", line 220, in end
+    self.server.close_all()
+AttributeError: 'Command' object has no attribute 'server'
+"POST /user/signup/extended/ HTTP/1.1" 500 89318
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 166, in post
+    server.end()
+  File "A:\code\Current\dj\core\ftp\ftp_server.py", line 227, in end
+    self.server.close_all()
+AttributeError: 'Command' object has no attribute 'server'
+"POST /user/signup/extended/ HTTP/1.1" 500 89347
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 166, in post
+    server.stop()
+  File "A:\code\Current\dj\core\ftp\ftp_server.py", line 228, in stop
+    self.server.close_all()
+AttributeError: 'Command' object has no attribute 'server'
+"POST /user/signup/extended/ HTTP/1.1" 500 89299
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 166, in post
+    server.stop()
+  File "A:\code\Current\dj\core\ftp\ftp_server.py", line 228, in stop
+    print(self.server)
+AttributeError: 'Command' object has no attribute 'server'
+"POST /user/signup/extended/ HTTP/1.1" 500 89305
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 165, in post
+    command.stop()
+  File "A:\code\Current\dj\core\ftp\ftp_server.py", line 228, in stop
+    print(self.server)
+AttributeError: 'Command' object has no attribute 'server'
+"POST /user/signup/extended/ HTTP/1.1" 500 89116
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Not Found: /
+"GET / HTTP/1.1" 404 2798
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Not Found: /white
+"GET /white HTTP/1.1" 404 2831
+Not Found: /wendor
+"GET /wendor HTTP/1.1" 404 2834
+Not Found: /wendors/white
+"GET /wendors/white HTTP/1.1" 404 2855
+Not Found: /wendor/white
+"GET /wendor/white HTTP/1.1" 404 2852
+Not Found: /
+"GET / HTTP/1.1" 404 2798
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
