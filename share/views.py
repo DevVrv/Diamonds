@@ -31,14 +31,15 @@ def create_share(request):
             'share_list': json.dumps(requestData['comparing']),
             'share_key': rand_string
         }
-        shareModel = ShareModel.objects.filter(user_id = request.user.id)
-        if not shareModel.exists():
-            shareModel.create(**shareKwargs)
-        else:   
-            shareModel.update(**shareKwargs)
+        share_model = ShareModel.objects.filter(user_id = request.user.id).filter(share_type = shareKwargs['share_type'])
+        if share_model.exists():
+            share_model.update(**shareKwargs)
+        else:
+            share_model.create(**shareKwargs)
 
+        
         # * create share link
-        share_link = f'{request.build_absolute_uri()}{request.user.id}/{shareModel[0].id}/{shareModel[0].share_key}/'
+        share_link = f'{request.build_absolute_uri()}{request.user.id}/{share_model[0].id}/{share_model[0].share_key}/'
         share_link = share_link.replace('create', 'get')
 
         # * create responce data

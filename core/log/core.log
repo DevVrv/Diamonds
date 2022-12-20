@@ -2424,3 +2424,117 @@ Not Found: /favicon.ico
 "GET /favicon.ico HTTP/1.1" 404 2849
 Not Found: /favicon.ico
 "GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /share/get/1/1/bnfkkyov/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\share\views.py", line 66, in get_share
+    share = get_object_or_404(share_model, user_id=user_id, id=share_id, share_key=share_key)
+NameError: name 'share_model' is not defined
+"GET /share/get/1/1/bnfkkyov/ HTTP/1.1" 500 66732
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /orders/search/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\orders\views.py", line 268, in order_search
+    orders_model = orders_model.filter(created_at__range=[f'{date_from} 00:00:00.{time_zone}', timezone.now()])
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1420, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1438, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1445, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1532, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1562, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1478, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1303, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\lookups.py", line 276, in get_prep_lookup
+    rhs_value = self.lhs.output_field.get_prep_value(rhs_value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1554, in get_prep_value
+    value = super().get_prep_value(value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1433, in get_prep_value
+    return self.to_python(value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1536, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“231233-12-21 00:00:00.926514+00:00” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] format.']
+"POST /orders/search/ HTTP/1.1" 500 19575
+Internal Server Error: /orders/search/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\orders\views.py", line 268, in order_search
+    orders_model = orders_model.filter(created_at__range=[f'{date_from} 00:00:00.{time_zone}', timezone.now()])
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1420, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1438, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1445, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1532, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1562, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1478, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1303, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\lookups.py", line 276, in get_prep_lookup
+    rhs_value = self.lhs.output_field.get_prep_value(rhs_value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1554, in get_prep_value
+    value = super().get_prep_value(value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1433, in get_prep_value
+    return self.to_python(value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1536, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“232020-03-12 00:00:00.314330+00:00” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] format.']
+"POST /orders/search/ HTTP/1.1" 500 19575
+Internal Server Error: /orders/search/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\orders\views.py", line 268, in order_search
+    orders_model = orders_model.filter(created_at__range=[f'{date_from} 00:00:00.{time_zone}', timezone.now()])
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1420, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1438, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\query.py", line 1445, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1532, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1562, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1478, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\sql\query.py", line 1303, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\lookups.py", line 276, in get_prep_lookup
+    rhs_value = self.lhs.output_field.get_prep_value(rhs_value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1554, in get_prep_value
+    value = super().get_prep_value(value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1433, in get_prep_value
+    return self.to_python(value)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\db\models\fields\__init__.py", line 1536, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ['“231231-03-12 00:00:00.578629+00:00” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] format.']
+"POST /orders/search/ HTTP/1.1" 500 19575

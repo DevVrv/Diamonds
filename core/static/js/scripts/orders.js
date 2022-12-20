@@ -95,7 +95,6 @@ class Orders {
         
         // * key
         this.key = 'details';
-
         this.alert_container = document.querySelector('.alert_block');
 
         this.init();
@@ -111,6 +110,7 @@ class Orders {
         this.search('search/');
         this.searchShow();
         this.removeOrder();
+        this.dateValidation();
     }
 
     // debug mode
@@ -354,12 +354,24 @@ class Orders {
         const orders = JSON.parse(responce.orders);
         const date = responce.date;
 
-
-
         context.ordersContainer.innerHTML = '';
-        orders.map((order, i) => {
-            context.ordersContainer.insertAdjacentHTML('beforeend', context.getOrderHTML(order, date, i));
-        });
+        
+        if (orders.length != 0) {
+            orders.map((order, i) => {
+                context.ordersContainer.insertAdjacentHTML('beforeend', context.getOrderHTML(order, date, i));
+            });
+        } else {
+            const empty = `
+            <div class="alert alert-warning mt-2 shadow-sm alert-dismissible fade show border-0 w-100" role="alert">
+                <div class="my-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
+                        <h5 class="h5 m-0 p-0">No orders were found for your request</h5>
+                    </div>
+                </div>
+            </div>`; 
+            context.ordersContainer.insertAdjacentHTML('beforeend', empty);
+        }
 
         context.orders.orderDetails = context.getElemetns(context.kwargs.orderDetails, context.ordersContainer);
         context.orders.orderInvoice = context.getElemetns(context.kwargs.orderInvoice, context.ordersContainer);
@@ -378,19 +390,39 @@ class Orders {
             });
         });
     }
+
+    // remove oreder callback
     afterRemoveOrder(responce, context) {
         const order = document.querySelector(`[data-orders-item="${responce.number}"]`);
         order.remove();
-        const alert = `<div class="alert alert-warning mt-2 shadow-sm alert-dismissible fade show border-0" role="alert">
-                            <div class="my-2">
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
-                                    <h5 class="h5 m-0 p-0">Order #${responce.number} was removed.</h5>
-                                </div>
-                                <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        </div>`;
+        const alert = `
+            <div class="alert alert-warning mt-2 shadow-sm alert-dismissible fade show border-0" role="alert">
+                <div class="my-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
+                        <h5 class="h5 m-0 p-0">Order #${responce.number} was removed.</h5>
+                    </div>
+                    <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>`;
         context.alert_container.innerHTML = alert;
+        document.documentElement.scrollTo({
+            'top': 0
+        });
+    }
+
+    // date validator
+    dateValidation() {
+        this.dateInputs = [...this.searchForm.querySelectorAll('input[type="date"]')];
+        this.dateInputs.map(input => {
+            input.addEventListener('input', () => {
+                if (input.value.length > 10) {
+                    let value = input.value;
+                    value = value.slice(value.length - 10, value.length);
+                    input.value = value;
+                }
+            });
+        });
     }
 }
 
