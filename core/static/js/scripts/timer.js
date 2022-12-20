@@ -1,64 +1,33 @@
 "use strict";
 
-function timer(containerID, clockID, link, timer = 60) {
+function timer(timerContainer = '#resend_timer_container', timerSelector='#resend_timer', resend_link=String) {
 
-    // -- button HTML
-    const buttonHTML = 
-    `
+    // resend button
+    const resendButton = `
         <div class="login__info w-100 d-flex align-items-center justify-content-between py-3">
             <span>Didn't get the code ?</span>
-            <a href="${link}" class="btn btn-secondary" id="resend_mail_code">Send the code again</a>
+            <a href="${resend_link}" class="btn btn-secondary" id="resend_mail_code">Send the code again</a>
         </div>
     `;
     
-    // -- get container + get clock
-    const container = document.querySelector(containerID);
-    let clock = null;
-    if (container !== undefined) {
-        clock = container.querySelector(clockID);
-    }
-
-    // -- get now time
-    const time = Number(Date.now());
-
-    // -- create storage
-    if (localStorage.getItem('timer') === null) {
-        localStorage.setItem('timer', time);
-    }
-
-    //  -- update clock
-    function updateClock() {
-
-        // -- get date time now
-        const timeNow = Number(Date.now());
-        const timeFromStorage = Number(localStorage.getItem('timer'));
-
-        // -- get difference
-        let difference = Math.floor((timeNow / 1000) - (timeFromStorage / 1000));
-
-        // -- check difference
-        if (difference >= timer) {
-            
-            // -- clear storage
-            localStorage.clear();
-
-            // -- get clock parent + remove
-            let clockParent = clock.parentElement;
-            clockParent.remove();
-
-            // -- add button
-            container.innerHTML = buttonHTML;
-
-        }
-        else {
-            // -- set timer text content
-            clock.textContent = timer - difference;
-        }
-
-    }
-
-    if (clock !== null) {
-        let timerID = setInterval(updateClock, 1000);
+    // timer params
+    const timer_container = document.querySelector(timerContainer);
+    const timer_element = timer_container.querySelector(timerSelector);
+    if (timer_element) {
+        const timer_parent = timer_element.parentElement;
+        let timer_value = Number(timer_element.textContent);
+        
+        const timerId = setInterval(() => {
+            if (timer_value > 0) {
+                timer_element.textContent = timer_value -= 1;
+            } else {
+                if (timer_parent) {
+                    timer_container.insertAdjacentHTML('beforebegin', resendButton);
+                    timer_parent.remove();
+                    clearInterval(timerId)
+                }
+            }
+        }, 1000)
     }
 
 }

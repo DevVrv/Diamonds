@@ -51,24 +51,18 @@
 
                     {% comment %} send new code {% endcomment %}
                     <div class="col-12 mt-4 d-flex flex-column align-items-center justify-content-center" id="resend_timer_container">
-
                         {% if timer %}
-
                             <div class="login__info w-100 d-flex align-items-center justify-content-center py-3">
                                 <span class="d-block">You will be able to resend the code after</span>
-                                <span class="d-block ms-2 fs-4 link" id="resend_timer"></span>
+                                <span class="d-block ms-2 fs-4 link" id="resend_timer">{{timer_remains}}</span>
                                 <i class="fa fa-clock-o ms-1 fs-5 link" aria-hidden="true"></i>
                             </div>
-
                         {% else %}
-                            
                             <div class="login__info w-100 d-flex align-items-center justify-content-between py-3">
                                 <span>Didn't get the code ?</span>
                                 <a href="{% url 'signin_confirm_resend' %}" id="resend_mail_code" class="btn btn-secondary">Send the code again</a>
                             </div>
-
                         {% endif %}
-
                     </div>
                     
                     {% comment %} submit {% endcomment %}
@@ -76,8 +70,10 @@
                         <button type="submit" class="btn btn-primary w-100">
                             Confirm
                         </button>
-                    </div>
 
+                        
+                        <p class="mt-4">Return to <a href="{% url 'signin' %}" class="link">Sign In</a></p>
+                    </div>
                 </div>
 
             </form>
@@ -93,7 +89,8 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
     {% comment %} ! Bootstrap ! {% endcomment %}
-    <script src="{% static 'js/scripts/timer.min.js' %}"></script>
+    <script src="{% static 'js/scripts/timer.js' %}"></script>
+    <script src="{% static 'js/scripts/bootstrap/bootstrap.bundle.min.js' %}"></script>
     <script>
         timer('#resend_timer_container', '#resend_timer', '/user/signin/confirm/');
     </script>

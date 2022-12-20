@@ -114,8 +114,6 @@ def filtering(request):
                 filtered = filtered.filter(**nums)
 
         # --> filter by strs
-        print(requestStr)
-
         if (requestStr):
 
             # conver strs keys to __in
@@ -146,9 +144,6 @@ def filtering(request):
 
                 except KeyError:
                     continue
-            
-            print(filtered)
-            print(strs)
 
             if filtered == False:
                 filtered = diamonds.filter(**strs)

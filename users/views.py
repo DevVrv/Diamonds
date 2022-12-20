@@ -1,5 +1,8 @@
 import os
 import hashlib
+import time
+
+from django.contrib.staticfiles import finders
 
 from django.views.generic import FormView
 from django.contrib.auth.views import PasswordChangeView
@@ -13,22 +16,22 @@ from django.contrib.auth import login, logout
 
 from django.contrib import messages
 
-# -- models
+#  models
 from .models import CustomUser, CompanyDetails, ShippingAddress
 
-# -- forms
+#  forms
 from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm, PasswordRecoveryForm, CompanyDetailsForm,  ShippingFormSet, CustomUserChangeForm, ChangePasswordForm
 
-# -- tools
+#  tools
 from .verification_code import create_code
 from .inspector import Inspector
 from mail.views import send_email
 from core.settings import DEFAULT_FROM_EMAIL
 
-# -- ftp
+#  ftp
 from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user, get_users_list
 
-# -- reciver
+#  reciver
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
@@ -40,10 +43,10 @@ logger = logging.getLogger(__name__)
 
 # SIGN UP
 
-# -- sign up view
+#  sign up view
 class SignUpView(FormView):
     
-    # -- class params
+    #  class params
     success_url = 'signin'
     template_name = 'signup.html'
     form_class = UsersCreationForm
@@ -51,15 +54,15 @@ class SignUpView(FormView):
         'title': 'Registration'
     }
     
-    # --> POST
+    # > POST
     def post(self, request, *args: str, **kwargs):
 
-        # <-- get form and form data
+        #  get form and form data
         form = self.form_class(self.request.POST)
         if self.request.recaptcha_is_valid:
             if form.is_valid():
                 
-                # <-- get user name from email
+                #  get user name from email
                 new_user = {
                     'username': form.cleaned_data.get('email'),
                     'email': form.cleaned_data.get('email'),
@@ -90,17 +93,17 @@ class SignUpView(FormView):
         else:
             return redirect(reverse_lazy('signup'))
 
-    # <-- GET
+    #  GET
     def get(self, request, *args, **kwargs):
 
-        # -- permissions
+        #  permissions
         permission = Inspector(request)
         if permission.auth:
             return redirect(reverse_lazy('user_info'))
 
         return super().get(request, *args, **kwargs)
         
-# -- sign up extended view
+#  sign up extended view
 class SignUpExtendedView(FormView):
     form_class = ExtendedUsersCreationForm
     template_name = 'signup_extended.html'
@@ -109,15 +112,15 @@ class SignUpExtendedView(FormView):
         'title': 'Registration Extended'
     }
     
-    # --> POST
+    # > POST
     def post(self, request, *args: str, **kwargs):
 
-        # <-- get form and form data
+        #  get form and form data
         form = self.form_class(self.request.POST)
         if self.request.recaptcha_is_valid:
             if form.is_valid():
                 
-                # <-- get user name from email
+                #  get user name from email
                 new_user = {
                     'username': form.cleaned_data.get('email'),
                     'email': form.cleaned_data.get('email'),
@@ -174,10 +177,10 @@ class SignUpExtendedView(FormView):
         else:
             return redirect(reverse_lazy('signup_extended'))
 
-    # <-- GET
+    #  GET
     def get(self, request, *args, **kwargs):
 
-        # -- permissions
+        #  permissions
         permission = Inspector(request)
         permission_list = ['users.add_customuser']
         permission.has_permissions(permissions_list=permission_list)
@@ -185,7 +188,7 @@ class SignUpExtendedView(FormView):
 
 # SIGN OUT
 
-# -- sign out
+#  sign out
 class SignOut(TemplateView):
     def get(self, request, *args, **kwargs):
         logout(request)
@@ -194,7 +197,7 @@ class SignOut(TemplateView):
 
 # SIGN IN
 
-# -- sign in
+#  sign in
 class SignInView(FormView):
 
     success_url = reverse_lazy('signin_confirm')
@@ -204,63 +207,64 @@ class SignInView(FormView):
         'title': 'Sign In'
     }
 
-    # --> POST
+    # > POST
     def post(self, request, *args, **kwargs):
         form = self.form_class(self.request.POST)
 
-        # -- recaptcha true
+        #  recaptcha true
         if self.request.recaptcha_is_valid:
             
-            # -- form valid
+            #  form valid
             if form.is_valid():
                 user_type = form.cleaned_data.get('user_type')
                 user_name = form.cleaned_data.get('username')
                 
 
-                # --> client door
+                # > client door
                 if user_type == '1' or user_type == '0':
 
-                    # -- generate code
+                    #  generate code
                     code = create_code(request, form.cleaned_data.get('username'), form.cleaned_data.get('remember_me'))
                     
-                    # --> send email
+                    # > send email
                     send_email({
-                        'subject': 'Labrilliante email confirm',
+                        'subject': 'Labrilliante e-mail confirmation',
                         'email': [self.request.session['email']],
                         'template': '_mail_confirm.html',
                         'context': {
+                            'title': 'Confirm your e-mail at b2b.labrilliante.com',
                             'code': code,
                             'login': self.request.session['email']
                         }
                     })
 
-                # --> vendor door
+                # > vendor door
                 elif user_type == '2':
                     user = CustomUser.objects.get(username=user_name)
                     login(request, user)
                     messages.success(request, 'You have been successfully logged in')
                     return redirect(reverse_lazy('white'))
 
-                # -- unexpected
+                #  unexpected
                 else:
                     messages.error(request, 'Check the entered data')
                     return redirect(reverse_lazy('signin'))
         
-        # -- recaptcha false
+        #  recaptcha false
         else:
             return redirect(reverse_lazy('signin'))
 
         return super().post(request, *args, **kwargs)
 
-    # <-- GET
+    #  GET
     def get(self, request, *args, **kwargs):
-        # -- permissions
+        #  permissions
         permission = Inspector(request)
         if permission.auth:
             return redirect(reverse_lazy('user_info'))
         return super().get(request, *args, **kwargs)
 
-# -- auth confirm
+#  auth confirm
 class SignInConfirmView(FormView):
 
     template_name = 'signin_confirm.html'
@@ -270,7 +274,54 @@ class SignInConfirmView(FormView):
     }
     success_url = 'user_info'
 
-    # --> POST
+    # resend the confirm code
+    def send_code(self):
+        mail = self.request.session['email']
+        remember = self.request.session['remember']
+        code = create_code(self.request, mail, remember)
+        logo = finders.find('img/logo/LaBrilliante.svg')
+        send_email({
+            'subject': 'Labrilliante e-mail confirmation',
+            'email': [self.request.session['email']],
+            'template': '_mail_confirm.html',
+            'context': {
+                'title': 'Confirm your e-mail at b2b.labrilliante.com',
+                'site': 'b2b.labrilliante.com',
+                'logo': logo,
+                'code': code,
+                'login': self.request.session['email']
+            }
+        })
+        messages.info(self.request, 'The new code has been sent to your email')
+
+    #  get timer
+    def timer_remains(self, timer_len = 10):
+        timer = {
+            'timer': False,
+            'stamp': None,
+            'remains': None,
+            'current': time.time()
+        }
+        try:
+            timer['stamp'] = self.request.session['timer_stamp']
+            timer['remains'] = timer_len - int(timer['current'] - timer['stamp'])
+            if timer['remains'] < 0: 
+                timer['remains'] = 0
+                timer['timer'] = False
+            else:
+                timer['timer'] = True
+
+        except KeyError:
+            pass
+        return timer
+
+    # create timer
+    def timer_create(self):
+        remains = self.timer_remains()
+        self.request.session['timer'] = remains['timer']
+        self.request.session['timer_stamp'] = time.time()
+
+    # > POST
     def post(self, request, *args, **kwargs):
 
         form = self.form_class(request.POST)
@@ -296,52 +347,42 @@ class SignInConfirmView(FormView):
 
         return super().post(request, *args, **kwargs)
 
-    # <-- GET
+    #  GET
     def get(self, request, *args, **kwargs):
-        # -- permissions
+        #  permissions
         permission = Inspector(request)
         if permission.inspect():
             return redirect(reverse_lazy('user_info'))
+
+        # timer remains
+        remains = self.timer_remains()
+        self.extra_context['timer'] = remains['timer']
+        self.extra_context['timer_remains'] = remains['remains']
+        self.extra_context['email'] = self.request.session['email']
         return super().get(request, *args, **kwargs)
 
-# -- auth confirm replay
+#  auth confirm replay
 class SignInConfirmResend(SignInConfirmView):
 
-    # <-- GET
+    #  GET
     def get(self, request, *args: str, **kwargs):
 
-        # -- permissions
+        #  permissions
         permission = Inspector(request)
         if permission.inspect():
             return redirect(reverse_lazy('user_info'))
-
-        mail = self.request.session['email']
-        remember = self.request.session['remember']
-
-        # -- generate code
-        code = create_code(request, mail, remember)
         
-        # -- set timer
-        self.extra_context['timer'] = True
-        
-        # --> send email
-        send_email({
-            'subject': 'Labrilliante email confirm',
-            'email': [self.request.session['email']],
-            'template': '_mail_confirm.html',
-            'context': {
-                'code': code,
-                'login': self.request.session['email']
-            }
-        })
+        remains = self.timer_remains()
+        if not remains['timer']:
+            self.timer_create()
+            self.send_code()
 
-        messages.info(self.request, 'New code was sended on your email')
         return redirect(reverse_lazy('signin_confirm'))
 
 
 # PASSWORD RECOVERY
 
-# -- restor password
+#  restor password
 class PasswordRecovery(FormView):
 
     form_class = PasswordRecoveryForm
@@ -352,7 +393,7 @@ class PasswordRecovery(FormView):
         'resend_url': 'password_recovery_resend'
     }
 
-    # --> POST
+    # > POST
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
@@ -361,10 +402,9 @@ class PasswordRecovery(FormView):
             code = create_code(request, form.cleaned_data.get('mail'))
             self.request.session['new_pass'] = form.cleaned_data.get('password1')
             
-
-            # --> send email
+            # > send email
             send_email({
-                'subject': 'Password recovery',
+                'subject': 'Labrilliante password recovery confirmation',
                 'email': [self.request.session['email']],
                 'template': '_mail_confirm.html',
                 'context': {
@@ -374,22 +414,21 @@ class PasswordRecovery(FormView):
                 }
             })
 
-
             return redirect(reverse_lazy(self.success_url))
 
         return super().post(request, *args, **kwargs)
 
-    # <-- get
+    #  get
     def get(self, request, *args, **kwargs):
 
-        # -- permissions
+        #  permissions
         permission = Inspector(request)
         if permission.inspect():
             return redirect(reverse_lazy('signin'))
 
         return super().get(request, *args, **kwargs)
 
-# -- auth confirm
+#  auth confirm
 class PasswordRecoveryConfirm(FormView):
 
     template_name = 'password_recovery_confirm.html'
@@ -398,40 +437,40 @@ class PasswordRecoveryConfirm(FormView):
         'title': 'Password recovery confirm',
     }
     success_url = 'signin'
-
-    # --> POST
-    def post(self, request, *args, **kwargs):
-        password = self.request.session['new_pass']
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            
-            if int(self.request.session['code']) == int(form.cleaned_data.get('code')):
-                user = CustomUser.objects.get(email = self.request.session['email'])
-                user.password = make_password(password)
-                user.save()
-                messages.success(self.request, 'Your password has been successfully updated')
-                return redirect(reverse_lazy(self.success_url))
-
-        return super().post(request, *args, **kwargs)
-
-# -- auth confirm replay
-class PasswordRecoveryResend(PasswordRecoveryConfirm):
     
-    # <-- GET
-    def get(self, request, *args: str, **kwargs):
-        
-        mail = self.request.session['email']
+    #  get timer
+    def timer_remains(self, timer_len = 60):
+        timer = {
+            'timer': False,
+            'stamp': None,
+            'remains': None,
+            'current': time.time()
+        }
+        try:
+            timer['stamp'] = self.request.session['timer_stamp']
+            timer['remains'] = timer_len - int(timer['current'] - timer['stamp'])
+            if timer['remains'] < 0: 
+                timer['remains'] = 0
+                timer['timer'] = False
+            else:
+                timer['timer'] = True
 
-        # -- generate code
-        code = create_code(request, mail)
-        
-        # -- set timer
-        self.extra_context['timer'] = True
-        
-        # --> send email
+        except KeyError:
+            pass
+        return timer
+
+    # create timer
+    def timer_create(self):
+        remains = self.timer_remains()
+        self.request.session['timer'] = remains['timer']
+        self.request.session['timer_stamp'] = time.time()
+
+    # send email code
+    def send_code(self):
+        mail = self.request.session['email']
+        code = create_code(self.request, mail)
         send_email({
-            'subject': 'Password recovery',
+            'subject': 'Labrilliante password recovery confirmation',
             'email': [self.request.session['email']],
             'template': '_mail_confirm.html',
             'context': {
@@ -440,14 +479,48 @@ class PasswordRecoveryResend(PasswordRecoveryConfirm):
                 'login': self.request.session['email']
             }
         })
+        messages.info(self.request, 'The new code has been sent to your email')
+    
+    # POST
+    def post(self, request, *args, **kwargs):
+        password = self.request.session['new_pass']
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            if int(self.request.session['code']) == int(form.cleaned_data.get('code')):
+                user = CustomUser.objects.get(email = self.request.session['email'])
+                user.password = make_password(password)
+                user.save()
+                messages.success(self.request, 'Your password has been successfully updated')
+                return redirect(reverse_lazy(self.success_url))
+            else:
+                messages.error(request, 'Invalid Code')
+                return redirect(reverse_lazy('password_recovery_confirm'))
+        return super().post(request, *args, **kwargs)
 
-        messages.info(self.request, 'New code was sended on your email')
+    # GET
+    def get(self, request, *args, **kwargs):
+        remains = self.timer_remains()
+        self.extra_context['timer'] = remains['timer']
+        self.extra_context['timer_remains'] = remains['remains']
+        self.extra_context['email'] = self.request.session['email']
+        return super().get(request, *args, **kwargs)
+
+#  auth confirm replay
+class PasswordRecoveryResend(PasswordRecoveryConfirm):
+    
+    #  GET
+    def get(self, request, *args: str, **kwargs):
+        remains = self.timer_remains()
+        if not remains['timer']:
+            self.timer_create()
+            self.send_code()
+
         return redirect(reverse_lazy('password_recovery_confirm'))
 
 
 # USER INFO
 
-# -- user info
+#  user info
 class UserInfo(TemplateView):
     template_name = 'user_info.html'
     user_form = CustomUserChangeForm
@@ -455,7 +528,7 @@ class UserInfo(TemplateView):
     shipping_forms = ShippingFormSet
     success_url = 'user_info'
 
-    # -- update shipping
+    #  update shipping
     def update_shipping(self):
 
         shipping = ShippingAddress.objects.filter(user_id=self.request.user.pk)
@@ -465,7 +538,7 @@ class UserInfo(TemplateView):
 
             new_addresses = []
 
-            # -- create address data
+            #  create address data
             for item in self.shipping_forms.cleaned_data:
                 if item:
                     item['user_id'] = self.request.user.pk
@@ -474,7 +547,7 @@ class UserInfo(TemplateView):
                     new_addresses.append(item)
 
 
-            # -- update or create address data
+            #  update or create address data
             for index, item in enumerate(new_addresses):
                 if index < len(shipping):
                     shipping[index].shipping_company_name = item['shipping_company_name']
@@ -496,7 +569,7 @@ class UserInfo(TemplateView):
         else:
             return False
 
-    # -- get company form
+    #  get company form
     def get_company(self):
 
         # if compnay is not registered - create company details
@@ -518,23 +591,24 @@ class UserInfo(TemplateView):
         # return form obj
         return form
 
-    # --> POST
+    # > POST
     def post(self, request, *args, **kwargs):
 
-        # -- personal details
+        #  personal details
         self.user_form = self.user_form(request.POST, instance=CustomUser.objects.get(pk=request.user.pk))
         if self.user_form.is_valid():
             self.user_form.save()
         else:
+            print(self.user_form.errors)
             messages.error(request, 'A user with this data already exists')
             return redirect(reverse_lazy('user_info'))
 
-        # -- company details
+        #  company details
         self.company_form = self.company_form(request.POST, instance=CompanyDetails.objects.get(user_id=request.user.pk))
         if self.company_form.is_valid():
             self.company_form.save()
         
-        # -- shipping details
+        #  shipping details
         self.shipping_forms = self.shipping_forms(request.POST)
         if self.shipping_forms.is_valid():
             shipping_changed = self.update_shipping()
@@ -567,20 +641,20 @@ class UserInfo(TemplateView):
 
         return redirect(reverse_lazy(self.success_url))
 
-    # <-- GET
+    #  GET
     def get(self, request, *args: str, **kwargs):
 
         permission = Inspector(request, {'level': 0, 'type': 1})
         if not permission.inspect():
             return redirect(reverse_lazy('signin'))
 
-        # -- user form
+        #  user form
         self.user_form = self.user_form(instance=request.user or None)
 
-        # -- company form
+        #  company form
         self.company_form = self.get_company()
         
-        # -- shipping formset
+        #  shipping formset
         shipping = ShippingAddress.objects.filter(user_id = request.user.id)
         if not shipping.exists():
             self.shipping_forms = self.shipping_forms(queryset= ShippingAddress.objects.none())
@@ -589,7 +663,7 @@ class UserInfo(TemplateView):
 
 
 
-        # -- extra context
+        #  extra context
         self.extra_context = {
             'title': 'User Info',
             'user_form': self.user_form,
@@ -601,7 +675,7 @@ class UserInfo(TemplateView):
 
 # CHAGE PASSWORD
 
-# -- user info change pass
+#  user info change pass
 class ChangePassword(PasswordChangeView):
 
     template_name = 'change_pass.html'
@@ -611,30 +685,21 @@ class ChangePassword(PasswordChangeView):
     success_url = reverse_lazy('user_info')
     form_class = ChangePasswordForm
 
-    # --> POST
+    # > POST
     def post(self, request, *args, **kwargs):
-
         form = self.form_class(request.user, request.POST)
-
         if form.is_valid():
             messages.success(request, 'Your password was successfully changed')
         else:
             messages.error(request, form.errors.as_text())
-
         return super().post(request, *args, **kwargs)
 
-    # <-- GET
+    #  GET
     def get(self, request, *args, **kwargs):
-
-        # -- permissions
-        permission = Inspector(request)
-        if not permission.inspect():
-            return redirect(reverse_lazy('signin'))
-
         return super().get(request, *args, **kwargs)
 
 
-# * ------------------------------------------------------------------- receiver for update user level and user email
+# * - receiver for update user level and user email
 @receiver(pre_save, sender=CustomUser)
 def on_change(sender, instance: CustomUser, **kwargs):
     if instance.id is None: # new object will be created
@@ -662,6 +727,3 @@ def on_change(sender, instance: CustomUser, **kwargs):
                 instance.save()
         except:
             pass
-                
-
-            

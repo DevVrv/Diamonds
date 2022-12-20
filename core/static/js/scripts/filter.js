@@ -1870,7 +1870,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     density: 1,
                     steped: true,
                 },
-                replacePips: ["Fair", "Good", "Very Good", "Ideal", "Super Ideal"]
+                replacePips: ["Fair", "Good", "Very Good", "Excellent", "Ideal"]
             },
             options: {
                 key: 'cut'

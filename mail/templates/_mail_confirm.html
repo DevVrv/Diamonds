@@ -1,9 +1,17 @@
 {% load static %}
 
-<h2 style="font-size:22px;color:#5dc2aa; padding: 10px 0; border-bottom: 1px solid #c5c5c5;">{{title}} code for {{login}} <br> B2B Labrilliante com</h2>
+{% comment %} <img src="{{site}}{% static 'img/logo/Labrilliante.svg' %}" alt="Logo"> {% endcomment %}
 
-<p style="font-size: 14px; margin-top: 10px; padding: 10px 0; border-bottom: 1px solid #c5c5c5;">
-    Your {{title}} Code: <span style="color: #5dc2aa !important; font-size: 20px;">{{code}}</span>
+<h2 style="font-size:18px;color:#5dc2aa !important; padding: 10px 0; border-bottom: 1px solid #c5c5c5; text-decoration: none !important;">
+    {{title}} 
+</h2>
+
+<p style="font-size: 13px; margin-top: 10px; padding: 10px 0; border-bottom: 1px solid #c5c5c5;">
+    <img src="b2b.Labrilliante.com/static/img/logo/Labrilliante.svg" alt="">
+    Your confirmation code: <span style="color: #5dc2aa !important; font-size: 16px;">{{code}}</span>
 </p>
 
-<a href="b2b.labrilliante.com/filter/" style="font-size: 16px; margin-top: 40px; color: #5dc2aa !important;">Go to the b2b.Labrilliante.com</a>
+<p>
+    Go to the 
+    <a href="b2b.labrilliante.com/filter/" style="font-size: 16px; margin-top: 40px; color: #5dc2aa !important; text-decoration: none !important;">b2b.Labrilliante.com</a>
+</p>

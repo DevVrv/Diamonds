@@ -163,7 +163,7 @@ class Reader_CSV(object):
                 'vendor': vendor
             }
             
-            if diamond['color'].startswith('Fancy') or diamond['color'].startswith('fancy'):
+            if diamond['color'].startswith('Fancy') or diamond['color'].startswith('fancy') or diamond['color'].startswith('Light'):
                 fancy_diamonds.append(diamond);
             else:
                 diamonds.append(diamond)

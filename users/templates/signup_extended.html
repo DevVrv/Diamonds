@@ -36,7 +36,20 @@
                     
                     {% comment %} form inputs {% endcomment %}
                     {% for input in form %}
-                        {% if input.name != 'user_type' %}
+                        {% if input.name == 'password1'%}
+                            <div class="col-12 mt-4 w-100 d-flex">
+                                {{input}}
+                                <div class="dropdown ms-2">
+                                    <a class="btn-que px-3" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ?
+                                    </a>
+                                
+                                    <ul class="dropdown-menu border p-3" aria-labelledby="dropdownMenuLink">
+                                    <li><p>The password must consist of at least 8 characters and also contain numbers and letters</p></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% elif input.name != 'user_type' %}
                             <div class="col-12 mt-4">
                                 {{input}}
                             </div>
