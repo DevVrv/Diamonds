@@ -2538,3 +2538,191 @@ Traceback (most recent call last):
     raise exceptions.ValidationError(
 django.core.exceptions.ValidationError: ['“231231-03-12 00:00:00.578629+00:00” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] format.']
 "POST /orders/search/ HTTP/1.1" 500 19575
+Not Found: /
+"GET / HTTP/1.1" 404 2798
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Forbidden (CSRF cookie not set.): /ftp/vrv.lfm@Gmail.com/ggwp88883/
+"POST /ftp/vrv.lfm@Gmail.com/ggwp88883/ HTTP/1.1" 403 2870
+Forbidden (CSRF cookie not set.): /ftp/vrv.lfm@Gmail.com/ggwp88883/
+"POST /ftp/vrv.lfm@Gmail.com/ggwp88883/ HTTP/1.1" 403 2870
+Forbidden (CSRF cookie not set.): /ftp/vrv.lfm@Gmail.com/ggwp88883/
+"POST /ftp/vrv.lfm@Gmail.com/ggwp88883/ HTTP/1.1" 403 2870
+Forbidden (CSRF cookie not set.): /ftp/vrv.lfm@Gmail.com/ggwp88883/
+"POST /ftp/vrv.lfm@Gmail.com/ggwp88883/ HTTP/1.1" 403 2870
+Forbidden (CSRF cookie not set.): /ftp/vrv.lfm@Gmail.com/ggwp8888/
+"POST /ftp/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 403 2870
+Forbidden (CSRF cookie not set.): /ftp/vrv.lfm@Gmail.com/ggwp8888/
+"POST /ftp/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 403 2870
+Not Found: /ftp
+"GET /ftp HTTP/1.1" 404 2825
+Not Found: /ftp
+"GET /ftp HTTP/1.1" 404 2825
+Internal Server Error: /ftp/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+TypeError: _wrapped_view() missing 1 required positional argument: 'request'
+"GET /ftp/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65686
+Internal Server Error: /ftp/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+TypeError: _wrapped_view() missing 1 required positional argument: 'request'
+"GET /ftp/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65686
+Internal Server Error: /ftp/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 45, in ftp_autorizer
+    return HttpResponse(content=json.dumps(is_valid), content_type="application/json")
+UnboundLocalError: local variable 'is_valid' referenced before assignment
+"GET /ftp/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 63184
+Internal Server Error: /ftp/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 45, in ftp_autorizer
+    return HttpResponse(content=json.dumps(is_valid), content_type="application/json")
+UnboundLocalError: local variable 'is_valid' referenced before assignment
+"GET /ftp/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 63184
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+TypeError: ftp_autorizer() missing 1 required positional argument: 'password'
+"GET /ftp/validation/vrv.lfm@Gmail.com/ HTTP/1.1" 500 60352
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+TypeError: ftp_autorizer() missing 1 required positional argument: 'password'
+"GET /ftp/validation/vrv.lfm@Gmail.com/ HTTP/1.1" 500 60352
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+TypeError: ftp_autorizer() missing 1 required positional argument: 'password'
+"GET /ftp/validation/vrv.lfm@Gmail.com/ HTTP/1.1" 500 60352
+Not Found: /ftp/validation/vrv.lfm@Gmail.com//ggwp8888
+"POST /ftp/validation/vrv.lfm@Gmail.com//ggwp8888 HTTP/1.1" 404 3460
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\utils\deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\middleware\common.py", line 54, in process_request
+    path = self.get_full_path_with_slash(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\middleware\common.py", line 88, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888 HTTP/1.1" 500 70610
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 40, in ftp_autorizer
+    request.form
+AttributeError: 'WSGIRequest' object has no attribute 'form'
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65661
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 40, in ftp_autorizer
+    request.form
+AttributeError: 'WSGIRequest' object has no attribute 'form'
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65661
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 40, in ftp_autorizer
+    print(request.data)
+AttributeError: 'WSGIRequest' object has no attribute 'data'
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65675
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 40, in ftp_autorizer
+    print(request['data'])
+TypeError: 'WSGIRequest' object is not subscriptable
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65619
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\utils\datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 40, in ftp_autorizer
+    print(request.POST['data'])
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\utils\datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'data'
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 73931
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\utils\datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'form'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 40, in ftp_autorizer
+    print(request.POST['form'])
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\utils\datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'form'
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 73931
+Internal Server Error: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\ftp\views.py", line 40, in ftp_autorizer
+    print(request.POST.get['data'])
+TypeError: 'method' object is not subscriptable
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65617
+Not Found: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
+"POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 404 3230

@@ -193,10 +193,10 @@ class Control {
                                     <span>Culet: ${diamond.fields.culet}</span>
                                 </li>
                                 <li class="result__drop-li">
-                                    <span>Girdle: ${diamond.fields.gridle}</span>
+                                    <span>Girdle: ${diamond.fields.girdle}</span>
                                 </li>
                                 <li class="result__drop-li">
-                                    <span>Report №: ${diamond.fields.cert_number}</span>
+                                    <span>Report №: ${diamond.fields.stock}</span>
                                 </li>
                                 <li class="result__drop-li">
                                     <span>Fluour: ${diamond.fields.fluor}</span>
