@@ -1,90 +1,42 @@
-import os, logging, requests, hashlib, json
+import json
+import logging
+import requests
+import os
+
 from datetime import date
 from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 from pyftpdlib.handlers import FTPHandler
-from pyftpdlib.servers import FTPServer
+from pyftpdlib.servers import ThreadedFTPServer
 
-FTP_IP = '127.0.0.1'
-FTP_PORT = '21'
+# =========================================== #
 
-cfg = 'A:\code\Current\dj\core\\ftp\config\\ftp_config.cfg'
-ftp_folders = 'A:\code\Current\dj\core\\ftp\\ftp_folders'
-ftpd_log_path = 'A:\code\Current\dj\core\\ftp\\log\\ftpd.log'
 perm = 'elradfmw'
-
+ftpd_log_path = 'A:\code\Current\dj\core\\ftp\\log\\ftpd.log'
+ftp_folders = 'A:\code\Current\dj\core\\ftp\\ftp_folders'
 request_url = 'http://127.0.0.1:8000/ftp'
 
 # =========================================== #
 
-
 # csv request 
 def csv_request(user):
-    responce = requests.get(f'{request_url}{user}/')
+    responce = requests.get(f'{request_url}/{user}/')
     return responce
 
 # validation request
-def validation_request(user, password):
-    url = f'{request_url}/validation/{user}/'
+def validation_request(username, password):
+
+    # create token 
+    url = f'{request_url}/validation/{username}/'
     get_request = requests.get(url)
     get_request_content = json.loads(get_request.content)
     
-    token = get_request_content['token']
-    data = {'username': user, 'password': password}
+    # send request
+    token = get_request_content
+    data = {'username': username, 'password': password}
     header = {'X-CSRFToken': token}
     cookies = {'csrftoken': token}
-    resp = requests.post(f'{url}', data=json.dumps(data), headers=header, cookies=cookies)
-
-    return resp
-
-# ftp server preparing + add user list to autorizer
-def ftp_server(autorizer):
-    user_list = get_users_list(cfg)
-    for user in user_list:
-        name, password,  = user
-        homedir = ftp_folders + f'\{name}'
-        try:
-            autorizer.add_user(name, password, homedir=homedir, perm=perm)
-        except Exception as e:
-            print(e)
-
-# get FTP users from cfg
-def get_users_list(userfile):
-    # Define a list of users
-    user_list = []
-    with open(userfile) as f:
-        for line in f:
-            if not line.startswith('#') and line:
-                user_list.append(line.split())
-    return user_list
-
-# get ftp user from cfg
-def get_ftp_user(username):
-    name = username
-    with open(cfg) as f:
-        for line in f:
-            if line.startswith(name):
-                return line.split()
-        return None
-
-# add new ftp user in cfg
-def add_ftp_user(user_info):
-    with open(cfg, 'r') as fp:
-        lines = []
-        for line in fp:
-            lines.append(line)
-    with open(cfg, 'w') as fp:
-        lines.insert (0, str (user_info) + '\n')
-        s = ''.join(lines)
-        fp.write(s)
-
-# del ftp user from cfg
-def del_ftp_user(username):
-    with open(cfg, 'r') as r:
-        lines = r.readlines()
-    with open(cfg, 'w') as w:
-        for l in lines:
-            if not l.startswith(username):
-                w.write(l)
+    responce = requests.post(f'{url}', data=json.dumps(data), headers=header, cookies=cookies)
+    return responce
 
 # personal logging
 def personal_logging(username, content):
@@ -117,86 +69,54 @@ def personal_logging(username, content):
             value = content['missing']['value']
             file.write(f'User: {username}, date: {current_date}, info - {msg}{value} \n')
 
-        file.close()
-    except:
-        pass
+        file.close()   
     finally:
         file.close()
 
-# FTP My Aytorizer
-class MyDummyAuthorizer(DummyAuthorizer):
-
+# FTP authorizer
+class Authorizer(DummyAuthorizer):
     def validate_authentication(self, username, password, handler):
-        """
-        Raises AuthenticationFailed if supplied username and
-        password don't match the stored credentials, else return
-        None.
-        """
-        
-        request = validation_request(username, password)
-
-        msg = "Authentication failed"
-
+        msg = "Authentication failed."
         if not self.has_user(username):
             if username == 'anonymous':
                 msg = "Anonymous access not allowed."
-            raise AuthenticationFailed(msg)
-            
-        if username != 'anonymous':
-            received_pass = hashlib.md5(password.encode('utf-8')).hexdigest()
-            if self.user_table[username]['pwd'] != received_pass:
                 raise AuthenticationFailed(msg)
-            
+            elif username != 'anonymous':
+                responce = json.loads(validation_request(username, password).content)           
+                if responce:
+                    self.add_user(username=username, password=password, homedir=f'{ftp_folders}/{username}', perm=perm)    
+                else:
+                    raise AuthenticationFailed(msg)
+
 # FTP Handler 
-class MyHandler(FTPHandler):
-    """
-    Callback methods
-    """
-    def on_connect(self):
-        print("%s:%s connected" % (self.remote_ip, self.remote_port))
+class Handler(FTPHandler):
 
-    def on_disconnect(self):
-        # do something when client disconnects
-        pass
-
-    def on_login(self, username):
-        # do something when user login
-        pass
-
-    def on_logout(self, username):
-        # do something when user logs out
-        pass
-
-    def on_file_sent(self, file):
-        # do something when a file has been sent
-        pass
-
+    # -- callback on received -- #
     def on_file_received(self, file):
-        # do something when a file has been received
+        if not file.endswith('.csv'):
+            os.remove(file)
+            return None
+
         responce = csv_request(self.username)
         content = json.loads(responce.content)
         current_date = str(date.today())
-
+        
         if content['created']:
             msg = content['created']['msg']
             value = content['created']['value']
             logging.warning(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
-
         if content['error']:
             msg = content['error']['msg']
             value = content['error']['value']
             logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
-
         if content['exists']:
             msg = content['exists']['msg']
             value = content['exists']['value']
             logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
-
         if content['rejected']:
             msg = content['rejected']['msg']
             value = content['rejected']['value']
             logging.error(msg=f'User: {self.username}, date: {current_date}, info - {msg}{value}')
-
         if content['missing']:
             msg = content['missing']['msg']
             value = content['missing']['value']
@@ -204,42 +124,39 @@ class MyHandler(FTPHandler):
         
         personal_logging(self.username, content)
 
-    def on_incomplete_file_sent(self, file):
-        # do something when a file is partially sent
-        pass
+    def add_user(self, username, password):
+        self.authorizer.add_user(username=username, password=password, homedir=f'{ftp_folders}/{username}', perm=perm) 
 
-    def on_incomplete_file_received(self, file):
-        # remove partially uploaded files
-        os.remove(file)
-
-# FTP start server
-class Command(object):
+# FTP Server
+class FTP_Server:
 
     def __init__(self):
-        self.handler = MyHandler
-        self.authorizer = MyDummyAuthorizer()
+        self.port = '21'
+        self.ip = '127.0.0.1'
+        self.authorizer = Authorizer()
+        self.handler = Handler
         self.handler.authorizer = self.authorizer
-        self.server = FTPServer((FTP_IP, FTP_PORT), self.handler)
+        self.server = ThreadedFTPServer((self.ip, self.port), self.handler)
 
-    def handle(self, *args, **options):
-        """
-            To achieve the main logic, start ftp service
-            :param args:
-            :param options:
-            :return:
-        """
-        
         # logger
-        # self.logger = logging.basicConfig(
-        #     level=logging.WARNING, 
-        #     filename=ftpd_log_path, 
-        #     format='%(process)d-%(levelname)s-%(message)s', 
-        #     datefmt='%d-%b-%y %H:%M:%S')
-        
-        ftp_server(self.authorizer)
+        self.logger = logging.basicConfig(
+            level=logging.INFO, 
+            filename=ftpd_log_path, 
+            format='%(process)d-%(levelname)s-%(message)s', 
+            datefmt='%d-%b-%y %H:%M:%S')
+
+    def start(self):
         self.server.serve_forever()
+
+    def end(self):
+        self.server.close_all()
+
+
+if __name__ == '__main__':    
+    server = FTP_Server()
+    server.start()
+    server.add_user('Roman', '12345')
+
     
-# --> server runer
-if __name__ == '__main__':
-    command = Command()
-    command.handle()
+    
+    

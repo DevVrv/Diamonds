@@ -36,7 +36,6 @@ def create_share(request):
             share_model.update(**shareKwargs)
         else:
             share_model.create(**shareKwargs)
-
         
         # * create share link
         share_link = f'{request.build_absolute_uri()}{request.user.id}/{share_model[0].id}/{share_model[0].share_key}/'

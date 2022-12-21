@@ -23,13 +23,13 @@ def csv_request(user):
     return responce
 
 # validation request
-def validation_request(user, password):
-    url = f'{request_url}/validation/{user}/'
+def validation_request(username, password):
+    url = f'{request_url}/validation/{username}/'
     get_request = requests.get(url)
     get_request_content = json.loads(get_request.content)
     
-    token = get_request_content['token']
-    data = {'username': user, 'password': password}
+    token = get_request_content
+    data = {'username': username, 'password': password}
     header = {'X-CSRFToken': token}
     cookies = {'csrftoken': token}
     resp = requests.post(f'{url}', data=json.dumps(data), headers=header, cookies=cookies)
@@ -59,10 +59,9 @@ def get_users_list(userfile):
 
 # get ftp user from cfg
 def get_ftp_user(username):
-    name = username
     with open(cfg) as f:
         for line in f:
-            if line.startswith(name):
+            if line.startswith(username):
                 return line.split()
         return None
 
@@ -132,19 +131,18 @@ class MyDummyAuthorizer(DummyAuthorizer):
         password don't match the stored credentials, else return
         None.
         """
-        
-        request = validation_request(username, password)
+        responce = validation_request(username, password)
+        content = json.loads(responce.content)
 
         msg = "Authentication failed"
-
+    
         if not self.has_user(username):
             if username == 'anonymous':
                 msg = "Anonymous access not allowed."
             raise AuthenticationFailed(msg)
-            
+
         if username != 'anonymous':
-            received_pass = hashlib.md5(password.encode('utf-8')).hexdigest()
-            if self.user_table[username]['pwd'] != received_pass:
+            if not content['valid']:
                 raise AuthenticationFailed(msg)
             
 # FTP Handler 
@@ -218,8 +216,7 @@ class Command(object):
     def __init__(self):
         self.handler = MyHandler
         self.authorizer = MyDummyAuthorizer()
-        self.handler.authorizer = self.authorizer
-        self.server = FTPServer((FTP_IP, FTP_PORT), self.handler)
+        self.handler.authorizer = self.authorizer     
 
     def handle(self, *args, **options):
         """
@@ -236,10 +233,17 @@ class Command(object):
         #     format='%(process)d-%(levelname)s-%(message)s', 
         #     datefmt='%d-%b-%y %H:%M:%S')
         
+        self.server = FTPServer((FTP_IP, FTP_PORT), self.handler)
         ftp_server(self.authorizer)
         self.server.serve_forever()
     
+    def restart(self):
+        pass
+
+
 # --> server runer
+command = Command()
+        
+
 if __name__ == '__main__':
-    command = Command()
     command.handle()

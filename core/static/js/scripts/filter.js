@@ -372,6 +372,7 @@ class NoUI extends Control {
     constructor(kwargs) {
         super()
 
+        this.default_strs = {};
         this.active_size = 768;
         this.active_button = this._getElement('#show_filter_result');
         this.filter_exit = this._getElement('#filter-exit-btn');
@@ -500,6 +501,7 @@ class NoUI extends Control {
 
         // -- pips settings
         const pips = this._getElements('.noUi-value', parent);
+        this.default_strs[key] = settings.params.replacePips;
         pips.map((pip, index) => {
             pip.textContent = settings.params.replacePips[index];
         });
@@ -518,10 +520,11 @@ class NoUI extends Control {
             });
 
             this.data.strs[key] = current_values;
-
-            this.apply();
-
+            if (this.data.strs[key].length == this.default_strs[key].length) {
+                delete this.data.strs[key];
+            }
             
+            this.apply();
         });
     }
 
@@ -660,7 +663,7 @@ class NoUI extends Control {
                 this.filter_exit.click();
             }
         }
-        
+        console.log(this);
     }
 }
 

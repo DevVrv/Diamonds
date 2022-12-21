@@ -28,9 +28,6 @@ from .inspector import Inspector
 from mail.views import send_email
 from core.settings import DEFAULT_FROM_EMAIL
 
-#  ftp
-from ftp.ftp_server import get_ftp_user, add_ftp_user, del_ftp_user, get_users_list
-
 #  reciver
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -137,18 +134,8 @@ class SignUpExtendedView(FormView):
                     user.is_staff = True
                     user.save()
                 elif new_user['user_type'] == '2':
-                    
                     user_name = new_user['username']
-                    user_password = form.cleaned_data.get('password1').encode('utf-8')
-                    hash_password = hashlib.md5(user_password).hexdigest()
                     
-                    # create ftp user
-                    if not get_ftp_user(username=user_name):
-                        add_ftp_user(f'{user_name} {hash_password}')
-                    else:
-                        del_ftp_user(username=user_name)
-                        add_ftp_user(f'{user_name} {hash_password}')
-
                     # create ftp dir for vendor
                     try:
                         os.chdir('ftp/ftp_folders')
@@ -160,7 +147,6 @@ class SignUpExtendedView(FormView):
                         messages.info(request, f'Folder: {user_name}, was created')        
                     else:
                         messages.error(request, 'Vendor Folder was not created, folder name already exists')
-                    
 
                 user_type_name = {
                     '0': 'staff',
@@ -170,9 +156,8 @@ class SignUpExtendedView(FormView):
 
                 # success message
                 messages.success(self.request, f'Success, new {user_type_name[user.user_type]} was created')
-
                 return redirect(reverse_lazy(self.success_url))
-            
+
             return super().post(request, *args, **kwargs)
         else:
             return redirect(reverse_lazy('signup_extended'))

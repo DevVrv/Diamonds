@@ -1,0 +1,3 @@
+User: vendor@email.com, date: 2022-12-21, info - The stones were successfully created:76 
+User: vendor@email.com, date: 2022-12-21, info - The stones were not created because they already exist:153 
+User: vendor@email.com, date: 2022-12-21, info - The following stones were rejected, incorrect data:[{'row': 100, 'column': 'Measurements Depth'}] 

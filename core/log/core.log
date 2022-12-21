@@ -2726,3 +2726,117 @@ TypeError: 'method' object is not subscriptable
 "POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 500 65617
 Not Found: /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/
 "POST /ftp/validation/vrv.lfm@Gmail.com/ggwp8888/ HTTP/1.1" 404 3230
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 158, in post
+    command.authorizer.add_user(username=user_name, password=new_user['password'], homedir=current_dir, perm=perm)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\pyftpdlib\authorizers.py", line 105, in add_user
+    homedir = homedir.decode('utf8')
+AttributeError: 'NoneType' object has no attribute 'decode'
+"POST /user/signup/extended/ HTTP/1.1" 500 90658
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 160, in post
+    command.authorizer.add_user(username=user_name, password=new_user['password'], homedir='', perm=perm)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\pyftpdlib\authorizers.py", line 107, in add_user
+    raise ValueError('no such directory: %r' % homedir)
+ValueError: no such directory: ''
+"POST /user/signup/extended/ HTTP/1.1" 500 90332
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 159, in post
+    print(os.chdir('ftp/ftp_folders'))
+FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: 'ftp/ftp_folders'
+"POST /user/signup/extended/ HTTP/1.1" 500 85483
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 159, in post
+    print(os.chdir())
+TypeError: chdir() missing required argument 'path' (pos 1)
+"POST /user/signup/extended/ HTTP/1.1" 500 85194
+Internal Server Error: /user/signup/extended/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\users\decorators.py", line 25, in wrap
+    return function(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\views\generic\base.py", line 142, in dispatch
+    return handler(request, *args, **kwargs)
+  File "A:\code\Current\dj\core\users\views.py", line 160, in post
+    command.authorizer.add_user(username=user_name, password=new_user['password'], homedir='', perm=perm)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\pyftpdlib\authorizers.py", line 107, in add_user
+    raise ValueError('no such directory: %r' % homedir)
+ValueError: no such directory: ''
+"POST /user/signup/extended/ HTTP/1.1" 500 90234
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /ftpvendor06@example.com/
+"GET /ftpvendor06@example.com/ HTTP/1.1" 404 2888
+Not Found: /
+"GET / HTTP/1.1" 404 2798
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
