@@ -272,7 +272,6 @@ class Control {
             context.updateViewEnd(responce);
         }, 200);
     }
-
 }
 
 // @ Data Control
@@ -322,12 +321,12 @@ class DataControl {
         }
 
         this.ordering = {
-            result: [0, 45],
-            best: [0, 45]
+            result: [0, 46],
+            best: [0, 46]
         }
         this.requestOrdering = {
-            result: [0, 45],
-            best: [0, 45],
+            result: [0, 46],
+            best: [0, 46],
         }
         this.maxOrder = {
             result: null,
@@ -353,12 +352,12 @@ class DataControl {
             }
         }
         this.ordering = {
-            result: [0, 45],
-            best: [0, 45]
+            result: [0, 46],
+            best: [0, 46]
         }
         this.requestOrdering = {
-            result: [0, 45],
-            best: [0, 45],
+            result: [0, 46],
+            best: [0, 46],
         }
         this.maxOrder = {
             result: null,
@@ -404,7 +403,6 @@ class NoUI extends Control {
         // -- clean
         this.clean();
     }
-
     // <-- get max min values
     getMaxMin(selector) {
         const input = this._getElement(selector);
@@ -566,7 +564,7 @@ class NoUI extends Control {
                     }
                 }
 
-                this.apply();
+                this.apply(true);
             });
         });
     }
@@ -617,7 +615,7 @@ class NoUI extends Control {
     }
     
     // --> apply data
-    apply() {
+    apply(anyWay = false) {
         this.cleaner();
 
         // -- set keys
@@ -626,12 +624,12 @@ class NoUI extends Control {
 
         // -- set ordering default
         this.dataControl.ordering = {
-            result: [0, 45],
-            best: [0, 45]
+            result: [0, 46],
+            best: [0, 46]
         }
         this.dataControl.requestOrdering = {
-            result: [0, 45],
-            best: [0, 45],
+            result: [0, 46],
+            best: [0, 46],
         }
 
         // --> clean containers view and add spiner
@@ -655,16 +653,237 @@ class NoUI extends Control {
             // --> send request
             ajax('filtering/', this.dataControl, this.view.updateView, this.view);
         }
-        else {
+        else if (window_size <= this.active_size && anyWay == false) {
             this.active_button.classList.add('active');
             this.active_button.onclick = () => {
-                // --> send request
                 ajax('filtering/', this.dataControl, this.view.updateView, this.view);
                 this.active_button.classList.remove('active');
                 this.filter_exit.click();
             }
         }
+        else if (window_size <= this.active_size && anyWay == true) {
+            ajax('filtering/', this.dataControl, this.view.updateView, this.view);
+        }
     }
+}
+
+// @ Filter Sort
+class FilterSort extends Control {
+    constructor(kwargs) {
+        super();
+        this.key = kwargs.key;
+        this.data = kwargs.data;
+        this.view = kwargs.view;
+        this.sort = ['sale_price'];
+        this.sortCompare = {};
+        this.url = kwargs.url;
+
+        // create objects
+        this.advanced = {};
+        this.simple = {};
+        this.viewContainer = this._getElement(kwargs.viewContainer);
+
+        // get containers
+        this.simple.container = this._getElement(kwargs.simpleContainer);
+        this.advanced.container = this._getElement(kwargs.advancedContainer);
+
+        // get elemetns
+        this.simple.elems = this._getElements('[data-sort-simple]', this.simple.container);
+        this.advanced.elems = this._getElements('[data-sort-advanced]', this.advanced.container);
+
+        // get handlers
+        this.advanced.priority = this._getElement('[data-sort-priority]', this.advanced.container);
+        this.advanced.by = this._getElement('[data-sort-by]', this.advanced.container);
+        this.advanced.plus = this._getElements('.fa-plus', this.advanced.container);
+        this.advanced.angle = this._getElements('.fa-angle-down', this.advanced.container);
+
+        if (kwargs.debug == true) {this._debug();}
+    }
+    
+    // init sortable
+    init() {
+        this._dragInit();
+        this._simpleListener();
+        this._angleListener();
+        this._plusListener();
+        this._dragListener();
+
+    }
+
+    // make dragable
+    _dragInit() {
+        this.sortable = new Sortable(this.advanced.priority, {
+            animation: 200,
+            handle: '.drag-handle'
+        });
+    }
+
+    // get by key
+    _getByKey(key) {
+        const obj = {
+            simple: null,
+            advanced: null
+        }
+        
+        obj.advanced = this.advanced.elems.filter(elem => {
+            if (elem.dataset.sortAdvanced == key) {return elem;} 
+        });
+        obj.simple = this.simple.elems.filter(elem => {
+            if (elem.dataset.sortSimple == key) {return elem;} 
+        });
+
+        obj.simple = obj.simple[0];
+        obj.advanced = obj.advanced[0];
+        return obj;
+    }
+
+    // clean active
+    _cleanActive() {
+        this.simple.elems.map(elem => {
+            elem.classList.remove('active');
+        });
+    }
+
+    // --> makers
+    _changeDirection(simple, advanced) {
+        
+        const direction = simple.dataset.sortDirection;
+
+        if (direction == 'up') {
+            simple.dataset.sortDirection = 'down';
+            advanced.dataset.sortDirection = 'down';
+        }
+        else if (direction == 'down') {
+            simple.dataset.sortDirection = 'up';
+            advanced.dataset.sortDirection = 'up';
+        }
+    }
+    _simpleCleane() {
+        this.simple.elems.map(elem => {
+            elem.classList.remove('active');
+        });
+    }
+    _jumpAdvanced(element, target = 'by' || 'prority') {
+        this.advanced[target].insertAdjacentElement('afterbegin', element);
+    }
+    _updateSort() {
+        this.sort = [];
+        this.advanced.drag.map(elem => {
+            let str;
+            if (elem.dataset.sortDirection == 'up') {
+                str = elem.dataset.sortAdvanced;
+            }
+            else if (elem.dataset.sortDirection == 'down') {
+                str = `-${elem.dataset.sortAdvanced}`;
+            }
+            this.sort.push(str);
+        });
+        this.sort = this.sort.filter(str => {
+            if (str == 'compare' || str == '-compare') {
+                this.data.sort.compare[this.key] = str;
+            }
+            else {
+                return str;
+            }
+        });
+        if (this.advanced.drag[0].dataset.sortAdvanced != 'compare' && this.advanced.drag[0].dataset.sortAdvanced != '-compare') {
+            this.data.sort.compare[this.key] = false;
+        }
+        this.data.sort[this.key] = this.sort;
+        this._request();
+    }
+
+    // --> Events
+    _dragListener() {
+        this.advanced.drag = this._getElements('[data-sort-advanced]', this.advanced.priority);
+        this.advanced.drag.map(d => {
+            d.ondragend = () => {
+                this.advanced.drag = this._getElements('[data-sort-advanced]', this.advanced.priority);
+                this._updateSort();
+            }
+        });
+    }
+    _plusListener() {
+        this.advanced.plus.map(p => {
+            p.addEventListener('click', () => {
+                const key = p.parentElement.parentElement.dataset.sortAdvanced;
+                const current = this._getByKey(key);
+                let target;
+                this._simpleCleane();
+                
+                if (!current.advanced.classList.contains('active')) {
+                    current.advanced.classList.add('active');
+                    current.simple.classList.add('active');
+                    target = 'priority';
+                }
+                else if (current.advanced.classList.contains('active')) {
+                    current.advanced.classList.remove('active');
+                    target = 'by';
+                }
+
+                this._jumpAdvanced(current.advanced, target);
+                this._dragListener();
+                this._updateSort();
+            });
+        });
+    }
+    _angleListener() {
+        this.advanced.angle.map(a => {
+            a.addEventListener('click', () => {
+                const advanceElem = a.parentElement.parentElement;
+                const key = advanceElem.dataset.sortAdvanced;
+                const current = this._getByKey(key);
+                this._changeDirection(current.simple, current.advanced);
+                this._updateSort();
+            });
+        });
+    }
+    _simpleListener() {
+        this.simple.elems.map(elem => {
+            elem.addEventListener('click', () => {
+                const current = this._getByKey(elem.dataset.sortSimple);
+                this._cleanActive();
+                this._changeDirection(current.simple, current.advanced);
+
+                current.advanced.classList.add('active');
+                current.simple.classList.add('active');
+                this._jumpAdvanced(current.advanced, 'priority');
+
+                this._dragListener();
+                this._updateSort();
+            });
+        });
+    }
+
+    // -- request
+    _request() {
+        this.data.dropInfinity();
+        this.viewContainer.innerHTML = '';
+        this.viewContainer.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+        this.data.comparisonSelected = this.view.comparison.selected.map(elem => {return elem.replace('chb_', '');});
+        ajax(this.url, this.data, this._updateView, this);
+    }
+    _updateView(responce, context) {
+        let diamonds;
+        try {
+            diamonds = JSON.parse(responce[context.key]).reverse();
+        } catch (error) {
+            diamonds = responce;
+        }
+            
+    
+        context.viewContainer.innerHTML = '';
+        diamonds.forEach(diamond => {
+            context.viewContainer.insertAdjacentHTML('afterbegin', context.getDiamondHTML(diamond));
+        });
+        
+        context.view.updateHTMLList(context.key);
+        context.view.selecteble();
+        context.view.selected();
+
+        setTimeout(() => {context.data.scrollLock = false}, 200);
+    }
+
 }
 
 // @ Comparison
@@ -903,6 +1122,7 @@ class Comparison extends Control {
                         input.parentElement.classList.add('active');
                     }
                 });
+                this.dataControl.comparisonSelected = this.comparison.selected;
             },
             
             // -- unchecked 
@@ -914,6 +1134,7 @@ class Comparison extends Control {
                         input.parentElement.classList.remove('active');
                     }
                 });
+                this.dataControl.comparisonSelected = this.comparison.selected;
             }
         );
     }
@@ -936,6 +1157,7 @@ class Comparison extends Control {
                     input.parentElement.classList.add('active');
                 }
             });
+            
         });
     }
 
@@ -1440,10 +1662,10 @@ class InfinityScroll extends Control {
 // @ DOM Content Loaded;
 document.addEventListener("DOMContentLoaded", () => {
 
-    // -- Data Control -- //
+    // Data Control
     const dataControl = new DataControl({});
 
-    // -- Comparison -- //
+    // Comparison
     const comparison = new Comparison({
         dataControl: dataControl,
         resultContainer: '#result__items',
@@ -1458,7 +1680,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     comparison.init();
 
-    // -- Filter NoUI -- //
+    // Filter NoUI
     function filterNoUI() {
         // -- create NoUI Constructor
         const noUIKwargs = {
@@ -1765,7 +1987,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const labNoUI = noUI.select('lab');
     } filterNoUI();
 
-    // -- Filter Dynamic -- //
+    // Filter Dynamic
     function filterDynamic() {
         const filterMore = new ElementsControl({
             manager: '#filter-more-btn',
@@ -1875,24 +2097,38 @@ document.addEventListener("DOMContentLoaded", () => {
     
     } scrollEvents();
 
-    // // * --------------------------------------------------------- Sort
-    // // -- sort result -- //
-    // const sortResult = {
-    //     simpleContainer: '#result-simple-sort',
-    //     advancedContainer: '#result-sort-modal',
-    //     container: '#result__items',
-    //     key: 'result',
+    // Fitler Sort
+    const sortResult = new FilterSort({
+        key: 'result',
+        data: dataControl,
+        view: comparison,
+        advancedContainer: '#result-sort-modal',
+        simpleContainer: '#result-simple-sort',
+        viewContainer: '#result__items',
+        url: 'filtering/'
+    }).init();
 
-    //     dataControl: dataControl,
-    //     view: comparison,
+    const sortBest = new FilterSort({
+        key: 'best',
+        data: dataControl,
+        view: comparison,
+        advancedContainer: '#best-sort-modal',
+        simpleContainer: '#best-simple-sort',
+        viewContainer: '#best__items',
+        url: 'filtering/'
+    }).init();
 
-    //     make: () => {
-    //         console.log(comparison);
-    //     }
-    // }
+    const sortComparison = new FilterSort({
+        key: 'comparison',
+        data: dataControl,
+        view: comparison,
+        advancedContainer: '#comparison-sort-modal',
+        simpleContainer: '#comparison-simple-sort',
+        viewContainer: '#comparison__items',
+        url: 'filtering/of/key/'
+    }).init();
+
     
-    const sort = new Sort(sortResult).init();
-
     function setDate() {
         const date = deliveryDate();
         const elements = [...document.querySelectorAll('.delivery_date')];

@@ -4196,3 +4196,56 @@ Not Found: /filter/undefined
 "POST /filter/undefined HTTP/1.1" 404 3305
 Not Found: /filter/sort/
 "POST /filter/sort/ HTTP/1.1" 404 3293
+Not Found: /
+"GET / HTTP/1.1" 404 2798
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2849
+"GET /static/js/scripts/filter_tet.js HTTP/1.1" 404 1831
+Not Found: /filre
+"GET /filre HTTP/1.1" 404 2831
+Not Found: /filrer
+"GET /filrer HTTP/1.1" 404 2834
+"GET /static/js/scripts/filter_tet.js HTTP/1.1" 404 1831
+"GET /static/js/scripts/filter_tet.js HTTP/1.1" 404 1831
+"GET /static/js/scripts/filter_tet.js HTTP/1.1" 404 1831
+"GET /static/js/scripts/filter_tet.js HTTP/1.1" 404 1831
+Internal Server Error: /filter/filtering/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\filter\views.py", line 229, in filtering
+    resultFiltered = list_diamonds
+UnboundLocalError: local variable 'list_diamonds' referenced before assignment
+"POST /filter/filtering/ HTTP/1.1" 500 17127
+Internal Server Error: /filter/filtering/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\filter\views.py", line 229, in filtering
+    resultFiltered = list_diamonds
+UnboundLocalError: local variable 'list_diamonds' referenced before assignment
+"POST /filter/filtering/ HTTP/1.1" 500 17127
+Internal Server Error: /filter/filtering/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\filter\views.py", line 229, in filtering
+    resultFiltered = list_diamonds
+UnboundLocalError: local variable 'list_diamonds' referenced before assignment
+"POST /filter/filtering/ HTTP/1.1" 500 17127
+Internal Server Error: /filter/filtering/
+Traceback (most recent call last):
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\devvr\AppData\Local\Programs\Python\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "A:\code\Current\dj\core\filter\views.py", line 229, in filtering
+    resultFiltered = list_diamonds
+UnboundLocalError: local variable 'list_diamonds' referenced before assignment
+"POST /filter/filtering/ HTTP/1.1" 500 17127

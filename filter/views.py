@@ -38,9 +38,9 @@ def filterPage(request):
     query_set = Diamond_Model.objects.filter(is_published = 1).order_by('sale_price')
 
     best_diamonds = query_set.filter(best_selling=1)
-    best_diamonds_responce = best_diamonds[0:45]
+    best_diamonds_responce = best_diamonds[0:46]
 
-    result_diamonds_responce = query_set[0:45]
+    result_diamonds_responce = query_set[0:46]
     
     context = {
         'title': 'Filter',
@@ -312,7 +312,6 @@ def filtering_of_key(request):
         # * make queryset
         filtered = Diamond_Model.objects.filter(pk__in=keys).filter(is_published = 1).order_by(*sort)
         for_responce = filtered
-
         if requestData['sort']['compare']['comparison'] != False:
             order = requestData['sort']['compare']['comparison']
             selected_pks = requestData['comparisonSelected']
