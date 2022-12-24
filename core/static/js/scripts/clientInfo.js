@@ -1,6 +1,7 @@
 "use strict";
     
 // -- user info from control
+
 class UserFormControl {
 
     constructor(kwargs) {
@@ -12,13 +13,16 @@ class UserFormControl {
         this.form = this._getElem(kwargs.form);
         this.inputs = this._getElems(kwargs.inputs, this.form);
         this.labels = this._getElems(kwargs.labels, this.form);
-        this.buttons = this._getElems(kwargs.buttons, this.form);
-        this.edit = this._getElem(kwargs.edit, this.form);
+        this.buttons = this._getElems(kwargs.buttons);
+        this.edit = this._getElem(kwargs.edit);
         this.password = this._getElem(kwargs.password);
+        this.save = this._getElem('#save-changes');
 
         // * init edit event
         this.editEvent();
         this.valid();
+
+        this.edit.click();
 
     }
 
@@ -42,7 +46,6 @@ class UserFormControl {
 
     // edit button
     editEvent() {
-
         this.edit.onclick = () => {
 
             if (this.edit.dataset.edit !== "show") {
@@ -72,6 +75,9 @@ class UserFormControl {
             
         };
 
+        this.save.onclick = () => {
+            this.form.submit();
+        }
     }
 
     // update object
@@ -79,8 +85,8 @@ class UserFormControl {
         this.form = this._getElem(this.kwargs.form);
         this.inputs = this._getElems(this.kwargs.inputs, this.form);
         this.labels = this._getElems(this.kwargs.labels, this.form);
-        this.buttons = this._getElems(this.kwargs.buttons, this.form);
-        this.edit = this._getElem(this.kwargs.edit, this.form);
+        this.buttons = this._getElems(this.kwargs.buttons);
+        this.edit = this._getElem(this.kwargs.edit);
 
         // * init edit event
         this.editEvent();
@@ -176,8 +182,14 @@ class AddShipping {
         // * form control object
         this.formControl = kwargs.formControl;
 
+        // * delete shipping
+        this.deleteShipping = this._getElems('[data-delete-shipping="0"]');
+
         // --> create
         this._create(kwargs);
+
+        this.shipping_delete_links();
+        this.debug();
 
     }
 
@@ -267,9 +279,25 @@ class AddShipping {
 
             this.formControl.update();
 
+            // * delete shipping
+            this.deleteShipping = this._getElems('[data-delete-shipping="0"]');
+
+            console.log(this)
+
         };
     }
 
+    // delete shipping
+    shipping_delete_links() {
+        this.deleteShipping.map((item, index) => {
+            let href = item.getAttribute('href');
+            let href_new = href.replace('/0/', `/${index}/`);
+            item.dataset.deleteShipping = index;
+            console.log(href_new)
+            item.setAttribute('href', href_new);
+        });
+    }
+    shipping_delete() {}
 }
 
 // ev DOM on load

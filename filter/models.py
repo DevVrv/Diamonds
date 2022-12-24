@@ -45,13 +45,11 @@ class Base_Diamond_Model(models.Model):
     def __str__(self):
         return f'Clarity: {self.clarity}, Color: {self.color}'
 
-    
     class Meta:
         verbose_name = 'Diamond'
         verbose_name_plural = 'Diamonds'
         ordering = ['sale_price']
         abstract = True
-
 
 # * filter diamond model
 class Diamond_Model(Base_Diamond_Model):

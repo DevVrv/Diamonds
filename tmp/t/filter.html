@@ -548,7 +548,7 @@
                 <!-- * result -->
                 <section class="tab-pane result fade show pb-5 active" id="pills-result" role="tabpanel"
                     aria-labelledby="pills-result-tab">
-
+                    <!-- content buttons -->
                     <div class="content-buttons border-bottom py-3 px-3 rounded-top d-flex justify-content-between">
                         <div class="input-group">
                             <button type="button" class="btn btn-primary me-2 hidden-button">
@@ -557,13 +557,14 @@
                         </div>
                     </div>
 
-
+                    <!-- content info list start -->
                     <div class="content-name">
-
+                        <!-- content sort list -->
                         <div class="simple-sort-container w-100" id="result-simple-sort">
                             {% include 'inc/_simple_sort.html' %}
                         </div>
 
+                        <!-- modal toggler -->
                         <div class="sort-modal-toggler me-4 d-block d-xxl-none d-xl-none d-lg-none d-md-none">
                             <button type="button" class="btn-sort px-2 py-1" data-io-sort="toggle-modal"
                                 data-bs-target="#result-name--modal" data-bs-toggle="modal">
@@ -572,6 +573,7 @@
                             </button>
                         </div>
 
+                        {% comment %} result sort modal {% endcomment %}
                         <div class="modal fade" id="result-name--modal" tabindex="-1"
                             aria-labelledby="result-sort-label" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -583,11 +585,10 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="" id="result-sort-modal">
-
                                             <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Drag to set priority
                                             </h6>
-                                            <ul class="list result-name__modal-list" data-sort-priority>
-                                                <li class="modal-sort-item active" data-sort-direction="up" data-sort-advenced="sale_price">
+                                            <ul class="list result-name__modal-list" id="result-name-priority">
+                                                <li class="modal-sort-item active-2" data-io-advanced-sort="sale_price">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Price</span>
@@ -598,10 +599,9 @@
                                                     </div>
                                                 </li>
                                             </ul>
-
                                             <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Sort by</h6>
-                                            <ul class="list result-name__modal-list" data-sort-by>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="compare">
+                                            <ul class="list result-name__modal-list" id="result-name-sort">
+                                                <li class="modal-sort-item" data-io-advanced-sort="compare">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Compare</span>
@@ -611,7 +611,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="shape">
+                                                <li class="modal-sort-item" data-io-advanced-sort="shape">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Shape</span>
@@ -621,7 +621,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="disc">
+                                                <li class="modal-sort-item" data-io-advanced-sort="disc">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Disc%</span>
@@ -631,7 +631,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="weight">
+                                                <li class="modal-sort-item" data-io-advanced-sort="weight">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Carat</span>
@@ -641,7 +641,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="cut">
+                                                <li class="modal-sort-item" data-io-advanced-sort="cut">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Cut</span>
@@ -651,7 +651,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="color">
+                                                <li class="modal-sort-item" data-io-advanced-sort="color">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Color</span>
@@ -661,7 +661,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="clarity">
+                                                <li class="modal-sort-item" data-io-advanced-sort="clarity">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Clarity</span>
@@ -671,7 +671,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="table_procent">
+                                                <li class="modal-sort-item" data-io-advanced-sort="table_procent">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">T%</span>
@@ -681,7 +681,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="depth_procent">
+                                                <li class="modal-sort-item" data-io-advanced-sort="depth_procent">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">D%</span>
@@ -691,7 +691,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="lw">
+                                                <li class="modal-sort-item" data-io-advanced-sort="lw">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">L/W</span>
@@ -701,7 +701,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="report">
+                                                <li class="modal-sort-item" data-io-advanced-sort="report">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Report</span>
@@ -777,7 +777,7 @@
                                             <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Drag to set priority
                                             </h6>
                                             <ul class="list best-name__modal-list" id="best-name-priority">
-                                                <li class="modal-sort-item active-2" data-sort-direction="down" data-sort-advenced="sale_price">
+                                                <li class="modal-sort-item active-2" data-io-advanced-sort="sale_price">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Price</span>
@@ -790,7 +790,7 @@
                                             </ul>
                                             <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Sort by</h6>
                                             <ul class="list best-name__modal-list" id="best-name-sort">
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="compare">
+                                                <li class="modal-sort-item" data-io-advanced-sort="compare">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Compare</span>
@@ -800,7 +800,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="shape">
+                                                <li class="modal-sort-item" data-io-advanced-sort="shape">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Shape</span>
@@ -810,7 +810,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="disc">
+                                                <li class="modal-sort-item" data-io-advanced-sort="disc">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Disc%</span>
@@ -820,7 +820,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="weight">
+                                                <li class="modal-sort-item" data-io-advanced-sort="weight">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Carat</span>
@@ -830,7 +830,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="cut">
+                                                <li class="modal-sort-item" data-io-advanced-sort="cut">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Cut</span>
@@ -840,7 +840,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="color">
+                                                <li class="modal-sort-item" data-io-advanced-sort="color">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Color</span>
@@ -850,7 +850,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="clarity">
+                                                <li class="modal-sort-item" data-io-advanced-sort="clarity">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Clarity</span>
@@ -860,7 +860,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="table_procent">
+                                                <li class="modal-sort-item" data-io-advanced-sort="table_procent">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">T%</span>
@@ -870,7 +870,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="depth_procent">
+                                                <li class="modal-sort-item" data-io-advanced-sort="depth_procent">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">D%</span>
@@ -880,7 +880,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="lw">
+                                                <li class="modal-sort-item" data-io-advanced-sort="lw">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">L/W</span>
@@ -890,7 +890,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="report">
+                                                <li class="modal-sort-item" data-io-advanced-sort="report">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Report</span>
@@ -968,7 +968,7 @@
                                             <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Drag to set priority
                                             </h6>
                                             <ul class="list comparison-name__modal-list" id="comparison-name-priority">
-                                                <li class="modal-sort-item active-2" data-sort-direction="down" data-sort-advenced="sale_price">
+                                                <li class="modal-sort-item active-2" data-io-advanced-sort="sale_price">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Price</span>
@@ -981,7 +981,7 @@
                                             </ul>
                                             <h6 class="h6 py-2 px-3 io-bg-dark rounded text-white">Sort by</h6>
                                             <ul class="list comparison-name__modal-list" id="comparison-name-sort">
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="compare">
+                                                <li class="modal-sort-item" data-io-advanced-sort="compare">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Compare</span>
@@ -991,7 +991,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="shape">
+                                                <li class="modal-sort-item" data-io-advanced-sort="shape">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Shape</span>
@@ -1001,7 +1001,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="disc">
+                                                <li class="modal-sort-item" data-io-advanced-sort="disc">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Disc%</span>
@@ -1011,7 +1011,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="weight">
+                                                <li class="modal-sort-item" data-io-advanced-sort="weight">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Carat</span>
@@ -1021,7 +1021,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="cut">
+                                                <li class="modal-sort-item" data-io-advanced-sort="cut">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Cut</span>
@@ -1031,7 +1031,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="color">
+                                                <li class="modal-sort-item" data-io-advanced-sort="color">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Color</span>
@@ -1041,7 +1041,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="clarity">
+                                                <li class="modal-sort-item" data-io-advanced-sort="clarity">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Clarity</span>
@@ -1051,7 +1051,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="table_procent">
+                                                <li class="modal-sort-item" data-io-advanced-sort="table_procent">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">T%</span>
@@ -1061,7 +1061,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="depth_procent">
+                                                <li class="modal-sort-item" data-io-advanced-sort="depth_procent">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">D%</span>
@@ -1071,7 +1071,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="lw">
+                                                <li class="modal-sort-item" data-io-advanced-sort="lw">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">L/W</span>
@@ -1081,7 +1081,7 @@
                                                         <i class="fa fa-bars drag-handle"></i>
                                                     </div>
                                                 </li>
-                                                <li class="modal-sort-item" data-sort-direction="down" data-sort-advenced="report">
+                                                <li class="modal-sort-item" data-io-advanced-sort="report">
                                                     <div class="d-flex sort-plus">
                                                         <i class="fa fa-plus"></i>
                                                         <span class="ms-2">Report</span>
@@ -1122,6 +1122,7 @@
     {% comment %} * filter scripts @ {% endcomment %}
 
     
+    <script src="{% static 'js/scripts/sort.js' %}"></script>
     <script src="{% static 'js/scripts/ajax.min.js' %}"></script>
     <script src="{% static 'js/scripts/delivery_date.min.js' %}"></script>
     <script src="{% static 'js/scripts/diamond_view.min.js' %}"></script>
@@ -1130,13 +1131,12 @@
     
     <script src="{% static 'js/scripts/canvas.min.js' %}"></script>
     <script src="{% static 'js/scripts/in-dev.min.js' %}"></script>
-    
+
     <script src="{% static 'js/scripts/classes/elementControl.min.js' %}"></script>
     <script src="{% static 'js/scripts/classes/nouiSlider.min.js' %}"></script>
     <script src="{% static 'js/scripts/classes/scroll.min.js' %}"></script>
-    
+
     <script src="{% static 'js/node_modules/sortablejs/Sortable.min.js' %}"></script>
     <script src="{% static 'js/scripts/bootstrap/bootstrap.bundle.min.js' %}"></script> 
-    
-    <script src="{% static 'js/scripts/sort.js' %}"></script>
+
 {% endblock scripts %}

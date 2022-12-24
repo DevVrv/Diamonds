@@ -170,11 +170,11 @@ class CustomUserChangeForm(UserChangeForm):
         model = CustomUser
         fields = ['first_name', 'last_name', 'job_title', 'email', 'tel']
         widgets = {
-            'first_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'last_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'email': forms.EmailInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info'}),
-            'tel': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'job_title': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control form-control-client-info'}),
+            'tel': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'job_title': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
         }
 
 # -- company details form
@@ -193,15 +193,15 @@ class CompanyDetailsForm(forms.ModelForm):
             'company_web_address'
             ]
         widgets = {
-            'company_name': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'company_tel': forms.NumberInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'company_email': forms.EmailInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info'}),
-            'company_address': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'company_city': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'company_web_address': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'company_region': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'company_country': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
-            'company_zip': forms.TextInput(attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_name': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_tel': forms.NumberInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_email': forms.EmailInput(attrs={'class': 'form-control form-control-client-info'}),
+            'company_address': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_city': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_web_address': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_region': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_country': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            'company_zip': forms.TextInput(attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
         }
 
 # -- shipping address formser
@@ -227,31 +227,31 @@ ShippingFormSet = modelformset_factory(
 
     widgets = {
         'shipping_company_name': forms.TextInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
             
         'shipping_attention_name': forms.TextInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
 
         'shipping_tel': forms.NumberInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
 
         'shipping_email': forms.EmailInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
 
         'shipping_address': forms.TextInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
 
         'shipping_city': forms.TextInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
 
         'shipping_region': forms.TextInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
 
         'shipping_country': forms.TextInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
 
         'shipping_zip': forms.TextInput(
-            attrs={'disabled': 'true', 'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
+            attrs={'class': 'form-control form-control-client-info w-100 rounded mt-2'}),
     },
 
     extra=1,

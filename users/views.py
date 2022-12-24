@@ -22,6 +22,8 @@ from .models import CustomUser, CompanyDetails, ShippingAddress
 #  forms
 from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm, PasswordRecoveryForm, CompanyDetailsForm,  ShippingFormSet, CustomUserChangeForm, ChangePasswordForm
 
+from django.http import HttpResponse, Http404
+
 #  tools
 from .verification_code import create_code
 from .inspector import Inspector
@@ -34,6 +36,7 @@ from django.dispatch import receiver
 
 # import the logging library
 import logging
+import json
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -658,6 +661,39 @@ class UserInfo(TemplateView):
         
         return super().get(request, *args, **kwargs)
 
+# delete shipping address
+def delete_shipping(request, shipping_id):
+    shippings = ShippingAddress.objects.filter(user_id=request.user.id)
+    if shippings.exists():
+        for idnex, shipping in enumerate(shippings):
+            print(idnex)
+            if int(idnex) == int(shipping_id):
+                shipping.delete()
+                messages.info(request, 'Success, your shipping address was deleted')
+
+                user = request.user
+                manager = CustomUser.objects.get(id=user.id)
+                company = CompanyDetails.objects.get(user_id=user.id)
+                send_email({
+                'subject': f'User {request.user.email} was updated',
+                'email': [manager.email],
+                'template': '_mail_user_updated.html',
+                'context': {
+                    'message': 'The user has deleted one of his delivery addresses',
+                    'fname': user.first_name,
+                    'lname': user.last_name,
+                    'user_email': user.email,
+                    'user_tel': user.tel,
+                    'company_name': company.company_name,
+                    'company_tel': company.company_tel,
+                    'company_email': company.company_email,
+                    'company_address': company.company_address,
+                }
+            })
+                return redirect(reverse_lazy('user_info'))        
+    return redirect(reverse_lazy('user_info'))         
+
+    
 # CHAGE PASSWORD
 
 #  user info change pass

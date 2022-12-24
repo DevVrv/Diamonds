@@ -272,7 +272,6 @@ class Control {
             context.updateViewEnd(responce);
         }, 200);
     }
-
 }
 
 // @ Data Control
@@ -664,6 +663,267 @@ class NoUI extends Control {
                 this.filter_exit.click();
             }
         }
+    }
+}
+
+// @ Filter Sort
+class FilterSort extends Control {
+    constructor(kwargs) {
+        super();
+
+        this.dataControl = kwargs.control;
+        this.viewControl = kwargs.view,
+            
+        this.key = kwargs.key;
+        this.parent = this._getElement(kwargs.parent);
+        this.container = this._getElement(kwargs.container, this.parent);
+
+        this.simple = {
+            container: this._getElement(kwargs.simpleSort)
+        };
+        this.simple.items = this._getElements('[data-io-simple-sort]', this.simple.container);
+
+        this.advanced = {
+            container: this._getElement(kwargs.modal, this.parent)
+        };
+        this.advanced.body = this._getElement('.modal-body', this.advanced.container);
+        this.advanced.selected = this._getElement(kwargs.priorityList, this.advanced.body);
+        this.advanced.unselected = this._getElement(kwargs.sortList, this.advanced.body);
+        this.advanced.items = this._getElements('[data-io-advanced-sort]', this.advanced.body);
+        this.advanced.angle = this._getChilds('.fa-angle-down', this.advanced.items);
+        this.advanced.plus = this._getChilds('.fa-plus', this.advanced.items);
+        this.advanced.handle = this._getChilds('.drag-handle', this.advanced.items);
+
+        this.sort = [];
+
+        this.url = kwargs.url;
+
+        if (kwargs.debug == true) {this._debug();}
+    }
+    
+    init() {
+
+        this.dragElems = this.advanced.items.filter(item => { if (item.parentElement == this.advanced.selected) { return item; } });
+
+        this.plusEvent();
+        this.angleEvent();
+        this.simpleEvent();
+        this.drag();
+    }
+
+    // --> plus event
+    plusEvent() {
+        this.advanced.plus.map((plus, i) => {
+            plus.addEventListener('click', () => {
+                const element = this.advanced.items[i];
+                
+                if (element.parentElement == this.advanced.unselected) {
+                    element.classList.add('active-2');
+                    this.advanced.selected.insertAdjacentElement('afterbegin', element);
+                    this.dragElems.unshift(element);
+                }
+                else if (element.parentElement == this.advanced.selected) {
+                    element.classList.remove('active-2');
+                    element.classList.remove('active-1');
+                    this.advanced.unselected.insertAdjacentElement('afterbegin', element);
+                    this.dragElems = this.dragElems.filter(elem => { if (elem != element) { return elem; } });
+                }
+
+                this.dragElems = this._getElements('.modal-sort-item', this.advanced.selected);
+                
+                this.dragEvent(this.dragElems);
+                this.sortUpdate('advanced');
+            });
+        });
+    }
+
+    // --> angle event
+    angleEvent() {
+        this.advanced.angle.map((angle, i) => {
+            angle.addEventListener('click', () => {
+
+                const element = this.advanced.items[i];
+                
+                if (element.classList.contains('active-1')) {
+                    element.classList.remove('active-1');
+                    element.classList.add('active-2');
+                }
+                else if (element.classList.contains('active-2')) {
+                    element.classList.remove('active-2');
+                    element.classList.add('active-1');
+                }
+
+                
+                this.sortUpdate('advanced');
+
+            });
+        });
+    }
+
+    // --> simple event
+    simpleEvent() {
+        this.simple.items.map(item => {
+            item.addEventListener('click', () => {
+                // clear active on simple items
+                this.simple.items.map(cl => { if (cl !== item) {cl.classList.remove('active-1'); cl.classList.remove('active-2');} });
+                
+                if (item.classList.contains('active-1')) {
+                    item.classList.remove('active-1');
+                    item.classList.add('active-2');
+                }
+                else if (item.classList.contains('active-2')) {
+                    item.classList.remove('active-2');
+                    item.classList.add('active-1');
+                }
+                else if (!item.classList.contains('active-1') && !item.classList.contains('active-2')) {
+                    item.classList.add('active-2');
+                }
+
+                // -- drag func
+                this.updateDragElems(item.dataset.ioSimpleSort);
+                this.dragEvent(this.dragElems);
+                
+                // -- update sort
+                this.sortUpdate('simple');
+            });
+        });
+    }
+
+    // --> update drag elems list
+    updateDragElems(simpleValue) {
+        console.log(this);
+        const dragNew = this.advanced.items.filter(drag => {if (drag.dataset.ioAdvancedSort == simpleValue) {return drag}});
+        this.dragElems = [...dragNew, ...this.dragElems];
+        dragNew[0].classList.add('active-2');
+        this.advanced.container.insertAdjacentElement('afterbegin', dragNew[0]);
+        
+    }
+
+    // --> drag ability
+    drag() {
+        this.dragObject = new Sortable(this.advanced.selected, {
+            animation: 200,
+            handle: '.drag-handle'
+        });
+    }
+
+    // --> drag event
+    dragEvent(elements) {
+        elements.map(elem => {
+            elem.ondragend = () => {
+                this.sortUpdate('advanced'); 
+            };
+        });
+    }
+
+    // --> update data control
+    sortUpdate(from) {
+        // -- sort
+        if (from == 'advanced') {
+            this.sort = [];
+            const selectedValue = [];
+            // <-- get elements and data values
+            this.dragElems = this._getElements('[data-io-advanced-sort]', this.advanced.selected);
+            this.dragElems.map(elem => {
+
+                let value = elem.dataset.ioAdvancedSort;
+                selectedValue.push(value);
+
+                if (elem.classList.contains('active-1')) { value = '-' + value; }
+                this.sort.push(value);
+
+            });
+
+            // @ clear simple active
+            this.simple.items.map(elem => {
+                elem.classList.remove('active-1');
+                elem.classList.remove('active-2');
+            });
+
+            // --> add active to simple item
+            this.simple.items.map(elem => {
+                if (elem.dataset.ioSimpleSort == [selectedValue[0]]) {
+
+                    if (this.sort[0] == selectedValue[0]) {
+                        elem.classList.add('active-1');
+                    }
+                    else {
+                        elem.classList.add('active-2');
+                    }
+
+                }
+            });
+
+        }
+        else if (from == 'simple') {
+            this.simple.items.map(item => {
+                if (item.classList.contains('active-1') || item.classList.contains('active-2')) {
+                    let value = item.dataset.ioSimpleSort;
+                    this.sort = this.sort.filter(v => {
+                        if (v != value && v != `-${value}`) {
+                            return v;
+                        }
+                    });
+                    if (item.classList.contains('active-1')) {
+                        value = '-' + value;
+                    }
+                    this.sort.unshift(value);
+                }
+            });  
+        }
+
+        // -- compare sort
+        if (this.sort[0] == 'compare' || this.sort[0] == '-compare') {
+            const compare = this.sort[0];
+
+            this.dataControl.sort.compare[this.key] = compare;
+            this.sort = this.sort.filter(v => { return v != compare; });
+        }
+        else {
+            this.dataControl.sort.compare[this.key] = false;
+        }
+        
+        // --> update data control sort
+        this.dataControl.sort[this.key] = this.sort;
+
+        // --> comparison selected sort
+        if (this.key == 'comparison') {
+            const selected = this.view.comparison.selected.map(v => { return v.replace('chb_', ''); });
+            this.dataControl.comparisonSelected = selected;
+        }
+
+        // --> clean html + insert spiner
+        this.container.innerHTML = '';
+        this.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+
+        //  @ lock scroll
+        this.dataControl.scrollLock = true;
+
+        // @ drop infinity data
+        this.dataControl.dropInfinity();
+        // --> send ajax
+        ajax(this.url, this.dataControl, this.updateView, this);
+
+    }
+
+    // <-- emergence of view elements
+    updateViewEnd(responce) {
+
+        // <-- get max order
+        const resultLen = responce.resultResponceLen;
+        const bestLen = responce.bestResponceLen;
+
+        // --> add abilitys
+        this.viewControl.updateHTMLList(this.key);
+        this.viewControl.selected();
+        this.viewControl.selecteble();
+
+        // -- update max order len
+        this.dataControl.maxOrder.result = resultLen;
+        this.dataControl.maxOrder.best = bestLen;
+
+        //  @ unlock scroll
+        this.dataControl.scrollLock = false;
     }
 }
 
@@ -1875,23 +2135,52 @@ document.addEventListener("DOMContentLoaded", () => {
     
     } scrollEvents();
 
-    // // * --------------------------------------------------------- Sort
-    // // -- sort result -- //
-    // const sortResult = {
-    //     simpleContainer: '#result-simple-sort',
-    //     advancedContainer: '#result-sort-modal',
-    //     container: '#result__items',
-    //     key: 'result',
+    // * --------------------------------------------------------- Sort
+    // -- sort result -- //
+    const sortResult = new FilterSort({
+        parent: '#pills-result',
+        container: '#result__items',
+        key: 'result',
+        control: dataControl,
+        view: comparison,
+        
+        simpleSort: '#result-simple-sort',
+        modal: '#result-name--modal',
+        priorityList: '#result-name-priority',
+        sortList: '#result-name-sort',
+        url: 'filtering/',
 
-    //     dataControl: dataControl,
-    //     view: comparison,
+    }).init();
 
-    //     make: () => {
-    //         console.log(comparison);
-    //     }
-    // }
-    
-    const sort = new Sort(sortResult).init();
+    const sortBest = new FilterSort({
+        parent: '#pills-best',
+        container: '#best__items',
+        key: 'best',
+        control: dataControl,
+        view: comparison,
+        
+        simpleSort: '#best-simple-sort',
+        modal: '#best-name--modal',
+        priorityList: '#best-name-priority',
+        sortList: '#best-name-sort',
+        url: 'filtering/',
+
+    }).init();
+
+    const sortComparison = new FilterSort({
+        parent: '#pills-comparison',
+        container: '#comparison__items',
+        key: 'comparison',
+        control: dataControl,
+        view: comparison,
+        
+        simpleSort: '#comparison-simple-sort',
+        modal: '#comparison-name--modal',
+        priorityList: '#comparison-name-priority',
+        sortList: '#comparison-name-sort',
+        url: 'filtering/of/key/',
+
+    }).init();
 
     function setDate() {
         const date = deliveryDate();

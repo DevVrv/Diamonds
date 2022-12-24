@@ -40,20 +40,7 @@
                     <div class="client-info__header border-bottom d-flex justify-content-between">
     
                         <h2 class="h2 text-nowrap m-0 d-flex align-items-center">My Profile</h2>
-                        
-                        
-                        <div class="client-info__header--buttons d-flex py-2 text-nowrap">
-
-                            <button type="submit" 
-                            class="btn btn-primary me-3" 
-                            id="save-changes" 
-                            disabled data-hide-btn="">Save Changes</button>
-
-                            <button type="button" data-edit="hide" 
-                            class="btn btn-primary" 
-                            id="edit-client-info">Edit information</button>
-                            
-                        </div>
+                    
     
                     </div>
     
@@ -207,16 +194,46 @@
                             <div class="row client-info-managed">
                                 {{shipping_formset.management_form}}
                                 {% for input in form %}
+                                    {% if input.label != 'Id' and input.label != 'Contact Email' %}
                                     <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
-                                        {% comment %} * label {% endcomment %}
-                                        {% if input.label != 'Id' %}
                                         <span class="client-info__input-group--name">{{input.label}}<i class="fa fa-pencil"
                                             aria-hidden="true"></i></span>
-                                            {% endif %}
-                                        {% comment %} * input {% endcomment %}
+                                            {{input}}
+                                    </div>
+                                    {% elif input.label == 'Contact Email' %}
+                                    <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
                                         {{input}}
-                                    </div>   
-                                {% endfor %}                    
+                                    </div>
+                                    <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 d-flex justify-content-end align-items-center">
+                                        
+                                        <!-- Modal accept deleting -->
+                                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content border-0">
+                                                <div class="modal-header border-0">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Are you sure you want to delete this shipping address ?</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-footer border-0 border-top">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cansel</button>
+                                                <a href="{% url 'delete_shipping' 0 %}" class="btn btn-danger" data-delete-shipping="0">Delete</a>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            Delete this address
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                    <div class="col-12 col-xxl-6 col-xl-6 col-md-6 col-sm-6 mt-4 client-info__input-group">
+                                        {{input}}
+                                    </div>
+                                    {% endif %}
+                      
+                                {% endfor %} 
                             </div>
         
                         </div>
@@ -226,6 +243,15 @@
 
                 <!-- - client info add shipping address - -->
                 <div class="client-info__shipping-add mt-4 border p-4 py-3 rounded shadow-sm d-flex justify-content-end">
+                    <button type="submit" 
+                    class="btn btn-primary me-3" 
+                    id="save-changes" 
+                    disabled data-hide-btn="">Save Changes</button>
+
+                    <button type="button" data-edit="hide" 
+                    class="btn btn-primary d-none" 
+                    id="edit-client-info">Edit information</button>
+
                     <div class="d-block">
                         <a href="{% url 'password_change' %}" 
                                 class="btn btn-secondary me-3" id="change-password" disabled data-hide-btn="">Change Password</a>
