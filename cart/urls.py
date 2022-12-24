@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import cart, cart_sort, delete_selected, cart_pack
+from .views import cart, cart_sort, delete_selected, cart_pack, list_to_manager
 
 
 urlpatterns = [
@@ -14,5 +14,8 @@ urlpatterns = [
 
     # --> add to cart
     path('pack/', cart_pack, name='cart_pack'),
+
+    # --> send list to manager
+    path('send_list/', list_to_manager, name='list_to_manager'),
 
 ]

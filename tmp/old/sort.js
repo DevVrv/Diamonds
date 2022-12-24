@@ -5,30 +5,27 @@ class Sort {
 
         // create obj
         this.simple = {};
-        this.advenced = {};
+        this.advanced = {};
         this.sort = [];
         this.key = kwargs.key || 'result';
         this.make = kwargs.make;
-        
-        // extentions objects
-        this.dataControl = kwargs.dataControl;
-        this.view = kwargs.view;
 
-        this.container = this._getElems(kwargs.container)[0];
+        this.viewContainer = this._getElems(kwargs.viewContainer)[0];
         
         // simple 
         this.simple.container = this._getElems(kwargs.simpleContainer, document);
         this.simple.elems = this._getElems('[data-sort-simple]', this.simple.container[0]);
 
-        // advenced
-        this.advenced.container = this._getElems(kwargs.advancedContainer);
-        this.advenced.elems = this._getElems('[data-sort-advenced]', this.advenced.container[0]);
+        // advanced
+        this.advanced.container = this._getElems(kwargs.advancedContainer);
+        this.advanced.elems = this._getElems('[data-sort-advanced]', this.advanced.container[0]);
 
-        this.advenced.priority = this._getElems('[data-sort-priority]', this.advenced.container[0]);
-        this.advenced.by = this._getElems('[data-sort-by]', this.advenced.container[0]);
-        this.advenced.plus = this._getElems('.fa-plus', this.advenced.container[0]);
-        this.advenced.angle = this._getElems('.fa-angle-down', this.advenced.container[0]);
- 
+        this.advanced.priority = this._getElems('[data-sort-priority]', this.advanced.container[0]);
+        this.advanced.by = this._getElems('[data-sort-by]', this.advanced.container[0]);
+        this.advanced.plus = this._getElems('.fa-plus', this.advanced.container[0]);
+        this.advanced.angle = this._getElems('.fa-angle-down', this.advanced.container[0]);
+        
+        if (kwargs.debug == true) {this._debug();}
     }
 
     // @ init
@@ -40,8 +37,11 @@ class Sort {
         this._dragListener();
         return this;
     }
+    _debug(log = this) {
+        console.log(this);
+    }
     _dragInit() {
-        this.sortable = new Sortable(this.advenced.priority[0], {
+        this.sortable = new Sortable(this.advanced.priority[0], {
             animation: 200,
             handle: '.drag-handle'
         });
@@ -269,14 +269,14 @@ class Sort {
             return nodes;
         }
     }
-    _getByData(value = '', key = 'simple' || 'advenced') {
+    _getByData(value = '', key = 'simple' || 'advanced') {
         let elems;
         if (key == 'simple') {
             elems = this.simple.elems;
             elems = elems.filter(elem => {if (elem.dataset.sortSimple == value) {return elem;}});
         }
-        else if (key == 'advenced') {
-            elems = this.advenced.elems;
+        else if (key == 'advanced') {
+            elems = this.advanced.elems;
             elems = elems.filter(elem => {if (elem.dataset.sortAdvenced == value) {return elem;}});
         }
         
@@ -303,16 +303,16 @@ class Sort {
     }
     _jumpAdvanced(element, mode = 'by' || 'prority') {
         if (mode == 'by') {
-            this.advenced.by[0].insertAdjacentElement('afterbegin', element);
+            this.advanced.by[0].insertAdjacentElement('afterbegin', element);
         }
         else if (mode == 'priority') {
-            this.advenced.priority[0].insertAdjacentElement('afterbegin', element);
+            this.advanced.priority[0].insertAdjacentElement('afterbegin', element);
         }
     }
     _updateSort() {
         // create sort direction
         this.sort = [];
-        const elems = this._getElems('[data-sort-advenced]', this.advenced.priority);
+        const elems = this._getElems('[data-sort-advanced]', this.advanced.priority);
         elems.map(elem => {
             let key = elem.dataset.sortAdvenced;
             const direction = elem.dataset.sortDirection;
@@ -327,8 +327,8 @@ class Sort {
 
     // --> Events
     _dragListener() {
-        this.advenced.dragElems = this._getElems('[data-sort-advenced]', this.advenced.priority);
-        this.advenced.dragElems.map(elem => {
+        this.advanced.dragElems = this._getElems('[data-sort-advanced]', this.advanced.priority);
+        this.advanced.dragElems.map(elem => {
             elem.ondragend = (e) => {
                 const target = e.target;
                 if (target === elem) {
@@ -338,7 +338,7 @@ class Sort {
         });
     }
     _plusListener() {
-        this.advenced.plus.map(p => {
+        this.advanced.plus.map(p => {
             p.addEventListener('click', () => {
                 const advanceElem = p.parentElement.parentElement;
                 const simpleElem = this._getByData(advanceElem.dataset.sortAdvenced, 'simple');
@@ -361,7 +361,7 @@ class Sort {
         });
     }
     _angleListener() {
-        this.advenced.angle.map(a => {
+        this.advanced.angle.map(a => {
             a.addEventListener('click', () => {
                 const advanceElem = a.parentElement.parentElement;
                 const simpleElem = this._getByData(advanceElem.dataset.sortAdvenced, 'simple');
@@ -378,20 +378,21 @@ class Sort {
         const simpleElems = this.simple.elems;
         simpleElems.map(simpleElem => {
             simpleElem.addEventListener('click', () => {
-                const advanceElem = this._getByData(simpleElem.dataset.sortSimple, 'advenced');
+                const advanceElem = this._getByData(simpleElem.dataset.sortSimple, 'advanced');
                 const direction = simpleElem.dataset.sortDirection;
                 
                 // clean simple
                 this._simpleCleane();
                 
                 // set active
+                console.log(simpleElem);
                 simpleElem.classList.add('active');
                 advanceElem.classList.add('active');
                 
                 // change direction
                 this._changeDirection(simpleElem, advanceElem, direction);
 
-                // jump advenced
+                // jump advanced
                 this._jumpAdvanced(advanceElem, 'priority');
 
                 // update sort object

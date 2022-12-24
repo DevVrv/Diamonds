@@ -744,54 +744,6 @@ class FilterSort extends Control {
         });
     }
 
-    // --> makers
-    _changeDirection(simple, advanced) {
-        
-        const direction = simple.dataset.sortDirection;
-
-        if (direction == 'up') {
-            simple.dataset.sortDirection = 'down';
-            advanced.dataset.sortDirection = 'down';
-        }
-        else if (direction == 'down') {
-            simple.dataset.sortDirection = 'up';
-            advanced.dataset.sortDirection = 'up';
-        }
-    }
-    _simpleCleane() {
-        this.simple.elems.map(elem => {
-            elem.classList.remove('active');
-        });
-    }
-    _jumpAdvanced(element, target = 'by' || 'prority') {
-        this.advanced[target].insertAdjacentElement('afterbegin', element);
-    }
-    _updateSort() {
-        this.sort = [];
-        this.advanced.drag.map(elem => {
-            let str;
-            if (elem.dataset.sortDirection == 'up') {
-                str = elem.dataset.sortAdvanced;
-            }
-            else if (elem.dataset.sortDirection == 'down') {
-                str = `-${elem.dataset.sortAdvanced}`;
-            }
-            this.sort.push(str);
-        });
-        this.sort = this.sort.filter(str => {
-            if (str == 'compare' || str == '-compare') {
-                this.data.sort.compare[this.key] = str;
-            }
-            else {
-                return str;
-            }
-        });
-        if (this.advanced.drag[0].dataset.sortAdvanced != 'compare' && this.advanced.drag[0].dataset.sortAdvanced != '-compare') {
-            this.data.sort.compare[this.key] = false;
-        }
-        this.data.sort[this.key] = this.sort;
-        this._request();
-    }
 
     // --> Events
     _dragListener() {
@@ -841,6 +793,7 @@ class FilterSort extends Control {
     _simpleListener() {
         this.simple.elems.map(elem => {
             elem.addEventListener('click', () => {
+
                 const current = this._getByKey(elem.dataset.sortSimple);
                 this._cleanActive();
                 this._changeDirection(current.simple, current.advanced);
@@ -853,6 +806,55 @@ class FilterSort extends Control {
                 this._updateSort();
             });
         });
+    }
+
+    // --> makers
+    _changeDirection(simple, advanced) {
+        
+        const direction = simple.dataset.sortDirection;
+
+        if (direction == 'up') {
+            simple.dataset.sortDirection = 'down';
+            advanced.dataset.sortDirection = 'down';
+        }
+        else if (direction == 'down') {
+            simple.dataset.sortDirection = 'up';
+            advanced.dataset.sortDirection = 'up';
+        }
+    }
+    _simpleCleane() {
+        this.simple.elems.map(elem => {
+            elem.classList.remove('active');
+        });
+    }
+    _jumpAdvanced(element, target = 'by' || 'prority') {
+        this.advanced[target].insertAdjacentElement('afterbegin', element);
+    }
+    _updateSort() {
+        this.sort = [];
+        this.advanced.drag.map(elem => {
+            let str;
+            if (elem.dataset.sortDirection == 'up') {
+                str = elem.dataset.sortAdvanced;
+            }
+            else if (elem.dataset.sortDirection == 'down') {
+                str = `-${elem.dataset.sortAdvanced}`;
+            }
+            this.sort.push(str);
+        });
+        this.sort = this.sort.filter(str => {
+            if (str == 'compare' || str == '-compare') {
+                this.data.sort.compare[this.key] = str;
+            }
+            else {
+                return str;
+            }
+        });
+        if (this.advanced.drag[0].dataset.sortAdvanced != 'compare' && this.advanced.drag[0].dataset.sortAdvanced != '-compare') {
+            this.data.sort.compare[this.key] = false;
+        }
+        this.data.sort[this.key] = this.sort;
+        this._request();
     }
 
     // -- request

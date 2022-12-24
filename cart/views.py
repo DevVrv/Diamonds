@@ -1,4 +1,9 @@
 import json
+import random
+import string
+
+from mail.views import send_email
+
 from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -120,15 +125,15 @@ def cart_sort(request):
             diamonds = Diamond_Model.objects.filter(pk__in=cart)
             
             # sort diamonds
-            responseDiamonds = diamonds.order_by(*requestData['order'])
+            responseDiamonds = diamonds.order_by(*requestData['sort'])
 
             # compare
-            if requestData['compare'] != False and len(requestData['compare']) != 0:
+            if requestData['compare']['key'] != False and len(requestData['compare']['nums']) != 0:
 
-                compares = Diamond_Model.objects.filter(pk__in=requestData['compare'])
+                compares = Diamond_Model.objects.filter(pk__in=requestData['compare']['nums'])
                 responseDiamonds = responseDiamonds.exclude(pk__in=compares)
 
-                if requestData['compare_order'] == 'compare':
+                if requestData['compare']['key'] == 'compare':
                     compares = list(reversed(compares))
                     responseDiamonds = list(reversed(responseDiamonds))
 
@@ -136,8 +141,7 @@ def cart_sort(request):
                         responseDiamonds.append(compare)
 
                     responseDiamonds = list(reversed(responseDiamonds))
-                
-                elif requestData['compare_order'] == '-compare':
+                elif requestData['compare']['key'] == '-compare':
                     compares = list(reversed(compares))
                     responseDiamonds = list(reversed(responseDiamonds))
                     
@@ -154,34 +158,33 @@ def cart_sort(request):
 def cart_pack(request):
     
     requestData = json.loads(request.body)
-
+    response = {}
     # kwargs for create cart
     cart = {
         'user': request.user,
-        'user_cart': json.dumps(requestData)
+        'user_cart': json.dumps(requestData),
+        'cart_link': ''
     }
 
     # get model items
     model_item = CartModal.objects.filter(user=request.user)
 
-    # get or create cart
+    # # get or create cart
     if not model_item.exists():
         model_item = CartModal.objects.create(**cart)
-
         response = {
             'cart_len': len(requestData),
             'update_len': len(requestData)
         }
     elif model_item.exists():
 
-        # arr for update values
         temp = []
-
-        # len of update
         updated_len = 0
 
+        
         # get model values
         for item in model_item:
+            print(item)
             model_values = json.loads(item.user_cart)
             for value in model_values:
                 temp.append(value)
@@ -194,7 +197,8 @@ def cart_pack(request):
         
         cart = {
             'user': request.user,
-            'user_cart': json.dumps(temp)
+            'user_cart': json.dumps(temp),
+            'cart_link': ''
         }
 
         # update cart
@@ -207,3 +211,22 @@ def cart_pack(request):
         }
 
     return HttpResponse (json.dumps(response), content_type="application/json")
+
+# --> Generate and send link to manager
+def list_to_manager(request):
+    def generate_random_string(length):
+        letters = string.ascii_lowercase
+        rand_string = ''.join(random.choice(letters) for i in range(length))
+        return rand_string
+    
+    if request.method == 'POST':
+        user = request.user
+        user_cart = CartModal.objects.get(user_id = user.id)
+        link = f'/cart/{user.id}/{generate_random_string(8)}'
+        user_cart.cart_link = link
+        user_cart.save()
+
+        # send_email()
+        
+    messages.info(request, 'Your wish list was sended to your manager')
+    return redirect(reverse_lazy('cart'))

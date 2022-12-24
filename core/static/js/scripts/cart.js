@@ -1,5 +1,494 @@
 "use strict";
 
+
+class Sort {
+    constructor(kwargs) {
+
+        // create obj
+        this.simple = {};
+        this.advanced = {};
+        this.sort = ['sale_price'];
+        this.compare = {
+            key: false,
+            nums: null
+        };
+        this.url = kwargs.url || 'sort/';
+        this.key = kwargs.key || 'result';
+        this.cart = kwargs.cart;
+
+        this.viewContainer = this._getElems(kwargs.viewContainer)[0];
+        
+        // simple 
+        this.simple.container = this._getElems(kwargs.simpleContainer, document);
+        this.simple.elems = this._getElems('[data-sort-simple]', this.simple.container[0]);
+
+        // advanced
+        this.advanced.container = this._getElems(kwargs.advancedContainer);
+        this.advanced.elems = this._getElems('[data-sort-advanced]', this.advanced.container[0]);
+
+        this.advanced.priority = this._getElems('[data-sort-priority]', this.advanced.container[0]);
+        this.advanced.by = this._getElems('[data-sort-by]', this.advanced.container[0]);
+        this.advanced.plus = this._getElems('.fa-plus', this.advanced.container[0]);
+        this.advanced.angle = this._getElems('.fa-angle-down', this.advanced.container[0]);
+        
+        if (kwargs.debug == true) {this._debug();}
+    }
+
+    // @ init
+    init() {
+        this._simpleListener();
+        this._plusListener();
+        this._angleListener();
+        this._dragInit();
+        this._dragListener();
+        return this;
+    }
+    _debug(log = this) {
+        console.log(this);
+    }
+    _dragInit() {
+        this.sortable = new Sortable(this.advanced.priority[0], {
+            animation: 200,
+            handle: '.drag-handle'
+        });
+    }
+
+
+    // -- HTML View
+    spinerView(action = 'get', container) {
+        if (action == 'get') {
+            const spin =
+            `
+            <div class="text-center text-primary py-4 shadow-sm w-100 bg-lite border-bottom border-top my-1" id="loading-spiner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            `
+            return spin;
+        }
+        else if (action == 'remove') {
+            if (container == undefined) { container = this.container; }
+            const spin = container.querySelector('#loading-spiner');
+            if (spin !== undefined && spin !== null) {
+                spin.remove()
+            }
+        }
+        else if (action == 'has') {
+            if (container == undefined) { container = this.container; }
+            const spin = container.querySelector('#loading-spiner');
+            if (spin !== undefined && spin !== null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    getDiamondHTML(diamond) {
+
+        parent.innerHTML = '';
+
+        let photo = `<img src="/static/img/diamonds/base-diamond.jpg" alt="" class="img-fluid rounded">`
+
+        const date = deliveryDate();
+        
+
+        const diamondHTML = `
+        <div class="result__item result-section--element">
+    
+        <ul class="item-list result__item-list">
+            <li class="item-list-element">
+                <i class="item-shape svg-${diamond.fields.shape.toLowerCase()}"></i>
+                <i class="fa fa-video-camera ms-2" aria-hidden="true"></i>
+                <i class="fa fa-chevron-down ms-2" aria-hidden="true"></i>
+            </li>
+            <li class="item-list-element">
+                <div class="checkbox-label label-result" data-io-label="diamonds-item">
+                    <input type="checkbox" name="chb_${diamond.pk}" id="chb_${diamond.pk}" class="d-none checkbox checkbox-results">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </div>
+            </li>
+            <li class="item-list-element">
+                <span class="me-2 shape-text-info">Shape:</span>
+                <span>${diamond.fields.shape}</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">Disc%:</span>
+                <span>${diamond.fields.disc}%</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">Price:</span>
+                <span>$${diamond.fields.sale_price}</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">Carat:</span>
+                <span>${diamond.fields.weight}</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">Cut:</span>
+                <span>${diamond.fields.cut}</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">Color:</span>
+                <span>${diamond.fields.color}</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">Clarity:</span>
+                <span>${diamond.fields.clarity}</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">T%:</span>
+                <span>${diamond.fields.table_procent}%</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">D%:</span>
+                <span>${diamond.fields.depth_procent}%</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">L/W:</span>
+                <span>${diamond.fields.lw}</span>
+            </li>
+            <li class="item-list-element">
+                <span class="item-list-element--info">Report:</span>
+                <span>${diamond.fields.lab}</span>
+            </li>
+        </ul>
+
+        <div class="result__drop-down border-top">
+            <div class="row">
+                
+                <div class="result__drop-down--col col-3">
+                    ${photo}
+                </div>
+                
+                <div class="result__drop-down--col col-7">
+    
+                    <h4 class="h4 py-2">1.01 Carat Pear Lab Diamond</h4>
+    
+                    <h5 class="h5 py-2">$${diamond.fields.sale_price}</h5>
+    
+                    <ul class="list result__info-list">
+    
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Carat: ${diamond.fields.weight}</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Color: ${diamond.fields.color}</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Clarity: ${diamond.fields.clarity}</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Cut: ${diamond.fields.cut}</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Polish: ${diamond.fields.polish}</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Symmetry: ${diamond.fields.symmetry}</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Table: ${diamond.fields.table_procent}%</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Depth: ${diamond.fields.depth_procent}%</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>L/W: ${diamond.fields.lw}</span>
+                        </li>
+                        <li class="py-3 border-bottom result__info-li">
+                            <span>Measurements: ${diamond.fields.measurements}</span>
+                        </li>
+                    </ul>
+    
+                    <div class="acordion">
+                        <button type="button" class="acordion__btn btn-more--info">
+                            Additional Details
+                            <i class="fa fa-chevron-down ms-2" aria-hidden="true"></i>
+                        </button>
+                        <div class="acordion__body body-more--info border-top w-100">
+                            <ul class="list result__drop-list">
+                                <li class="result__drop-li">
+                                    <span>Culet: ${diamond.fields.culet}</span>
+                                </li>
+                                <li class="result__drop-li">
+                                    <span>Girdle: ${diamond.fields.girdle}</span>
+                                </li>
+                                <li class="result__drop-li">
+                                    <span>Report №: ${diamond.fields.stock}</span>
+                                </li>
+                                <li class="result__drop-li">
+                                    <span>Fluour: ${diamond.fields.fluor}</span>
+                                </li>
+                                <li class="result__drop-li">
+                                    <span>Origin: Lab grown Diamond</span>
+                                </li>
+                                <li class="result__drop-li">
+                                    <span class="d-flex w-100 flex-column">
+                                        <span>Lab Created Diamond Delivery:</span>
+                                        <span class="text-nowrap delivery_date">${date.day} ${date.dayNum} ${date.month}</span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+    
+                </div>
+                
+                <div class="result__drop-down--col col-2 d-flex flex-column justify-content-center align-items-center">
+                    <p class="mt-3 w-100 d-flex justify-content-center">
+                        <i class="fa fa-heart me-2 text-primary" aria-hidden="true"></i>
+                        <span>Only One Available</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+        `;
+
+        return diamondHTML;
+    }
+    getEmpty(message) {
+
+        const html = `        
+        <div class="text-center text-primary py-4 border shadow-sm w-100 bg-lite" id="empty-allert">
+            <p class="fs-5 m-0">${message}</p>
+        </div>
+        `
+        return html;
+
+    }
+
+
+    // <-- get elemetns
+    _getElems(selector = String,  parent = document) {
+        if (parent.length == undefined) {
+            const query = [...parent.querySelectorAll(selector)];
+            return query;
+        }
+        else {
+            let nodes = [];
+            parent.map(p => {
+                const childs = p.querySelectorAll(selector);
+                nodes = [...nodes, ...childs];
+            });
+            return nodes;
+        }
+    }
+    // get by key
+    _getByKey(key) {
+        const obj = {
+            simple: null,
+            advanced: null
+        }
+        
+        obj.advanced = this.advanced.elems.filter(elem => {
+            if (elem.dataset.sortAdvanced == key) {return elem;} 
+        });
+        obj.simple = this.simple.elems.filter(elem => {
+            if (elem.dataset.sortSimple == key) {return elem;} 
+        });
+
+        obj.simple = obj.simple[0];
+        obj.advanced = obj.advanced[0];
+        return obj;
+    }
+
+
+    // --> makers
+    _changeDirection(simpleElem, advanceElem, direction) {
+        // change direction
+        if (direction == 'up') {
+            simpleElem.dataset.sortDirection = 'down';
+            advanceElem.dataset.sortDirection = 'down';
+        }
+        else if (direction == 'down') {
+            simpleElem.dataset.sortDirection = 'up';
+            advanceElem.dataset.sortDirection = 'up';
+        }
+    }
+    _simpleCleane() {
+        this.simple.elems.map(elem => {
+            elem.classList.remove('active');
+        });
+    }
+    _jumpAdvanced(element, mode = 'by' || 'prority') {
+        if (mode == 'by') {
+            this.advanced.by[0].insertAdjacentElement('afterbegin', element);
+        }
+        else if (mode == 'priority') {
+            this.advanced.priority[0].insertAdjacentElement('afterbegin', element);
+        }
+    }
+    _updateSort() {
+        // create sort direction
+        this.sort = [];
+        const elems = this._getElems('[data-sort-advanced]', this.advanced.priority);
+        elems.map(elem => {
+            let key = elem.dataset.sortAdvanced;
+            const direction = elem.dataset.sortDirection;
+            if (direction == 'down') {
+                key = `-${key}`
+            }
+            this.sort.push(key);
+        });
+
+        
+        if (this.sort[0] == 'compare' || this.sort[0] == '-compare') {
+            this.compare.key = this.sort[0];
+            this.compare.nums = JSON.parse(localStorage.getItem('cart'));
+            this.compare.nums = this.compare.nums.map(num => {return num.replace('chb_', '')});
+        }
+
+        this.sort = this.sort.filter(str => {
+            if (str != 'compare' && str != '-compare') {return str;}
+        });
+        this.apply();
+    }
+
+    checkLabel(inputs, labels) {
+
+        const checks = JSON.parse(localStorage.getItem('cart'));
+        inputs.forEach((inp, index) => {
+            const name = inp.name;
+
+            checks.forEach(check => {
+                if (name == check) {
+                    inp.check = true;
+                    labels[index].classList.add('active');
+                }
+            });
+        });
+
+    }
+
+
+    // --> Events
+    _dragListener() {
+        this.advanced.dragElems = this._getElems('[data-sort-advanced]', this.advanced.priority);
+        this.advanced.dragElems.map(elem => {
+            elem.ondragend = (e) => {
+                const target = e.target;
+                if (target === elem) {
+                    this._updateSort();
+                }
+            };
+        });
+    }
+    _plusListener() {
+        this.advanced.plus.map(p => {
+            p.addEventListener('click', () => {
+                const advanceElem = p.parentElement.parentElement;
+                const simpleElem = this._getByKey(advanceElem.dataset.sortAdvanced).simple;
+                if (!advanceElem.classList.contains('active')) {
+                    this._simpleCleane();
+                    advanceElem.classList.add('active');
+                    simpleElem.classList.add('active');
+                    this._jumpAdvanced(advanceElem, 'priority')
+                }
+                else if (advanceElem.classList.contains('active')) {
+                    advanceElem.classList.remove('active');
+                    simpleElem.classList.remove('active');
+                    this._jumpAdvanced(advanceElem, 'by')
+                }
+
+                // update sort object
+                this._dragListener() 
+                this._updateSort();
+            });
+        });
+    }
+    _angleListener() {
+        this.advanced.angle.map(a => {
+            a.addEventListener('click', () => {
+                const advanceElem = a.parentElement.parentElement;
+                const simpleElem = this._getByKey(advanceElem.dataset.sortAdvanced).simple;
+                const direction = advanceElem.dataset.sortDirection;
+
+                this._changeDirection(simpleElem, advanceElem, direction);
+
+                // update sort object
+                this._updateSort();
+            });
+        });
+    }
+    _simpleListener() {
+        const simpleElems = this.simple.elems;
+        simpleElems.map(simpleElem => {
+            simpleElem.addEventListener('click', () => {
+                const current = this._getByKey(simpleElem.dataset.sortSimple);
+                const direction = simpleElem.dataset.sortDirection;
+                
+                // clean simple
+                this._simpleCleane();
+                
+                simpleElem.classList.add('active');
+                current.advanced.classList.add('active');
+                
+                // change direction
+                this._changeDirection(simpleElem, current.advanced, direction);
+
+                // jump advanced
+                this._jumpAdvanced(current.advanced, 'priority');
+
+                // update sort object
+                this._dragListener();
+                this._updateSort();
+            });
+        });
+    }
+
+    apply() {
+        this.viewContainer.innerHTML = '';
+        this.viewContainer.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+        this.data = {
+            sort: this.sort,
+            compare: this.compare,
+        }
+        ajax(this.url, this.data, this.updateView, this);
+    }
+
+    updateView(responce, context) {
+        context.viewContainer.innerHTML = '';
+        const diamonds = JSON.parse(responce);
+        diamonds.map(diamond => {
+            context.viewContainer.insertAdjacentHTML('afterbegin', context.getDiamondHTML(diamond));
+        });
+        
+
+        // * -------------------------- diamond drop down
+        const diamondItem = new ElementsControl({
+            manager: ".result__item-list",
+            managed: ".result__drop-down",
+        });
+        diamondItem.toggler({ single: true, notThis: ".label-result" });
+
+        // * -------------------------- diamond more info
+        const diamondMoreInfo = new ElementsControl({
+            manager: ".btn-more--info",
+            managed: ".body-more--info",
+        });
+        diamondMoreInfo.toggler({ single: true });
+
+        // * -------------------------- diamond label
+        const diamondLabel = new ElementsControl({
+            manager: '[data-io-label="diamonds-item"]',
+            managed: '.checkbox-results'
+        });
+        diamondLabel.label(
+            // checked
+            context.cart.checked,
+            // unchecked
+            context.cart.unchecked
+        );
+
+        context.checkLabel(diamondLabel.managed, diamondLabel.manager);
+    }
+
+
+    
+}
+
 // * Cart actions
 class Cart {
     constructor(kwargs) {
@@ -366,28 +855,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // * -------------------------- cart sort
-    const cartSort = new SortSystem({
+    const cartSort = new Sort({
+
+        debug: true,
+
+        cart: cart,
 
         viewContainer: '#cart-items',
 
         // * simple sort items
         simpleContainer: '#cart_simple_sort',
-        simpleItems: '[data-io-simple-sort]',
         
         // * advanced sort items
         advancedContainer: '#cart-sort-modal', 
-        advancedDragBox: '#cart-name-priority', 
-        advancedOffBox: '#cart-name-sort', 
-        advancedItems: '[data-io-advanced-sort]', 
-
-        // * advanced extencions
-        plusItems: '.fa-plus',
-        angleItems: '.fa-angle-down',
 
         // * url for reqest/responce
         url: 'sort/',
-
-        extention: cart
  
     });
     cartSort.init();
