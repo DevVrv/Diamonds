@@ -8,13 +8,15 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.contrib import messages
 
+
+from users.models import CustomUser
 from .models import CartModal
 from filter.models import Diamond_Model
 from cart.models import CartModal
 
 from users.inspector import Inspector
+from django.http import HttpResponseNotFound
 
 # import the logging library
 import logging
@@ -213,20 +215,75 @@ def cart_pack(request):
     return HttpResponse (json.dumps(response), content_type="application/json")
 
 # --> Generate and send link to manager
-def list_to_manager(request):
+def send_wish_list(request):
     def generate_random_string(length):
         letters = string.ascii_lowercase
         rand_string = ''.join(random.choice(letters) for i in range(length))
         return rand_string
     
-    if request.method == 'POST':
+    responce = {'alert': '', 'msg': ''}
+
+    try: 
+        requestData = json.loads(request.body)
+        msg = requestData['msg']
+        price = int(requestData['price'])
+        stone = int(requestData['stone'])
+        carat = float(requestData['carat'])
+        
         user = request.user
+        login = user.username
+        user_email = user.email
+        user_tel = user.tel
+        fname = user.first_name
+        lname = user.last_name
+        title = f'{user.username} send new wish list'
+
         user_cart = CartModal.objects.get(user_id = user.id)
-        link = f'/cart/{user.id}/{generate_random_string(8)}'
+        link = f'{generate_random_string(8)}'
         user_cart.cart_link = link
         user_cart.save()
 
-        # send_email()
+        manager = CustomUser.objects.get(id=user.manager_id)
+        send_email({
+            'subject': 'User was send new wish list',
+            'email': [manager],
+            'template': '_mail_user_wish_list.html',
+            'context': {
+                'price': price, 
+                'stone': stone, 
+                'carat': carat, 
+                'login': login, 
+                'user_email': user_email, 
+                'user_tel': user_tel, 
+                'fname': fname, 
+                'lname': lname, 
+                'title': title, 
+                'link': f'{request.build_absolute_uri()}{user.id}/{link}'.replace('send_list', 'get_list'), 
+                'msg': msg
+            }
+        })
+        responce['alert'] = 'success'
+        responce['msg'] = 'Your wish list was sended to your manager'
+    except:
+        responce['alert'] = 'error'
+        responce['msg'] = 'Something was wrong'
+    return HttpResponse(json.dumps(responce), content_type="application/json")
+
+# --> Get link of wish list
+def get_wish_list(request, user_id, key):
+    
+    context = {}
+    user = CustomUser.objects.get(id=user_id)
+    user_cart = CartModal.objects.get(user_id = user_id)
+    cart_link = user_cart.cart_link
+
+    if key == cart_link:
+        cart_list = json.loads(user_cart.user_cart)
+        diamonds = Diamond_Model.objects.filter(id__in=cart_list)
+        context['diamonds'] = diamonds
         
-    messages.info(request, 'Your wish list was sended to your manager')
-    return redirect(reverse_lazy('cart'))
+    else:
+        return HttpResponseNotFound()
+
+
+    return render(request, 'wish_list.html', context)

@@ -1,0 +1,23 @@
+{% load static %}
+
+<h2 style="font-size:22px;color:#5dc2aa">{{title}}</h2>
+
+<h5 style="font-size: 18px; color: #5dc2aa; margin: 10px 0 5px 0;">User details</h5>
+<ul style="margin: 10px 0; padding: 20px 10px; border-bottom: 1px solid #3c3f3f57; border-top: 1px solid #3c3f3f57;">
+    <li style="padding: 4px;">Login: <span>{{login}}</span></li>
+    <li style="padding: 4px;">F-Name: <span>{{fname}}</span></li>
+    <li style="padding: 4px;">L-Name: <span>{{lname}}</span></li>
+    <li style="padding: 4px;">Email: <span>{{user_email}}</span></li>
+    <li style="padding: 4px;">Tel: <span>{{user_tel}}</span></li>
+</ul>
+
+<h5 style="font-size: 18px; color: #5dc2aa; margin: 10px 0 5px 0;">Wish list details</h5>
+<ul style="margin: 10px 0; padding: 20px 10px; border-bottom: 1px solid #3c3f3f57; border-top: 1px solid #3c3f3f57;">
+    <li style="padding: 4px;">Total price: <span>${{price}}</span></li>
+    <li style="padding: 4px;">Total stone: <span>{{stone}}</span></li>
+    <li style="padding: 4px;">Total carat: <span>{{carat}}</span></li>
+    <li style="padding: 4px;">Comment: <span>{{msg}}</span></li>
+    <li style="padding: 4px;"><a href="{{link}}">Link to wish list</a></li>
+</ul>
+
+<a href="b2b.labrilliante.com/filter/" style="font-size: 16px; margin-top: 50px; color: #5dc2aa !important; text-decoration: none;">Go to the b2b.Labrilliante.com</a>

@@ -501,11 +501,13 @@ class Cart {
 
         // get contaner for diamonds
         this.container = document.querySelector(kwargs.container);
+        this.msg = document.querySelector(kwargs.msg);
 
         // buy responce values
         this.formBuy = document.querySelector(kwargs.formBuy);
         this.formHold = document.querySelector(kwargs.formHold);
         this.formMemo = document.querySelector(kwargs.formMemo);
+        this.formMessage = document.querySelector(kwargs.formMessage);
 
         // total info
         this.total_carat = document.querySelector(kwargs.total_carat);
@@ -534,9 +536,10 @@ class Cart {
         this.deleteSelected();
 
         // ? forms
-        this.orderSubmit(this.formBuy, this);
-        this.orderSubmit(this.formMemo, this);
-        this.orderSubmit(this.formHold, this);
+        this.orderSubmit(this.formBuy);
+        this.orderSubmit(this.formMemo);
+        this.orderSubmit(this.formHold);
+        this.msgSubmit(this.formMessage, '/cart/send_list/');
 
         // * return this
         return this;
@@ -635,7 +638,7 @@ class Cart {
     }
 
     // -- Form Data
-    orderSubmit(form) {
+    orderSubmit(form, url = '/orders/create/') {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -643,7 +646,7 @@ class Cart {
             const button_text = button.querySelector('.order-btn-text')
             const button_main_text = button_text.textContent;
             
-            button_text.textContent = 'Order creating'
+            button_text.textContent = 'Order creating';
             button.classList.add('active');
             button.setAttribute('disabled', true);
 
@@ -675,13 +678,12 @@ class Cart {
             // if cart checked exists
             const cartChecked = JSON.parse(localStorage.getItem('cart'));
             if (cartChecked) {
-                formData.checked = cartChecked.map(
-                    item => {``
-                        return item.replace('chb_', '');
-                    });
+                formData.checked = cartChecked.map(item => {
+                    return item.replace('chb_', '');
+                });
             }
 
-            ajax('/orders/create/', formData, this.afterSubmit, this);
+            ajax(url, formData, this.afterSubmit, this);
         });
     }
     afterSubmit(responce, context) {
@@ -775,6 +777,62 @@ class Cart {
             context.container.innerHTML = emptyCart;
         }
     }
+
+    msgSubmit(form, url = '/cart/send_list/') {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const button = form.querySelector('button[type="submit"]');
+            const button_text = button.querySelector('.order-btn-text')
+            const button_main_text = button_text.textContent;
+            
+            button_text.textContent = 'Sending a wish list';
+            button.classList.add('active');
+            button.setAttribute('disabled', true);
+
+
+            const formData = {
+                msg: '',
+                carat: this.total_carat.textContent,
+                stone: this.total_stone.textContent,
+                price: this.total_price.textContent.replace('$', ''),
+            }
+            const input = form.querySelector('textarea');
+            formData.msg = input.value;
+
+            
+            ajax(url, formData, this.afterMsg, this);
+        });
+    }
+    afterMsg(responce, context) {
+        let type = 'info';
+        if (responce.alert == 'error') {type = 'danger';}
+        const alert = `
+            <div class="alert alert-${type} mt-2 shadow-sm alert-dismissible fade show border-0" role="alert">
+                <div class="my-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fa fa-exclamation-circle me-2 fs-5" aria-hidden="true"></i>
+                        <h5 class="h5 m-0 p-0">${responce.msg}</h5>
+                    </div>
+                    <button type="button" class="btn-close shadow-none border-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>`;
+
+        const form = context.formMessage;
+        const btnClose = form.querySelector('.btn-close');
+        btnClose.click();
+
+        const button = form.querySelector('button[type="submit"]');
+        const button_text = button.querySelector('.order-btn-text')
+        button_text.textContent = 'Send your wish list';
+        button.classList.remove('active');
+        button.removeAttribute('disabled');
+
+        context.msg.innerHTML = '';
+        context.msg.insertAdjacentHTML('afterbegin', alert);
+    }
+
+
 }
 
 // * DOM Content Loaded * //;
@@ -787,6 +845,8 @@ document.addEventListener("DOMContentLoaded", () => {
         formBuy: '#form-buy',
         formMemo: '#form-memo',
         formHold: '#form-hold',
+        formMessage: '#form-wish-list',
+        msg: '#cart_msg',
 
         total_price: '#total_price',
         total_carat: '#total_carat',
@@ -857,7 +917,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // * -------------------------- cart sort
     const cartSort = new Sort({
 
-        debug: true,
 
         cart: cart,
 

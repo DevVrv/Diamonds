@@ -18,29 +18,15 @@
             <span class="me-2 shape-text-info">Shape:</span>
             <span>{{diamond.shape}}</span>
         </li>
-        {% if share_type == '1' %}
-        
-            <li class="item-list-element">
-                <span class="item-list-element--info">Disc%:</span>
-                <span>{{diamond.disc}}%</span>
-            </li>
+        <li class="item-list-element">
+            <span class="item-list-element--info">Disc%:</span>
+            <span>{{diamond.disc}}</span>
+        </li>
 
-            <li class="item-list-element">
-                <span class="item-list-element--info">Price:</span>
-                <span>${{diamond.sale_price}}</span>
-            </li>
-        
-        {% elif share_type == '0' %}
-            <li class="item-list-element">
-                <span class="item-list-element--info">Disc%:</span>
-                <span>--</span>
-            </li>
-
-            <li class="item-list-element">
-                <span class="item-list-element--info">Price:</span>
-                <span>--</span>
-            </li>
-        {% endif %}
+        <li class="item-list-element">
+            <span class="item-list-element--info">Price:</span>
+            <span>{{diamond.sale_price}}</span>
+        </li>
 
         <li class="item-list-element">
             <span class="item-list-element--info">Carat:</span>
@@ -81,14 +67,15 @@
         <div class="row">
             {% comment %} img {% endcomment %}
             <div class="result__drop-down--col col-3">
-
-                {% comment %} {% if diamond.video != '' and diamond.video != '-' and diamond.video != 'N/A'%}
-                    <iframe class="video_frame" src="{{diamond.video}}" frameborder="0"></iframe>
-                {% elif diamond.photo != '' and diamond.photo != '-' and diamond.photo != 'N/A'%}
-                    <img src="{{diamond.photo}}" alt="" class="img-fluid rounded">
-                {% else %}
-                    <img src="{% static '/img/diamonds/base-diamond.jpg' %}" alt="" class="img-fluid rounded">
-                    {% endif %} {% endcomment %}
+                {% comment %} 
+                    {% if diamond.video != '' and diamond.video != '-' and diamond.video != 'N/A'%}
+                        <iframe class="video_frame" src="{{diamond.video}}" frameborder="0"></iframe>
+                    {% elif diamond.photo != '' and diamond.photo != '-' and diamond.photo != 'N/A'%}
+                        <img src="{{diamond.photo}}" alt="" class="img-fluid rounded">
+                    {% else %}
+                        <img src="{% static '/img/diamonds/base-diamond.jpg' %}" alt="" class="img-fluid rounded">
+                    {% endif %} 
+                {% endcomment %}
                 <img src="{% static '/img/diamonds/base-diamond.jpg' %}" alt="" class="img-fluid rounded">
 
             </div>
@@ -97,12 +84,7 @@
 
                 <h4 class="h4 py-2">{{diamond.weight}} Carat Pear Lab Diamond</h4>
 
-                {% if share_type == '1' %}
-                    <h5 class="h5 py-2">${{diamond.sale_price}}</h5>
-                
-                {% elif share_type == '0' %}
-                    <h5 class="h5 py-2">$--</h5>
-                {% endif %}
+                <h5 class="h5 py-2">${{diamond.sale_price}}</h5>
 
                 <ul class="list result__info-list">
 
