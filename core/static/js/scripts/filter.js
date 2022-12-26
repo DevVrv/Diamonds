@@ -1,5 +1,10 @@
 "use strict";
 
+function showComparison() {
+    const comparisonButton = document.querySelector('#pills-comparison-tab');
+    comparisonButton.click();
+}
+
 // -- Control Ancestor
 class Control {
     
@@ -1199,10 +1204,24 @@ class Comparison extends Control {
     shareLink() {
 
         this.share.trigger.addEventListener('click', () => {
-            this.share.data = {
-                share: '0',
-                comparing: this.dataControl.comparing
-            };
+            console.log(this.dataControl)
+            if (this.dataControl.comparisonSelected.length != 0) {
+                const selected = [];
+                this.dataControl.comparisonSelected.map(item => {
+                    selected.push(item.replace('chb_', ''));
+                });
+                this.share.data = {
+                    share: '0',
+                    comparing: selected
+                };
+            }
+            else {
+                this.share.data = {
+                    share: '0',
+                    comparing: this.dataControl.comparing
+                };
+            }
+
 
             if (this.share.data.comparing.length > 0) {
                 // <-- get radio value 
@@ -1357,7 +1376,6 @@ class Comparison extends Control {
                 let forRequest;
                 if (this.comparison.selected.length == 0) {
                     forRequest = this.comparing.map(item => { return item.replace('chb_', ''); });
-                    
                 }
                 else {
                     console.log(this)
@@ -1381,6 +1399,7 @@ class Comparison extends Control {
     cartResponce(responce, context) {
 
         // -- update cart length in cart pack
+        console.log(responce)
         context.cart.length.textContent = responce.update_len;
 
         if (responce.update_len == 0) {

@@ -25,6 +25,35 @@
     {% comment %} * page content * {% endcomment %}
     {% block content %}{% endblock content %}
 
+    {% comment %} modal mail {% endcomment %}
+    <div class="modal fade" id="send_message_modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <form id="form_message" class="modal-content">
+                {% csrf_token %}
+                <div class="modal-header border">
+                    <h5 class="modal-title" id="modalTitleId">Send message to your manager</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="subject" id="" placeholder="Subject" class="form-control">
+                    <textarea name="message" id="" cols="30" rows="10" placeholder="Message" class="form-control mt-3"></textarea>
+                    <div class="message_alert">
+
+                    </div>
+                </div>
+                <div class="modal-footer border">
+                    <button type="submit" class="btn w-100 d-flex align-items-center justify-content-center" id="message_submit">
+                        <div class="form_message_button_text" data-message-button="default">Send message</div>
+                        <div class="form_message_button_text" data-message-button="sending">
+                            <div class="form_message_default">Sending your message</div>
+                            <div class="spinner-border ms-3 smal-spiner" role="status"></div>
+                        </div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     {% comment %} * scripts * {% endcomment %}
     {% block scripts %}{% endblock scripts %}
 </body>

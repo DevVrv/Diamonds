@@ -186,7 +186,6 @@ def cart_pack(request):
         
         # get model values
         for item in model_item:
-            print(item)
             model_values = json.loads(item.user_cart)
             for value in model_values:
                 temp.append(value)

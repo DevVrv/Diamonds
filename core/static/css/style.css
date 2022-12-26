@@ -2267,33 +2267,7 @@ input::-webkit-search-results-decoration {
   height: 70vh;
 }
 
-.orders__search {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
 
-.orders__search-btn {
-  height: 30px;
-  padding: 0;
-  width: 120px;
-  background-color: #3c3f3f;
-  color: #fff;
-  border-radius: 2px;
-  -webkit-transition: background-color 0.3s ease;
-  -o-transition: background-color 0.3s ease;
-  transition: background-color 0.3s ease;
-}
-
-.orders__search-btn:hover {
-  background-color: #5DC2AA;
-}
 
 .orders__items {
   display: -webkit-box;
@@ -2962,23 +2936,7 @@ body::-webkit-scrollbar-thumb {
   [data-io-sort="delete"] {
     display: none !important;
   }
-  .orders__search {
-    -webkit-box-align: start;
-        -ms-flex-align: start;
-            align-items: flex-start;
-    -webkit-box-pack: start;
-        -ms-flex-pack: start;
-            justify-content: flex-start;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-  }
-  .orders__search-form {
-    margin-top: 20px;
-    -ms-flex-item-align: end;
-        align-self: flex-end;
-  }
+
   .orders .content-name {
     display: none;
   }
@@ -3670,103 +3628,11 @@ body::-webkit-scrollbar-thumb {
   .shape-text-info {
     display: none;
   }
-  .orders__search {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  .orders__search-form {
-    width: 100%;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-  }
-  .orders__show-search {
-    display: -webkit-box !important;
-    display: -ms-flexbox !important;
-    display: flex !important;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-transition: background-color 0.2s ease;
-    -o-transition: background-color 0.2s ease;
-    transition: background-color 0.2s ease;
-  }
-  .orders__show-search.active {
-    border-radius: 2px 2px 0 0 !important;
-    background-color: #3c3f3f !important;
-  }
-  .orders__search-body {
-    width: 99.8%;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    overflow: hidden;
-    height: auto;
-    max-height: 0;
-    padding: 0 10px;
-    -webkit-transition: max-height 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
-    -o-transition: max-height 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
-    transition: max-height 0.2s ease, padding 0.2s ease, opacity 0.2s ease;
-    background-color: #fff;
-    opacity: 0;
-    border-radius: 0 0 2px 2px;
-    -webkit-box-shadow: 0 0 1px 2px #3c3f3f1e;
-            box-shadow: 0 0 1px 2px #3c3f3f1e;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-  }
-  .orders__search-body.active {
-    max-height: 200px;
-    padding: 20px 10px;
-    opacity: 1;
-  }
-  .orders__search-group {
-    width: 49% !important;
-    margin-right: 0 !important;
-    margin-bottom: 10px;
-  }
-  .orders__search-group input {
-    margin: 0 !important;
-  }
-  .orders__search-group:nth-child(1) {
-    -webkit-box-ordinal-group: 2;
-        -ms-flex-order: 1;
-            order: 1;
-    width: 100% !important;
-  }
-  .orders__search-group:nth-child(1) span {
-    display: block;
-    width: 20%;
-  }
-  .orders__search-group:nth-child(2) {
-    -webkit-box-ordinal-group: 3;
-        -ms-flex-order: 2;
-            order: 2;
-    width: 100% !important;
-  }
-  .orders__search-group:nth-child(2) span {
-    display: block;
-    width: 20%;
-  }
-  .orders__search-group:nth-child(3) {
-    -webkit-box-ordinal-group: 0;
-        -ms-flex-order: -1;
-            order: -1;
-  }
-  .orders__search-btn {
-    width: 49%;
-    margin-bottom: 10px;
-    background-color: #5DC2AA;
-    border-color: #5DC2AA;
-  }
+
   .share__items {
     padding-left: 0 !important;
   }
-}
+
 
 @media (max-width: 675px) {
   .cart-panel__info-name {

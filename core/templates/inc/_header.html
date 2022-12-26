@@ -21,17 +21,17 @@
                         <span>+1201 2855165</span>
                     </a>
 
-                    <a href="#" class="header__nav--btn fs-4">
+                    <a href="#" class="header__nav--btn fs-4" data-bs-toggle="modal" data-bs-target="#send_message_modal">
                         <i class="fa fa-envelope-o" aria-hidden="true"></i>
                     </a>
                 </div>
 
                 <div class="d-flex align-items-end">
-                    <a href="#" class="header__nav--btn fs-4">
+                    {% comment %} <a href="#" class="header__nav--btn fs-4">
                         <i class="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                    </a>
+                    </a> {% endcomment %}
 
-                    <a href="#" class="header__nav--btn fs-4">
+                    <a href="{% url 'filter_comp' path='comparison'  %}" class="header__nav--btn fs-4">
                         <i class="fa fa-heart" aria-hidden="true"></i>
                     </a>
 

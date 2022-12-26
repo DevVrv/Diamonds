@@ -22,7 +22,7 @@ from .models import CustomUser, CompanyDetails, ShippingAddress
 #  forms
 from .forms import UsersCreationForm, ExtendedUsersCreationForm, UsersAuthForm, UsersConfirmForm, PasswordRecoveryForm, CompanyDetailsForm,  ShippingFormSet, CustomUserChangeForm, ChangePasswordForm
 
-from django.http import HttpResponse, Http404
+from django.contrib.auth.hashers import make_password;
 
 #  tools
 from .verification_code import create_code

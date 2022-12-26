@@ -16,7 +16,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 # <------------------------------ get filter page
-def filterPage(request):
+def filterPage(request, path='result'):
 
     permission = Inspector(request, { 'type': 1, 'level': 2 })
     if not permission.inspect():
@@ -49,9 +49,13 @@ def filterPage(request):
         'result_length': len(query_set),
         'best_length': len(best_diamonds),
         'cart_len': cart_len,
-        'max_min': max_min
+        'max_min': max_min,
+        'comparison': False
     }
 
+    if path == 'comparison':
+        context['comparison'] = True
+    
     return render(request, 'filter.html', context)
 
 

@@ -12,21 +12,23 @@
         {% include 'inc/_indev.html' %}
 
         <!-- ? page wrapper -->
-        <div class="wrapper filter-wrapper min-vh-100 mt-5">
+        <div class="wrapper filter-wrapper min-vh-100 cart_margin">
             
 
             <!-- ? start diamond item ? -->
             <div class="container-fluid container-io px-5 mt-2 content-container diamond-items-container pb-5">
                 {% comment %} messages {% endcomment %}
-                <div id="cart_msg">
-                    {% if messages %}
-                        {% include 'messages/_messages.html' %}
-                    {% endif %}
-                </div>
+
 
                 <h2 class="h2 px-2 py-3">Shopping Bag <i class="fa fa-shopping-bag ms-2 text-primary"></i></h2>
 
                 <div class="shopping_alert">
+                </div>
+
+                <div id="cart_msg">
+                    {% if messages %}
+                        {% include 'messages/_messages.html' %}
+                    {% endif %}
                 </div>
 
                 <!-- content sections -->

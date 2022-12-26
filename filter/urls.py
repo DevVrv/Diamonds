@@ -5,6 +5,7 @@ urlpatterns = [
 
     # @ Get filter page
     path('', filterPage, name='filter'),
+    path('<str:path>', filterPage, name='filter_comp'),
 
     # @ Filtering Ajax
     path('filtering/', filtering, name='filtering'),

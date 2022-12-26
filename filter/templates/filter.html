@@ -41,8 +41,11 @@
     </div>
 
     <div class="wrapper min-vh-100 filter-wrapper">
+
         <!-- ? start diamond filter ? -->
-        <div class="container-fluid container-io px-5 pb-5 mt-4 diamonds-filter-container">
+        <div class="container-fluid container-io px-5 pb-5 mt-5 pt-4 diamonds-filter-container">
+
+            <div class="message_alert"></div>
 
             <div class="mt-1 d-flex flex-column align-items-center justify-content-center py-4 col-tittle"
                 id="shape-jump-container">
@@ -1109,7 +1112,7 @@
                     </div>
 
                 </section>
-                
+            
             </div>
         </div>
         <!-- ? end diamond item ? -->
@@ -1121,14 +1124,13 @@
 
     {% comment %} * filter scripts @ {% endcomment %}
 
-    
     <script src="{% static 'js/scripts/ajax.min.js' %}"></script>
     <script src="{% static 'js/scripts/delivery_date.min.js' %}"></script>
     <script src="{% static 'js/scripts/diamond_view.min.js' %}"></script>
     
-    <script src="{% static 'js/scripts/filter.min.js' %}"></script>
+    <script src="{% static 'js/scripts/filter.js' %}"></script>
     
-    <script src="{% static 'js/scripts/canvas.min.js' %}"></script>
+    <script src="{% static 'js/scripts/scripts.js' %}"></script>
     <script src="{% static 'js/scripts/in-dev.min.js' %}"></script>
     
     <script src="{% static 'js/scripts/classes/elementControl.min.js' %}"></script>
@@ -1138,5 +1140,10 @@
     <script src="{% static 'js/node_modules/sortablejs/Sortable.min.js' %}"></script>
     <script src="{% static 'js/scripts/bootstrap/bootstrap.bundle.min.js' %}"></script> 
     
-    <script src="{% static 'js/scripts/sort.js' %}"></script>
+
+    {% if comparison %}
+        <script>
+            showComparison();
+        </script>
+    {% endif %}
 {% endblock scripts %}

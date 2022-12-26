@@ -386,6 +386,8 @@ class Orders {
         remove.map(btn => {
             btn.addEventListener('click', () => {
                 const number = btn.dataset.orderNumber;
+                const backdrop = document.querySelector('.modal-backdrop');
+                backdrop.remove();
                 ajax('/orders/remove/', number, this.afterRemoveOrder, this);
             });
         });
