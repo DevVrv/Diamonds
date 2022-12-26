@@ -283,7 +283,7 @@ class SignInConfirmView(FormView):
         messages.info(self.request, 'The new code has been sent to your email')
 
     #  get timer
-    def timer_remains(self, timer_len = 10):
+    def timer_remains(self, timer_len = 60):
         timer = {
             'timer': False,
             'stamp': None,
@@ -318,7 +318,6 @@ class SignInConfirmView(FormView):
             form_code = form.cleaned_data.get('code')
             mail_code = self.request.session['code']
             email = self.request.session['email']
-
             if int(form_code) == int(mail_code):
                 user = CustomUser.objects.get(email=email)
                 login(self.request, user=user)
@@ -672,7 +671,7 @@ def delete_shipping(request, shipping_id):
                 messages.info(request, 'Success, your shipping address was deleted')
 
                 user = request.user
-                manager = CustomUser.objects.get(id=user.id)
+                manager = CustomUser.objects.get(id=user.manager_id)
                 company = CompanyDetails.objects.get(user_id=user.id)
                 send_email({
                 'subject': f'User {request.user.email} was updated',
@@ -727,7 +726,7 @@ def on_change(sender, instance: CustomUser, **kwargs):
         pass # write your code here
     else:
         try:
-            # send email message if level was update
+            # send email message if level was update 
             previous = CustomUser.objects.get(id=instance.id)
             if previous.level != instance.level: # field will be updated
                 if previous.level < instance.level and instance.level >= 2:
@@ -746,5 +745,5 @@ def on_change(sender, instance: CustomUser, **kwargs):
             if previous.email != instance.email:
                 instance.username = instance.email
                 instance.save()
-        except:
-            pass
+        except Exception as ex:
+            print(ex)

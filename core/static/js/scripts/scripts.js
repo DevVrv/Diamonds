@@ -1,3 +1,5 @@
+"use strict";
+
 class SendMessageToManager {
     constructor(kwargs) {
 
@@ -49,6 +51,7 @@ class SendMessageToManager {
                 else if (inp.name == 'message') {this.message.message = inp.value;}
             });
             
+            console.log(this);
             ajax(this.url, this.message, this._responce, this);
         });
     }
@@ -56,6 +59,7 @@ class SendMessageToManager {
     _responce(responce, context) {
         setTimeout(() => {
             context._buttonsSwitcher(false);
+            console.log(context)
             context.alert.innerHTML = '';
             context.alert.insertAdjacentHTML('afterbegin', `
                 <div class="alert alert-${responce.alert} mb-4 mt-2 shadow-sm alert-dismissible fade show border-0" role="alert" id="message_alert_info">
@@ -102,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // * -------------------------- send mial
     const message = new SendMessageToManager({
         form: '#form_message',
-        url: ''
+
     });
     message.init();
     console.log(message);

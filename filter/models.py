@@ -4,7 +4,7 @@ from users.models import CustomUser
 # * filter diamond model
 class Base_Diamond_Model(models.Model):
 
-    stock = models.CharField(max_length=255, verbose_name="Stock #")
+    stock = models.CharField(max_length=255, verbose_name="Stock #", blank=True)
     certificate = models.CharField(max_length=255, verbose_name="Certificate", unique=True, db_index=True)
 
     shape = models.CharField(max_length=255, verbose_name="Shape")
@@ -15,7 +15,7 @@ class Base_Diamond_Model(models.Model):
     polish = models.CharField(max_length=255, verbose_name="Polish", blank=True)
     symmetry = models.CharField(max_length=255, verbose_name="Symmetry", blank=True)
     girdle = models.CharField(max_length=255, verbose_name="Gridle", blank=True)
-    fluor = models.CharField(max_length=255, verbose_name="Fluour", blank=True)
+    fluor = models.CharField(max_length=255, verbose_name="Fluor", blank=True)
     measurements = models.CharField(max_length=255, verbose_name="Measurements", blank=True)
     lab = models.CharField(max_length=255, verbose_name="Lab", blank=True)
     

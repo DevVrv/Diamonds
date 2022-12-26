@@ -52,83 +52,85 @@
     
                     <div class="orders__items mt-4 pb-3" id="orders_items">
                         {% comment %} * view orders list {% endcomment %}
-                        {% for order in orders  %}
-                            <div class="orders__item shadow-sm border" data-orders-item="{{order.order_number}}">
-                                <div class="orders__item-header py-3 px-3">
-                                    {% comment %} ? values list {% endcomment %}
-                                    <ul class="orders__item-header-list m-0">
-                                        {% comment %} type {% endcomment %}
-                                        <li class="orders__item-header-element pe-4">
-                                            <span class="text-capitalize fs-5 text-primary" data-order-type="{{order.get_order_type_display}}">{{order.get_order_type_display}}</span>
-                                        </li>
-                                        {% comment %} date placed {% endcomment %}
-                                        <li class="orders__item-header-element orders__item--date">
-                                            <span class="text-uppercase">Placed</span>
-                                            <span class="orders__item--value" data-order-placed="{{order.created_at|date:"M-d-m-Y"}}">{{order.created_at|date:"M-d-m-Y"}}</span>
-                                        </li>
-                                        {% comment %} diamonds len {% endcomment %}
-                                        <li class="orders__item-header-element">
-                                            <span class="text-uppercase">Total Diamonds:</span>
-                                            <span class="orders__item--value" data-order-diamonds="{{order.total_diamonds}}">{{order.total_diamonds}}</span>
-                                        </li>
-                                        {% comment %} carat {% endcomment %}
-                                        <li class="orders__item-header-element">
-                                            <span class="text-uppercase">Total Carat:</span>
-                                            <span class="orders__item--value" data-order-carat="{{order.total_carat}}">{{order.total_carat}}</span>
-                                        </li>
-                                        {% comment %} price {% endcomment %}
-                                        <li class="orders__item-header-element">
-                                            <span class="text-uppercase">Total Price:</span>
-                                            <span class="orders__item--value">$<span data-order-price="{{order.total_price}}">{{order.total_price}}</span></span>
-                                        </li>
-                                    </ul>
-                                    
-                                    {% comment %} ? buttons + number {% endcomment %}
-                                    <div class="orders__item-header-number">
-
-                                        {% comment %} ? order number {% endcomment %}
-                                        <div class="d-flex">
-                                            <span class="text-uppercase">Order Number #</span>
-                                            <span class="text-capitalize" data-order-number="{{order.order_number}}">{{order.order_number}}</span>
-                                        </div>
+                        {% if orders %}
+                            {% for order in orders  %}
+                                <div class="orders__item shadow-sm border" data-orders-item="{{order.order_number}}">
+                                    <div class="orders__item-header py-3 px-3">
+                                        {% comment %} ? values list {% endcomment %}
+                                        <ul class="orders__item-header-list m-0">
+                                            {% comment %} type {% endcomment %}
+                                            <li class="orders__item-header-element pe-4">
+                                                <span class="text-capitalize fs-5 text-primary" data-order-type="{{order.get_order_type_display}}">{{order.get_order_type_display}}</span>
+                                            </li>
+                                            {% comment %} date placed {% endcomment %}
+                                            <li class="orders__item-header-element orders__item--date">
+                                                <span class="text-uppercase">Placed</span>
+                                                <span class="orders__item--value" data-order-placed="{{order.created_at|date:"M-d-m-Y"}}">{{order.created_at|date:"M-d-m-Y"}}</span>
+                                            </li>
+                                            {% comment %} diamonds len {% endcomment %}
+                                            <li class="orders__item-header-element">
+                                                <span class="text-uppercase">Total Diamonds:</span>
+                                                <span class="orders__item--value" data-order-diamonds="{{order.total_diamonds}}">{{order.total_diamonds}}</span>
+                                            </li>
+                                            {% comment %} carat {% endcomment %}
+                                            <li class="orders__item-header-element">
+                                                <span class="text-uppercase">Total Carat:</span>
+                                                <span class="orders__item--value" data-order-carat="{{order.total_carat}}">{{order.total_carat}}</span>
+                                            </li>
+                                            {% comment %} price {% endcomment %}
+                                            <li class="orders__item-header-element">
+                                                <span class="text-uppercase">Total Price:</span>
+                                                <span class="orders__item--value">$<span data-order-price="{{order.total_price}}">{{order.total_price}}</span></span>
+                                            </li>
+                                        </ul>
                                         
-                                        {% comment %} ? order buttons {% endcomment %}
-                                        <div class="d-flex mt-2 orders__header-buttons">
-                                            <button type="button" class="link bg-none fs-5 me-3" data-view-details="order_details">View order details</button>
-                                            <button type="button" class="link bg-none fs-5" data-view-invoice="view_invoice">View invoice</button>
+                                        {% comment %} ? buttons + number {% endcomment %}
+                                        <div class="orders__item-header-number">
+
+                                            {% comment %} ? order number {% endcomment %}
+                                            <div class="d-flex">
+                                                <span class="text-uppercase">Order Number #</span>
+                                                <span class="text-capitalize" data-order-number="{{order.order_number}}">{{order.order_number}}</span>
+                                            </div>
+                                            
+                                            {% comment %} ? order buttons {% endcomment %}
+                                            <div class="d-flex mt-2 orders__header-buttons">
+                                                <button type="button" class="link bg-none fs-5 me-3" data-view-details="order_details">View order details</button>
+                                                <button type="button" class="link bg-none fs-5" data-view-invoice="view_invoice">View invoice</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="orders__item-footer py-3 px-3 border-top d-flex justify-content-between">
-                                    {% if order.order_status == '0' or order.order_status == '1' %}
-                                        <span class="fs-5 d-block text-danger" data-order-status="{{order.get_order_status_display}}">Status: {{order.get_order_status_display}}</span>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Remove order</button>
+                                    <div class="orders__item-footer py-3 px-3 border-top d-flex justify-content-between">
+                                        {% if order.order_status == '0' or order.order_status == '1' %}
+                                            <span class="fs-5 d-block text-danger" data-order-status="{{order.get_order_status_display}}">Status: {{order.get_order_status_display}}</span>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Remove order</button>
 
-                                        <div class="modal fade" id="delete-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header border">
-                                                        <h5 class="modal-title" id="modalTitleId">Delete oreder <span id="delete-number"></span></h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Are you sure you want to delete this order?
-                                                    </div>
-                                                    <div class="modal-footer border">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-danger remove-order" data-order-number="{{order.order_number}}">Delete</button>
+                                            <div class="modal fade" id="delete-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header border">
+                                                            <h5 class="modal-title" id="modalTitleId">Delete oreder <span id="delete-number"></span></h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to delete this order?
+                                                        </div>
+                                                        <div class="modal-footer border">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-danger remove-order" data-order-number="{{order.order_number}}">Delete</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    {% else %}
-                                        <span class="fs-5 d-block text-success" data-order-status="{{order.get_order_status_display}}">Status: {{order.get_order_status_display}}</span>
-                                    {% endif %}
+                                        {% else %}
+                                            <span class="fs-5 d-block text-success" data-order-status="{{order.get_order_status_display}}">Status: {{order.get_order_status_display}}</span>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-
-
+                            {% endfor %}
+                        {% else %}
+                            <h3 class="h3 w-100 text-center text-primary p-3">The list of orders is empty</h3>
+                        {% endif %}
                     </div>
                 </section>
             </div>
@@ -345,18 +347,17 @@
 {% block scripts %}
 
     <script src="{% static 'js/scripts/bootstrap/bootstrap.bundle.min.js' %}"></script> 
+    <script src="{% static 'js/node_modules/sortablejs/Sortable.min.js' %}"></script>
+    <script src="{% static 'js/scripts/delivery_date.min.js' %}"></script>
     
     <script src="{% static 'js/scripts/ajax.min.js' %}"></script>
-    <script src="{% static 'js/scripts/delivery_date.min.js' %}"></script>
     <script src="{% static 'js/scripts/diamond_view.min.js' %}"></script>
-    <script src="{% static 'js/node_modules/sortablejs/Sortable.min.js' %}"></script>
     <script src="{% static 'js/scripts/classes/nouiSlider.min.js' %}"></script>
     <script src="{% static 'js/scripts/classes/elementControl.min.js' %}"></script>
-    <script src="{% static 'js/scripts/classes/sort.min.js' %}"></script>
 
-    <script src="{% static 'js/scripts/orders.js' %}"></script>
+    <script src="{% static 'js/scripts/orders.min.js' %}"></script>
 
-    <script src="{% static 'js/scripts/canvas.min.js' %}"></script>
+    <script src="{% static 'js/scripts/scripts.min.js' %}"></script>
     <script src="{% static 'js/scripts/classes/scroll.min.js' %}"></script>
     <script src="{% static 'js/scripts/in-dev.min.js' %}"></script>
 

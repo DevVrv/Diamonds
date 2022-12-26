@@ -141,10 +141,10 @@ function getDiamondHTML(diamond) {
                                     <span>Gridle: Thick - ${diamond.fields.girdle}</span>
                                 </li>
                                 <li class="result__drop-li">
-                                    <span>Report №: ${diamond.fields.cert_number}</span>
+                                    <span>Report №: ${diamond.fields.lab}</span>
                                 </li>
                                 <li class="result__drop-li">
-                                    <span>Fluour: ${diamond.fields.fluor}</span>
+                                    <span>Fluor: ${diamond.fields.fluor}</span>
                                 </li>
                                 <li class="result__drop-li">
                                     <span>Origin: Lab grown Diamond</span>

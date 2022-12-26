@@ -1123,24 +1123,22 @@
 {% block scripts %}
 
     {% comment %} * filter scripts @ {% endcomment %}
-
+    <script src="{% static 'js/node_modules/sortablejs/Sortable.min.js' %}"></script>
+    <script src="{% static 'js/scripts/bootstrap/bootstrap.bundle.min.js' %}"></script> 
+    
     <script src="{% static 'js/scripts/ajax.min.js' %}"></script>
-    <script src="{% static 'js/scripts/delivery_date.min.js' %}"></script>
-    <script src="{% static 'js/scripts/diamond_view.min.js' %}"></script>
-    
-    <script src="{% static 'js/scripts/filter.js' %}"></script>
-    
-    <script src="{% static 'js/scripts/scripts.js' %}"></script>
-    <script src="{% static 'js/scripts/in-dev.min.js' %}"></script>
-    
     <script src="{% static 'js/scripts/classes/elementControl.min.js' %}"></script>
     <script src="{% static 'js/scripts/classes/nouiSlider.min.js' %}"></script>
     <script src="{% static 'js/scripts/classes/scroll.min.js' %}"></script>
     
-    <script src="{% static 'js/node_modules/sortablejs/Sortable.min.js' %}"></script>
-    <script src="{% static 'js/scripts/bootstrap/bootstrap.bundle.min.js' %}"></script> 
+    <script src="{% static 'js/scripts/delivery_date.min.js' %}"></script>
+    <script src="{% static 'js/scripts/diamond_view.min.js' %}"></script>
     
-
+    <script src="{% static 'js/scripts/filter.min.js' %}"></script>
+    
+    <script src="{% static 'js/scripts/scripts.min.js' %}"></script>
+    <script src="{% static 'js/scripts/in-dev.min.js' %}"></script>
+    
     {% if comparison %}
         <script>
             showComparison();

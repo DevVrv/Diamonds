@@ -201,10 +201,10 @@ class Control {
                                     <span>Girdle: ${diamond.fields.girdle}</span>
                                 </li>
                                 <li class="result__drop-li">
-                                    <span>Report №: ${diamond.fields.stock}</span>
+                                    <span>Report №: ${diamond.fields.lab}</span>
                                 </li>
                                 <li class="result__drop-li">
-                                    <span>Fluour: ${diamond.fields.fluor}</span>
+                                    <span>Fluor: ${diamond.fields.fluor}</span>
                                 </li>
                                 <li class="result__drop-li">
                                     <span>Origin: Lab grown Diamond</span>

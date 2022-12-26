@@ -101,8 +101,12 @@ class UsersAuthForm(forms.Form):
         # <-- GET form clean data
         email = self.cleaned_data['username']
         password = self.cleaned_data['password']
-        user_type = self.cleaned_data['user_type']
-        
+        try:
+            user_type = self.cleaned_data['user_type']
+
+        except:
+            user_type = '1'
+            self.cleaned_data['user_Type'] = user_type
         # -- check email
         if CustomUser.objects.filter(email=email).exists():
             user = CustomUser.objects.filter(email=email).filter(user_type=user_type)
