@@ -22,9 +22,12 @@ class Base_Diamond_Model(models.Model):
     photo = models.URLField(verbose_name="Image URL", blank=True)
     video = models.URLField(verbose_name="Video URL", blank=True)
     
-    rap_1ct = models.IntegerField(verbose_name="Rap_1ct", blank=True)
+    total_price = models.IntegerField(verbose_name="Total Price", blank=True, default=0)
+    price_per_ct = models.IntegerField(verbose_name="Price Per CT", blank=True, default=0)
     sale_price = models.IntegerField(verbose_name="Sale Price", blank=True)
-    disc = models.FloatField(verbose_name="Discount", blank=True)
+    rapaport_price = models.IntegerField(verbose_name="Rapaport Price", blank=True, default=0)
+    disc = models.FloatField(verbose_name="Disc", blank=True, default=0)
+    rap_disc = models.FloatField(verbose_name="Rap Disc", blank=True, default=0)
     
     weight = models.FloatField(max_length=255, verbose_name="Weight", blank=True)
     length_mm = models.FloatField(verbose_name="Length", blank=True)

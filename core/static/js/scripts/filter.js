@@ -102,7 +102,7 @@ class Control {
             </li>
             <li class="item-list-element">
                 <span class="item-list-element--info">Disc%:</span>
-                <span>${diamond.fields.disc}%</span>
+                <span>${diamond.fields.rap_disc}%</span>
             </li>
             <li class="item-list-element">
                 <span class="item-list-element--info">Price:</span>

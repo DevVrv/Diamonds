@@ -109,14 +109,14 @@ class RoundPear(FormView):
                         file_color = value[2]
                         file_weight_from = float(value[3])
                         file_weight_to = float(value[4])
-                        file_rap_1ct = float(value[5])
+                        file_price_per_ct = float(value[5])
 
                         for diamond in br_diamonds:
                             if diamond.clarity == file_clarity and diamond.color == file_color:
                                 if file_weight_from <= diamond.weight and file_weight_to >= diamond.weight:
-                                    diamond.rap_1ct = file_rap_1ct
-                                    rap_price = round(diamond.rap_1ct * diamond.weight, 2)
-                                    diamond.disc = round((diamond.sale_price / rap_price) * 1, 2)
+                                    diamond.price_per_ct = file_price_per_ct
+                                    diamond.rap_price = round(diamond.price_per_ct * diamond.weight, 2)
+                                    diamond.rap_disc = round((diamond.sale_price / diamond.rap_price - 1) * 100, 2)
                                     diamond.save()
                                     
                                     updated += 1
@@ -127,14 +127,14 @@ class RoundPear(FormView):
                         file_color = value[2]
                         file_weight_from = float(value[3])
                         file_weight_to = float(value[4])
-                        file_rap_1ct = float(value[5])
+                        file_price_per_ct = float(value[5])
 
                         for diamond in ps_diamonds:
                             if diamond.clarity == file_clarity and diamond.color == file_color:
                                 if file_weight_from <= diamond.weight and file_weight_to >= diamond.weight:
-                                    diamond.rap_1ct = file_rap_1ct
-                                    rap_price = round(diamond.rap_1ct * diamond.weight, 2)
-                                    diamond.disc = round((diamond.sale_price / rap_price) * 1, 2)
+                                    diamond.price_per_ct = file_price_per_ct
+                                    rap_price = round(diamond.price_per_ct * diamond.weight, 2)
+                                    diamond.rap_disc = round((diamond.sale_price / rap_price) * 1, 2)
                                     diamond.save()
                                     
                                     updated += 1

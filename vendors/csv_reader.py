@@ -60,6 +60,7 @@ class Reader_CSV(object):
         self.stones_acepted = []
         self.stones_rejected = []
         self.diamonds_list = []
+        self
 
         # messages
         self.messages = {
@@ -150,8 +151,9 @@ class Reader_CSV(object):
                 'photo': stone['Image Link'],
                 'video': stone['Video Link'],
 
-                'rap_1ct': round(stone['Price'], 2),
-                'sale_price': round(stone['Total Price'] * stone['Weight'], 2),
+                'total_price': round(stone['Total Price'], 2),
+                'price_per_ct': round(stone['Weight'] / stone['Total Price'], 2),
+                'sale_price': round(stone['Total Price'] * 1,25, 2),
                 'disc': round(stone['Discount Percent'], 2),
                 'weight': round(stone['Weight'], 2),
                 'length_mm': round(stone['Measurements Length'], 2),

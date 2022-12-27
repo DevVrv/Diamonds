@@ -182,7 +182,7 @@ def create_order(request):
                 'photo': diamond.photo,
                 'video': diamond.video,
 
-                'rap_1ct': diamond.rap_1ct,
+                'price_per_ct': diamond.price_per_ct,
                 'sale_price': diamond.sale_price,
                 'disc': diamond.disc,
 

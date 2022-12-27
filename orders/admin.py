@@ -115,7 +115,7 @@ class Orders_Diamonds_Admin(admin.ModelAdmin):
         'weight', 
         'color', 
         'clarity', 
-        'rap_1ct', 
+        'price_per_ct', 
         'sale_price', 
         'created_at', 
         'updated_at',

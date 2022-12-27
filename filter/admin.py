@@ -28,7 +28,7 @@ class Diamond_Model_admin(admin.ModelAdmin):
         'weight', 
         'color', 
         'clarity', 
-        'rap_1ct', 
+        'price_per_ct', 
         'sale_price', 
         'created_at', 
         'updated_at',
@@ -36,7 +36,7 @@ class Diamond_Model_admin(admin.ModelAdmin):
     list_display_links = ('id', 'shape')
     list_editable = ['best_selling']
     list_filter = ['shape', 'color', 'clarity', 'is_published', 'best_selling']
-    search_fields = ('id', 'rap_1ct', 'rap_price', 'sale_price',)
+    search_fields = ('id', 'price_per_ct', 'rap_price', 'sale_price',)
     save_on_top = True
     actions = [set_best, set_published, unset_best, unset_published]
 
@@ -51,7 +51,7 @@ class Fancy_Diamond_Model_admin(admin.ModelAdmin):
         'weight', 
         'color', 
         'clarity', 
-        'rap_1ct', 
+        'price_per_ct', 
         'sale_price', 
         'created_at', 
         'updated_at',
@@ -59,7 +59,7 @@ class Fancy_Diamond_Model_admin(admin.ModelAdmin):
     list_display_links = ('id', 'shape')
     list_editable = ['best_selling']
     list_filter = ['shape', 'color', 'clarity', 'is_published', 'best_selling']
-    search_fields = ('id', 'rap_1ct', 'rap_price', 'sale_price',)
+    search_fields = ('id', 'price_per_ct', 'rap_price', 'sale_price',)
     save_on_top = True
     actions = [set_best, set_published, unset_best, unset_published]
 
