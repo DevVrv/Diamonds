@@ -151,7 +151,7 @@ def cart_sort(request):
                         responseDiamonds.append(compare)
 
             # serealize diamonds queryset
-            responce = serializers.serialize('json', responseDiamonds)
+            responce = serializers.serialize('json', responseDiamonds.reverse())
 
             # return responce
             return HttpResponse (json.dumps(responce), content_type="application/json")

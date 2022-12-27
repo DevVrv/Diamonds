@@ -62,7 +62,7 @@
                 </button>
             </div>
 
-            <form method="POST" class="filters-container" id="filters-container">
+            <form method="POST" class="filters-container mt-4" id="filters-container">
                 <!-- mob filter tittle -->
                 <div class="row d-none filter-mob-title">
                     <div class="col-12 d-flex align-items-center justify-content-center pt-4 pb-3 border-bottom">
@@ -1134,14 +1134,14 @@
     <script src="{% static 'js/scripts/delivery_date.min.js' %}"></script>
     <script src="{% static 'js/scripts/diamond_view.min.js' %}"></script>
     
-    <script src="{% static 'js/scripts/filter.min.js' %}"></script>
+    <script src="{% static 'js/scripts/filter.js' %}"></script>
     
     <script src="{% static 'js/scripts/scripts.min.js' %}"></script>
     <script src="{% static 'js/scripts/in-dev.min.js' %}"></script>
     
     {% if comparison %}
         <script>
-            showComparison();
+            SelectPill('comparison');
         </script>
     {% endif %}
 {% endblock scripts %}

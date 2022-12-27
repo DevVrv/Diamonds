@@ -1,8 +1,10 @@
 "use strict";
 
-function showComparison() {
-    const comparisonButton = document.querySelector('#pills-comparison-tab');
-    comparisonButton.click();
+function SelectPill(pillName = 'result') {
+    if (pillName == 'comparison') {
+        const comparisonButton = document.querySelector('#pills-comparison-tab');
+        comparisonButton.click();
+    }
 }
 
 // -- Control Ancestor
@@ -1003,6 +1005,7 @@ class Comparison extends Control {
                 this.comparing = [...new Set(storage)];
                 localStorage.setItem(this.compKey, JSON.stringify(this.comparing));
                 this.selected();
+                
             },
             
             // -- unchecked 
@@ -1011,6 +1014,30 @@ class Comparison extends Control {
                 this.comparing = storage.filter(v => { return v != value });
                 localStorage.setItem(this.compKey, JSON.stringify(this.comparing));
                 this.selected();
+                
+                
+                this.comparison.selected.map(comp => {
+                    if (this.comparing.includes(comp)) {
+                        console.log(true);
+                    }
+                    else {
+                        this.comparison.selected = this.comparison.selected.filter(value => {return value != comp;}); 
+                        if (this.comparison.selected.length != 0) {
+                            this.comparison.lenList.map(el => {
+                                const id = 'add-to-cart-lenght';
+                                const itemId = el.getAttribute('id');
+                                if (itemId == id) {
+                                    el.textContent = `( ${this.comparison.selected.length} )`;
+                                }
+                            });
+                        }
+                        else {
+                            this.comparison.lenList.map(el => {
+                                el.textContent = `( ${this.comparing.length} )`;
+                            });
+                        }
+                    }
+                });
             }
         );
         
@@ -1060,7 +1087,23 @@ class Comparison extends Control {
         });
 
         // --> set len for len views
-        this.comparison.lenList.map(item => { item.textContent = `(${this.comparing.length})` });
+        
+        if (this.comparison.selected.length == 0) {
+            this.comparison.lenList.map(el => { 
+                el.textContent = `(${this.comparing.length})`});
+        }
+        else if (this.comparison.selected.length != 0) {
+            this.comparison.lenList.map(el => {
+                const id = 'comparison-lenth';
+                const itemId = el.getAttribute('id');
+                if (itemId == id) {
+                    el.textContent = `( ${this.comparing.length} )`;
+                }
+                else {
+                    el.textContent = `( ${this.comparison.selected.length} )`;
+                }
+            });
+        }
 
         // --> update data control
         this.dataControl.comparing = this.comparing.map(value => { return value.replace('chb_', ''); });
@@ -1118,7 +1161,7 @@ class Comparison extends Control {
         // --> comparison selecteble
         const comparisonLabelEvent = new ElementsControl({
             manager: this.comparison.labels,
-            managed: this.comparison.inputs
+        managed: this.comparison.inputs
         }).label(
             // -- checked 
             (value) => {
@@ -1130,6 +1173,14 @@ class Comparison extends Control {
                     }
                 });
                 this.dataControl.comparisonSelected = this.comparison.selected;
+
+                this.comparison.lenList.map(el => {
+                    const id = 'add-to-cart-lenght';
+                    const itemId = el.getAttribute('id');
+                    if (itemId == id) {
+                        el.textContent = `( ${this.comparison.selected.length} )`;
+                    }
+                });
             },
             
             // -- unchecked 
@@ -1142,6 +1193,25 @@ class Comparison extends Control {
                     }
                 });
                 this.dataControl.comparisonSelected = this.comparison.selected;
+                
+                if (this.comparison.selected.length != 0) {
+                    this.comparison.lenList.map(el => {
+                        const id = 'add-to-cart-lenght';
+                        const itemId = el.getAttribute('id');
+                        if (itemId == id) {
+                            el.textContent = `( ${this.comparison.selected.length} )`;
+                        }
+                    });
+                }
+                else {
+                    this.comparison.lenList.map(el => {
+                        const id = 'add-to-cart-lenght';
+                        const itemId = el.getAttribute('id');
+                        if (itemId == id) {
+                            el.textContent = `( ${this.comparing.length} )`;
+                        }
+                    });
+                }
             }
         );
     }
