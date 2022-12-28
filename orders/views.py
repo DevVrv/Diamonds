@@ -184,6 +184,9 @@ def create_order(request):
 
                 'price_per_ct': diamond.price_per_ct,
                 'sale_price': diamond.sale_price,
+                'total_price': diamond.total_price,
+                'rap_price': diamond.rap_price,
+                'rap_disc': diamond.rap_disc,
                 'disc': diamond.disc,
 
                 'weight': diamond.weight,

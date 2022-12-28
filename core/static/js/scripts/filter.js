@@ -758,8 +758,17 @@ class FilterSort extends Control {
         this.advanced.drag.map(d => {
             d.ondragend = () => {
                 this.advanced.drag = this._getElements('[data-sort-advanced]', this.advanced.priority);
+                this.simple.elems.map(elem => {
+                    if (elem.dataset.sortSimple == this.advanced.drag[0].dataset.sortAdvanced) {
+                        elem.classList.add('active');
+                    }
+                    else {
+                        elem.classList.remove('active');
+                    }
+                });
                 this._updateSort();
-            }
+            };  
+
         });
     }
     _plusListener() {

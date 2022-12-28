@@ -131,7 +131,7 @@ def cart_sort(request):
 
             # compare
             if requestData['compare']['key'] != False and len(requestData['compare']['nums']) != 0:
-
+               
                 compares = Diamond_Model.objects.filter(pk__in=requestData['compare']['nums'])
                 responseDiamonds = responseDiamonds.exclude(pk__in=compares)
 
@@ -150,8 +150,12 @@ def cart_sort(request):
                     for compare in compares:
                         responseDiamonds.append(compare)
 
+            
             # serealize diamonds queryset
-            responce = serializers.serialize('json', responseDiamonds.reverse())
+            if not requestData['compare']['key']:
+                responce = serializers.serialize('json', responseDiamonds.reverse())
+            else:
+                responce = serializers.serialize('json', responseDiamonds)
 
             # return responce
             return HttpResponse (json.dumps(responce), content_type="application/json")

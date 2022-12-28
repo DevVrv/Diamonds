@@ -179,7 +179,10 @@ def filtering(request):
         # * sort best
         sortBest = sortObject['best']
        
-        # * ordering 
+        # # * ordering 
+        # if 'disc' in sortResult or '-disc' in sortResult:
+        #     print(1)
+
         resultSorted = result_queryset.order_by(*sortResult)
         bestSorted = best_queryset.order_by(*sortBest)
 

@@ -88,6 +88,7 @@ class Orders_Model_admin(admin.ModelAdmin):
         'total_diamonds', 
         'total_carat', 
         'total_price', 
+        'total_price', 
         'created_at',
         'pay_within', 
         'p_ct_offer', 
@@ -103,8 +104,6 @@ class Orders_Model_admin(admin.ModelAdmin):
 
 @admin.register(Orders_Diamond_Model)
 class Orders_Diamonds_Admin(admin.ModelAdmin):
-    
-    
     list_display = (
         'id', 
         'order_number',
@@ -115,8 +114,11 @@ class Orders_Diamonds_Admin(admin.ModelAdmin):
         'weight', 
         'color', 
         'clarity', 
+        'total_price', 
         'price_per_ct', 
         'sale_price', 
+        'rap_disc', 
+        'rap_price', 
         'created_at', 
         'updated_at',
     )

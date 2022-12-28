@@ -841,3 +841,9 @@ background-color: #55b49e;
     max-width: 200px;
 }
 
+.result__item-list > .item-list-element:nth-child(4) span:nth-child(2) {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

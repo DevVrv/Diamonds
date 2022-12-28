@@ -354,7 +354,7 @@ class Sort {
 
             checks.forEach(check => {
                 if (name == check) {
-                    inp.check = true;
+                    inp.checked = true;
                     labels[index].classList.add('active');
                 }
             });
@@ -366,12 +366,19 @@ class Sort {
     // --> Events
     _dragListener() {
         this.advanced.dragElems = this._getElems('[data-sort-advanced]', this.advanced.priority);
-        this.advanced.dragElems.map(elem => {
-            elem.ondragend = (e) => {
-                const target = e.target;
-                if (target === elem) {
-                    this._updateSort();
-                }
+        this.advanced.dragElems.map(d => {
+            d.ondragend = () => {
+                console.log(this);
+                this.advanced.drag = this._getElems('[data-sort-advanced]', this.advanced.priority);
+                this.simple.elems.map(elem => {
+                    if (elem.dataset.sortSimple == this.advanced.drag[0].dataset.sortAdvanced) {
+                        elem.classList.add('active');
+                    }
+                    else {
+                        elem.classList.remove('active');
+                    }
+                });
+                this._updateSort();
             };
         });
     }
@@ -445,6 +452,17 @@ class Sort {
             sort: this.sort,
             compare: this.compare,
         }
+        
+
+        const advanced = this.advanced.priority[0];
+        const current = advanced.querySelector('[data-sort-advanced]');
+        const currentValue = current.dataset.sortAdvanced;
+        if (currentValue != 'compare') {
+            this.data.compare.key = false;
+            this.data.compare.nums = [];
+        }
+        
+
         ajax(this.url, this.data, this.updateView, this);
     }
 
@@ -568,9 +586,13 @@ class Cart {
     }
     checked(value) {
         // get storage values
-        const values = JSON.parse(localStorage.getItem('cart'));
+        let values = JSON.parse(localStorage.getItem('cart'));
 
         // update values
+        values = values.filter(v => {
+            if (v !== value) { return v; }
+        });
+
         values.push(value);
         
         // set new storage

@@ -43,7 +43,6 @@ class Diamond_Model_admin(admin.ModelAdmin):
     save_on_top = True
     actions = [set_best, set_published, unset_best, unset_published]
 
-
 @admin.register(Fancy_Diamond_Model)
 class Fancy_Diamond_Model_admin(admin.ModelAdmin):
     list_display = (
