@@ -623,52 +623,111 @@ class NoUI extends Control {
     
     // --> apply data
     apply(anyWay = false) {
-        this.cleaner();
-
-        // -- set keys
-        this.currentKey = 'all';
-        this.dataControl.currentKey = 'all';
-
-        // -- set ordering default
-        this.dataControl.ordering = {
-            result: [0, 46],
-            best: [0, 46]
-        }
-        this.dataControl.requestOrdering = {
-            result: [0, 46],
-            best: [0, 46],
-        }
-
-        // --> clean containers view and add spiner
-        this.view.result.container.innerHTML = '';
-        this.view.result.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
-
-        this.view.best.container.innerHTML = '';
-        this.view.best.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
-
-        // --> update data control
-        for (let key in this.data) {
-            this.dataControl.filter[key] = this.data[key];
-        }
-
-        // @ drop infinity data
-        this.dataControl.dropInfinity();
-
         const window_size = document.documentElement.getBoundingClientRect().width;
         
         if (window_size > this.active_size) {
+            this.cleaner();
+
+            // -- set keys
+            this.currentKey = 'all';
+            this.dataControl.currentKey = 'all';
+    
+            // -- set ordering default
+            this.dataControl.ordering = {
+                result: [0, 46],
+                best: [0, 46]
+            }
+            this.dataControl.requestOrdering = {
+                result: [0, 46],
+                best: [0, 46],
+            }
+    
+            // --> clean containers view and add spiner
+            this.view.result.container.innerHTML = '';
+            this.view.result.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+    
+            this.view.best.container.innerHTML = '';
+            this.view.best.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+    
+            // --> update data control
+            for (let key in this.data) {
+                this.dataControl.filter[key] = this.data[key];
+            }
+    
+            // @ drop infinity data
+            this.dataControl.dropInfinity();
             // --> send request
             ajax('filtering/', this.dataControl, this.view.updateView, this.view);
         }
         else if (window_size <= this.active_size && anyWay == false) {
             this.active_button.classList.add('active');
             this.active_button.onclick = () => {
+                this.cleaner();
+
+                // -- set keys
+                this.currentKey = 'all';
+                this.dataControl.currentKey = 'all';
+        
+                // -- set ordering default
+                this.dataControl.ordering = {
+                    result: [0, 46],
+                    best: [0, 46]
+                }
+                this.dataControl.requestOrdering = {
+                    result: [0, 46],
+                    best: [0, 46],
+                }
+        
+                // --> clean containers view and add spiner
+                this.view.result.container.innerHTML = '';
+                this.view.result.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+        
+                this.view.best.container.innerHTML = '';
+                this.view.best.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+        
+                // --> update data control
+                for (let key in this.data) {
+                    this.dataControl.filter[key] = this.data[key];
+                }
+        
+                // @ drop infinity data
+                this.dataControl.dropInfinity();
                 ajax('filtering/', this.dataControl, this.view.updateView, this.view);
                 this.active_button.classList.remove('active');
                 this.filter_exit.click();
             }
         }
         else if (window_size <= this.active_size && anyWay == true) {
+            this.cleaner();
+
+            // -- set keys
+            this.currentKey = 'all';
+            this.dataControl.currentKey = 'all';
+    
+            // -- set ordering default
+            this.dataControl.ordering = {
+                result: [0, 46],
+                best: [0, 46]
+            }
+            this.dataControl.requestOrdering = {
+                result: [0, 46],
+                best: [0, 46],
+            }
+    
+            // --> clean containers view and add spiner
+            this.view.result.container.innerHTML = '';
+            this.view.result.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+    
+            this.view.best.container.innerHTML = '';
+            this.view.best.container.insertAdjacentHTML('afterbegin', this.spinerView('get'));
+    
+            // --> update data control
+            for (let key in this.data) {
+                this.dataControl.filter[key] = this.data[key];
+            }
+    
+            // @ drop infinity data
+            this.dataControl.dropInfinity();
             ajax('filtering/', this.dataControl, this.view.updateView, this.view);
         }
     }
