@@ -136,9 +136,9 @@ class Control {
                 <span class="item-list-element--info">L/W:</span>
                 <span>${diamond.fields.lw}</span>
             </li>
-            <li class="item-list-element">
+            <li class="item-list-element cert-container">
                 <span class="item-list-element--info">Report:</span>
-                <span>${diamond.fields.lab}</span>
+                <span class="cert-text">${diamond.fields.certificate}</span>
             </li>
         </ul>
 
@@ -203,7 +203,7 @@ class Control {
                                     <span>Girdle: ${diamond.fields.girdle}</span>
                                 </li>
                                 <li class="result__drop-li">
-                                    <span>Report №: ${diamond.fields.lab}</span>
+                                    <span>Report №: ${diamond.fields.certificate}</span>
                                 </li>
                                 <li class="result__drop-li">
                                     <span>Fluor: ${diamond.fields.fluor}</span>
