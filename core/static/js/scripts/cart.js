@@ -163,7 +163,7 @@ class Sort {
                 
                 <div class="result__drop-down--col col-7">
     
-                    <h4 class="h4 py-2">1.01 Carat Pear Lab Diamond</h4>
+                    <h4 class="h4 py-2">${diamond.fields.weight} Carat Pear Lab Diamond</h4>
     
                     <h5 class="h5 py-2">$${diamond.fields.sale_price}</h5>
     
