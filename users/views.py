@@ -586,8 +586,11 @@ class UserInfo(TemplateView):
         if self.user_form.is_valid():
             self.user_form.save()
         else:
-            print(self.user_form.errors)
-            messages.error(request, 'A user with this data already exists')
+            msg= 'This field is required: '
+            for error in self.user_form.errors:
+                msg += f'{error}, '
+
+            messages.error(request, msg[0:-2])
             return redirect(reverse_lazy('user_info'))
 
         #  company details
@@ -609,14 +612,15 @@ class UserInfo(TemplateView):
             manager = CustomUser.objects.get(pk=request.user.manager_id)
 
             user = request.user
-
+            fname = self.user_form.cleaned_data.get('first_name')
+            lname = self.user_form.cleaned_data.get('last_name')
             send_email({
                 'subject': f'User {request.user.email} was updated',
                 'email': [manager.email, DEFAULT_FROM_EMAIL],
                 'template': '_mail_user_updated.html',
                 'context': {
-                    'fname': user.first_name,
-                    'lname': user.last_name,
+                    'fname': fname,
+                    'lname': lname,
                     'user_email': user.email,
                     'user_tel': user.tel,
                     'company_name': company.company_name,
@@ -665,7 +669,6 @@ def delete_shipping(request, shipping_id):
     shippings = ShippingAddress.objects.filter(user_id=request.user.id)
     if shippings.exists():
         for idnex, shipping in enumerate(shippings):
-            print(idnex)
             if int(idnex) == int(shipping_id):
                 shipping.delete()
                 messages.info(request, 'Success, your shipping address was deleted')

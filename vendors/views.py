@@ -133,8 +133,8 @@ class RoundPear(FormView):
                             if diamond.clarity == file_clarity and diamond.color == file_color:
                                 if file_weight_from <= diamond.weight and file_weight_to >= diamond.weight:
                                     diamond.price_per_ct = file_price_per_ct
-                                    rap_price = round(diamond.price_per_ct * diamond.weight, 2)
-                                    diamond.rap_disc = round((diamond.sale_price / rap_price) * 1, 2)
+                                    diamond.rap_price = round(diamond.price_per_ct * diamond.weight, 2)
+                                    diamond.rap_disc = round((diamond.sale_price / diamond.rap_price - 1) * 100, 2)
                                     diamond.save()
                                     
                                     updated += 1

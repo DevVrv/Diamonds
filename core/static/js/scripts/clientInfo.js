@@ -20,8 +20,6 @@ class UserFormControl {
 
         // * init edit event
         this.editEvent();
-        this.valid();
-
         this.edit.click();
 
     }
@@ -76,7 +74,7 @@ class UserFormControl {
         };
 
         this.save.onclick = () => {
-            this.form.submit();
+            this.valid();
         }
     }
 
@@ -109,55 +107,50 @@ class UserFormControl {
         }
 
         // <-- get required
-        const forValidNames = ['first_name', 'email', 'company_email', 'company_name', 'company_tel', 'company_address'];
-        const forValidInputs = [];
-        const formInvalidInputs = []
-        forValidNames.map(name => {
-            forValidInputs.push(this.form.querySelector(`[name="${name}"]`));
+        this.forValidNames = ['first_name', 'tel', 'job_title', 'email', 'company_email', 'company_name', 'company_tel', 'company_address'];
+        this.forValidInputs = [];
+        this.formInvalidInputs = []
+        this.forValidNames.map(name => {
+            this.forValidInputs.push(this.form.querySelector(`[name="${name}"]`));
         });
+        let valid = true;
+        console.log(this)
 
-        // --> submit listener
-        this.form.onsubmit = (e) => {
-            e.preventDefault();
-            let valid = true;
+        this.forValidInputs.map(inp => {
 
-            forValidInputs.map(inp => {
-
-                if (inp.value == '' || inp.value.replace(/\s/g,'') == '') {
-                    inp.classList.add('form-error');
-                    valid = false;
-                    formInvalidInputs.push(inp);
-                }
-
-            });
-            
-
-            if (valid == false) {
-                forValidInputs.map(inp => {
-                    inp.onfocus = () => {
-                        inp.classList.remove('form-error');
-                    };
-                });
-                const exAlert = this.form.closest('.main').querySelector('.alert');
-                if (exAlert !== undefined && exAlert !== null) {exAlert.remove();}
-                this.form.insertAdjacentHTML('beforebegin', alerts.error);
-
-                formInvalidInputs.map(elem => {
-                    const managed = elem.closest('.client-info-managed');
-                    const managedTitle = managed.previousElementSibling
-                    if (!managed.classList.contains('active')) {
-                        managed.classList.add('active');
-                    }
-                    if (!managedTitle.classList.contains('active')) {
-                        managedTitle.classList.add('active');
-                    }
-                });
-
+            if (inp.value == '' || inp.value.replace(/\s/g,'') == '') {
+                inp.classList.add('form-error');
+                valid = false;
+                this.formInvalidInputs.push(inp);
             }
-            else if (valid == true) {
-                e.target.submit();
-            }
+
+        });
         
+
+        if (valid == false) {
+            this.forValidInputs.map(inp => {
+                inp.onfocus = () => {
+                    inp.classList.remove('form-error');
+                };
+            });
+            const exAlert = this.form.closest('.main').querySelector('.alert');
+            if (exAlert !== undefined && exAlert !== null) {exAlert.remove();}
+            this.form.insertAdjacentHTML('beforebegin', alerts.error);
+
+            this.formInvalidInputs.map(elem => {
+                const managed = elem.closest('.client-info-managed');
+                const managedTitle = managed.previousElementSibling
+                if (!managed.classList.contains('active')) {
+                    managed.classList.add('active');
+                }
+                if (!managedTitle.classList.contains('active')) {
+                    managedTitle.classList.add('active');
+                }
+            });
+
+        }
+        else if (valid == true) {
+            this.form.submit();
         }
         
     }
@@ -189,7 +182,6 @@ class AddShipping {
         this._create(kwargs);
 
         this.shipping_delete_links();
-        this.debug();
 
     }
 
@@ -281,9 +273,6 @@ class AddShipping {
 
             // * delete shipping
             this.deleteShipping = this._getElems('[data-delete-shipping="0"]');
-
-            console.log(this)
-
         };
     }
 
@@ -293,11 +282,9 @@ class AddShipping {
             let href = item.getAttribute('href');
             let href_new = href.replace('/0/', `/${index}/`);
             item.dataset.deleteShipping = index;
-            console.log(href_new)
             item.setAttribute('href', href_new);
         });
     }
-    shipping_delete() {}
 }
 
 // ev DOM on load

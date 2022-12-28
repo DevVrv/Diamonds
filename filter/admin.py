@@ -28,8 +28,11 @@ class Diamond_Model_admin(admin.ModelAdmin):
         'weight', 
         'color', 
         'clarity', 
+        'total_price', 
         'price_per_ct', 
         'sale_price', 
+        'rap_price', 
+        'rap_disc', 
         'created_at', 
         'updated_at',
     )
@@ -51,8 +54,11 @@ class Fancy_Diamond_Model_admin(admin.ModelAdmin):
         'weight', 
         'color', 
         'clarity', 
+        'total_price', 
         'price_per_ct', 
         'sale_price', 
+        'rap_price', 
+        'rap_disc', 
         'created_at', 
         'updated_at',
     )
